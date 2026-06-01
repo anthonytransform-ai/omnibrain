@@ -1,0 +1,23 @@
+{
+  "name": "omnibrain-framework",
+  "version": "1.0.0",
+  "description": "An AI Operating System for Vibe Coders",
+  "main": "omnibrain-setup.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"No formal tests yet. Feel free to contribute!\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/omnibrain.git"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "vibecoding",
+    "llm",
+    "architecture"
+  ],
+  "author": "OmniBrain Contributors",
+  "license": "MIT"
+}
