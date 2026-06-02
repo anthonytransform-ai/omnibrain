@@ -25,6 +25,7 @@ const directories = [
   'Vault/System',
   'Vault/Features',
   'Vault/Agents',
+  'Vault/Plans',
   'scripts',
   'scripts/rules'
 ];
