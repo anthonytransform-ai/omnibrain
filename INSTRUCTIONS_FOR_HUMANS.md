@@ -24,6 +24,12 @@ If you are adding OmniBrain to a project that already has code or AI instruction
 3. Open `AGENT_PROMPT.md` and add a note at the top telling the AI to also read your existing instruction files (e.g., *"Read `CLAUDE.md` for our project rules"*).
 4. Tell your AI: *"I have just installed OmniBrain. Please analyze my existing codebase and populate the `Vault/System` and `Vault/Features` folders."*
 
+### The `/sync` Command
+If you have been chatting with your AI for a long time and it seems to forget the rules, or you just want to force it to update the documentation, simply type:
+> `/sync`
+
+The AI is programmed to immediately re-read its instructions and update your `Vault` dashboard when it sees this command.
+
 ---
 
 ## 🇭🇰 繁體中文指示
@@ -49,3 +55,9 @@ AI 會讀取提示詞並自動運行安裝腳本。它會創建一個名為 `Vau
 2. 如果你已經有一個 `package.json`，腳本會要求你手動將 `"check-ai-rules": "node scripts/check-ai-rules.js"` 腳本加入其中。
 3. 打開 `AGENT_PROMPT.md` 並在頂部添加註釋，告訴 AI 也要讀取你現有的指示文件（例如，*「請閱讀 `CLAUDE.md` 以了解我們的項目規則」*）。
 4. 告訴你的 AI：*「我剛剛安裝了 OmniBrain。請分析我現有的代碼庫並填充 `Vault/System` 和 `Vault/Features` 文件夾。」*
+
+### `/sync` 指令
+如果你和 AI 聊了很久，它似乎忘記了規則，或者你只是想強迫它更新文檔，只需輸入：
+> `/sync`
+
+AI 被編程為在看到此命令時立即重新閱讀其指示並更新你的 `Vault` 儀表板。
