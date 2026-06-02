@@ -48,13 +48,14 @@ if (!fs.existsSync(pkgPath)) {
     type: "module",
     scripts: {
       "check-ai-rules": "node scripts/check-ai-rules.js",
-      "vault-health": "node scripts/vault-health.js"
+      "vault-health": "node scripts/vault-health.js",
+      "omnibrain-migrate": "node scripts/omnibrain-migrate.js"
     }
   };
   fs.writeFileSync(pkgPath, JSON.stringify(pkgContent, null, 2));
   console.log(`\x1b[32m[\u2713] Generated:\x1b[0m package.json`);
 } else {
-  console.log(`\x1b[33m[-] package.json already exists. Please manually add the 'check-ai-rules' and 'vault-health' scripts.\x1b[0m`);
+  console.log(`\x1b[33m[-] package.json already exists. Please manually add the 'check-ai-rules', 'vault-health', and 'omnibrain-migrate' scripts.\x1b[0m`);
 }
 
 // 3. Move Templates into place
@@ -66,6 +67,7 @@ if (fs.existsSync(templateDir)) {
   copyFileSafe(path.join(templateDir, 'agents-moc.template.md'), path.join(__dirname, 'Vault', 'Agents', '_Agents_MOC.md'));
   copyFileSafe(path.join(templateDir, 'check-ai-rules.template.js'), path.join(__dirname, 'scripts', 'check-ai-rules.js'));
   copyFileSafe(path.join(templateDir, 'vault-health.template.js'), path.join(__dirname, 'scripts', 'vault-health.js'));
+  copyFileSafe(path.join(templateDir, 'omnibrain-migrate.template.js'), path.join(__dirname, 'scripts', 'omnibrain-migrate.js'));
   copyFileSafe(path.join(templateDir, 'rules', 'base-rules.template.js'), path.join(__dirname, 'scripts', 'rules', 'base-rules.js'));
   copyFileSafe(path.join(templateDir, 'rules', 'react-rules.template.js'), path.join(__dirname, 'scripts', 'rules', 'react-rules.js'));
   copyFileSafe(path.join(templateDir, 'rules', 'rules-readme.template.md'), path.join(__dirname, 'scripts', 'rules', 'README.md'));
