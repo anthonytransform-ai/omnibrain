@@ -48,7 +48,10 @@ if (!fs.existsSync(pkgPath)) {
     type: "module",
     scripts: {
       "check-ai-rules": "node scripts/check-ai-rules.js",
+      "vault-autotag": "node scripts/vault-autotag.js",
+      "vault-archive": "node scripts/vault-archive.js",
       "vault-health": "node scripts/vault-health.js",
+      "vault-maintenance": "npm run vault-autotag && npm run vault-health && npm run vault-archive",
       "omnibrain-migrate": "node scripts/omnibrain-migrate.js"
     }
   };
@@ -62,11 +65,15 @@ if (!fs.existsSync(pkgPath)) {
 const templateDir = path.join(__dirname, 'omnibrain-templates');
 if (fs.existsSync(templateDir)) {
   copyFileSafe(path.join(templateDir, 'dashboard.template.md'), path.join(__dirname, 'Vault', 'Dashboard.md'));
+  copyFileSafe(path.join(templateDir, 'anti-patterns.template.md'), path.join(__dirname, 'Vault', 'Anti_Patterns.md'));
+  copyFileSafe(path.join(templateDir, 'agent-directives.template.md'), path.join(__dirname, 'Vault', 'Agents', 'Agent_Directives.md'));
   copyFileSafe(path.join(templateDir, 'system-moc.template.md'), path.join(__dirname, 'Vault', 'System', '_System_MOC.md'));
   copyFileSafe(path.join(templateDir, 'features-moc.template.md'), path.join(__dirname, 'Vault', 'Features', '_Features_MOC.md'));
   copyFileSafe(path.join(templateDir, 'agents-moc.template.md'), path.join(__dirname, 'Vault', 'Agents', '_Agents_MOC.md'));
   copyFileSafe(path.join(templateDir, 'check-ai-rules.template.js'), path.join(__dirname, 'scripts', 'check-ai-rules.js'));
   copyFileSafe(path.join(templateDir, 'vault-health.template.js'), path.join(__dirname, 'scripts', 'vault-health.js'));
+  copyFileSafe(path.join(templateDir, 'vault-archive.template.js'), path.join(__dirname, 'scripts', 'vault-archive.js'));
+  copyFileSafe(path.join(templateDir, 'vault-autotag.template.js'), path.join(__dirname, 'scripts', 'vault-autotag.js'));
   copyFileSafe(path.join(templateDir, 'omnibrain-migrate.template.js'), path.join(__dirname, 'scripts', 'omnibrain-migrate.js'));
   copyFileSafe(path.join(templateDir, 'rules', 'base-rules.template.js'), path.join(__dirname, 'scripts', 'rules', 'base-rules.js'));
   copyFileSafe(path.join(templateDir, 'rules', 'react-rules.template.js'), path.join(__dirname, 'scripts', 'rules', 'react-rules.js'));
