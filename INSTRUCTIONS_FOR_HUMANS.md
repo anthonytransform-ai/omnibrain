@@ -2,13 +2,13 @@
 
 ## 🇺🇸 English Instructions
 
-Welcome! You do not need to know how to code to use this framework. OmniBrain is an "Operating System" that you install directly into your AI coding assistant (like Gemini, Cursor, or Claude) to stop it from making mistakes as your project grows.
+Welcome! You do not need to know how to code to use this framework. OmniBrain is an "Operating System" that you install directly into your AI coding assistant (like Gemini, Cursor, or Claude) to stop it from making mistakes as your project grows. It acts as a permanent "long-term memory" and strict "rule enforcer" for your AI.
 
 ### Step 1: Open Your Folder
 Unzip this repository and place all the files into the empty folder where you want to build your app.
 
 ### Step 2: Talk to Your AI
-Open your AI coding assistant. Copy the entire contents of `README.md` and paste it into the AI chat. 
+Open your AI coding assistant. Copy the entire contents of `AGENT_PROMPT.md` and paste it into the AI chat. 
 
 ### Step 3: Let the AI Do the Work
 The AI will read the prompt and automatically run the setup scripts. It will create a folder called `Vault`. 
@@ -18,11 +18,10 @@ The AI will read the prompt and automatically run the setup scripts. It will cre
 That's it! Every day, just tell the AI what to build, and OmniBrain will handle the rest.
 
 ### Adding to an Existing Project
-If you are adding OmniBrain to a project that already has code or AI instructions (like `cursorrules`, `CLAUDE.md`, or `AGENTS.md`):
+If you are adding OmniBrain to a project that already has code or legacy documentation:
 1. Run the setup normally (OmniBrain will not delete your existing files).
-2. If you already have a `package.json`, the script will ask you to manually add the `"check-ai-rules": "node scripts/check-ai-rules.js"` script to it.
-3. Open `AGENT_PROMPT.md` and add a note at the top telling the AI to also read your existing instruction files (e.g., *"Read `CLAUDE.md` for our project rules"*).
-4. Tell your AI: *"I have just installed OmniBrain. Please analyze my existing codebase and populate the `Vault/System` and `Vault/Features` folders."*
+2. Tell your AI: *"I have just installed OmniBrain. Please run `npm run omnibrain-migrate` to analyze my existing codebase and legacy documents, and integrate them into the new Vault structure."*
+3. Open `AGENT_PROMPT.md` and add a note at the top telling the AI to also read your existing instruction files (e.g., *"Read `CLAUDE.md` for our old project rules"*).
 
 ### The `/sync` Command
 If you have been chatting with your AI for a long time and it seems to forget the rules, or you just want to force it to update the documentation, simply type:
@@ -40,13 +39,13 @@ OmniBrain automatically prevents AI hallucinations. If you tell your AI *"Never 
 
 ## 🇭🇰 繁體中文指示
 
-歡迎！你不需要懂編程就可以使用這個框架。OmniBrain 是一個「操作系統」，你可以直接把它安裝到你的 AI 寫碼助手（如 Gemini、Cursor 或 Claude）中，以防止它在你的項目增長時犯錯。
+歡迎！你不需要懂編程就可以使用這個框架。OmniBrain 是一個「操作系統」，你可以直接把它安裝到你的 AI 寫碼助手（如 Gemini、Cursor 或 Claude）中，以防止它在你的項目增長時犯錯。它充當你 AI 的永久「長期記憶」和嚴格的「規則執行者」。
 
 ### 第一步：打開你的文件夾
 解壓縮這個代碼庫，並把所有文件放到你想建立應用程序的空白文件夾中。
 
 ### 第二步：與你的 AI 對話
-打開你的 AI 寫碼助手。複製 `README.md` 的全部內容，並將其貼上到 AI 聊天框中。
+打開你的 AI 寫碼助手。複製 `AGENT_PROMPT.md` 的全部內容，並將其貼上到 AI 聊天框中。
 
 ### 第三步：讓 AI 處理工作
 AI 會讀取提示詞並自動運行安裝腳本。它會創建一個名為 `Vault` 的文件夾。
@@ -56,11 +55,10 @@ AI 會讀取提示詞並自動運行安裝腳本。它會創建一個名為 `Vau
 就這麼簡單！每天，只需告訴 AI 要建立什麼，OmniBrain 就會處理剩下的事情。
 
 ### 添加到現有項目
-如果你正在將 OmniBrain 添加到已經有代碼或 AI 指示（如 `cursorrules`、`CLAUDE.md` 或 `AGENTS.md`）的項目中：
+如果你正在將 OmniBrain 添加到已經有代碼或舊版文檔的項目中：
 1. 正常運行安裝（OmniBrain 不會刪除你現有的文件）。
-2. 如果你已經有一個 `package.json`，腳本會要求你手動將 `"check-ai-rules": "node scripts/check-ai-rules.js"` 腳本加入其中。
-3. 打開 `AGENT_PROMPT.md` 並在頂部添加註釋，告訴 AI 也要讀取你現有的指示文件（例如，*「請閱讀 `CLAUDE.md` 以了解我們的項目規則」*）。
-4. 告訴你的 AI：*「我剛剛安裝了 OmniBrain。請分析我現有的代碼庫並填充 `Vault/System` 和 `Vault/Features` 文件夾。」*
+2. 告訴你的 AI：*「我剛剛安裝了 OmniBrain。請運行 `npm run omnibrain-migrate` 來分析我現有的代碼庫和舊文檔，並將它們整合到新的知識庫 (Vault) 結構中。」*
+3. 打開 `AGENT_PROMPT.md` 並在頂部添加註釋，告訴 AI 也要讀取你現有的指示文件（例如，*「請閱讀 `CLAUDE.md` 以了解我們舊的項目規則」*）。
 
 ### `/sync` 指令
 如果你和 AI 聊了很久，它似乎忘記了規則，或者你只是想強迫它更新文檔，只需輸入：

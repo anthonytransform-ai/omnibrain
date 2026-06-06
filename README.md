@@ -3,9 +3,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-Welcome to **OmniBrain**! This project provides a structured "Memory Bank" and AI-Constraint framework specifically designed for non-coders (Vibe Coders) who use AI Agents (like ChatGPT, Claude, Cursor, or Gemini) to build software. 
+Welcome to **OmniBrain**! This project provides a structured "Memory Bank" and AI-Constraint framework specifically designed for non-programmers (Vibe Coders) who use AI Agents (like Cursor, Claude, ChatGPT, or Gemini) to build software. 
 
-By installing OmniBrain, you prevent your AI from hallucinating, forgetting architectural rules, or breaking your project as it grows.
+### Why Use OmniBrain?
+When you build large applications with AI, the AI eventually forgets old rules, hallucinates bad code, or breaks existing features because its context window gets overwhelmed. OmniBrain solves this by acting as a permanent "Long-Term Memory" for your AI.
+- **No Coding Required:** You just install it and talk to your AI. OmniBrain does the rest.
+- **Zero Hallucinations:** OmniBrain includes an automated Markdown Linter. If you tell the AI "never use X", it writes that rule down and physically blocks itself from ever making that mistake again.
+- **Vault Maintenance:** The framework automatically archives old plans and distills architectural decisions into a single source of truth.
 
 ---
 
@@ -27,6 +31,30 @@ Are you a developer who wants to make OmniBrain better? We would love your help!
 The true power of this framework comes from its **Templates** and **AI Linter Rules**. If you have discovered a fantastic System Prompt, or you have written a regex rule that prevents AI hallucination, please contribute it!
 
 Read our [`CONTRIBUTING.md`](./CONTRIBUTING.md) to see how you can submit Pull Requests.
+
+---
+
+## 🇭🇰 繁體中文說明
+
+歡迎來到 **OmniBrain**！這個項目提供了一個結構化的「記憶庫」和 AI 限制框架，專為使用 AI 代理（如 Cursor、Claude、ChatGPT 或 Gemini）來構建軟件的非程式設計師（Vibe Coders）設計。
+
+### 為什麼使用 OmniBrain？
+當你使用 AI 構建大型應用程式時，AI 最終會忘記舊規則、產生糟糕的程式碼幻覺，或者因為上下文窗口不堪重負而破壞現有功能。OmniBrain 透過充當 AI 的永久「長期記憶」來解決這個問題。
+- **無需編程：** 你只需安裝它並與你的 AI 交談。OmniBrain 會處理剩下的事情。
+- **零幻覺：** OmniBrain 包含一個自動化的 Markdown 檢查器。如果你告訴 AI「永遠不要使用 X」，它會記下這個規則，並在物理上阻止自己再次犯這個錯誤。
+- **知識庫維護：** 框架會自動將舊計劃存檔，並將架構決策提煉成單一的真實來源。
+
+---
+
+## 🚀 如何使用 (給 Vibe Coders)
+你不需要運行任何終端命令或進行任何配置。
+
+1. 為你的新應用程式創建一個空白文件夾。
+2. 告訴你的 AI 寫碼助手：*「將這個代碼庫 [你的 Repo URL] 克隆到我的文件夾中。」*
+3. 接下來，複製位於 [`AGENT_PROMPT.md`](./AGENT_PROMPT.md) 中的「第 1 天魔法提示詞」，並將其貼上到你的 AI 聊天中。
+4. AI 將自動構建你項目的知識庫 (Vault) 並設置自動化的檢查規則！
+
+如需更詳細的設置說明，請閱讀 [`INSTRUCTIONS_FOR_HUMANS.md`](./INSTRUCTIONS_FOR_HUMANS.md)。
 
 ---
 
