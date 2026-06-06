@@ -30,6 +30,12 @@ If you have been chatting with your AI for a long time and it seems to forget th
 
 The AI is programmed to immediately re-read its instructions and update your `Vault` dashboard when it sees this command.
 
+### Using Multiple AIs (The Brain Isolation Rule)
+If you ever use your AI to generate a prompt for a *different* AI (like an external cloud agent), remember that the second AI cannot read your local `Vault` folder! Your primary AI is instructed to follow the **Brain Isolation Rule**: it will automatically copy-paste the relevant rules from your Vault into the prompt so the secondary AI doesn't break your project.
+
+### Markdown-Driven Linting
+OmniBrain automatically prevents AI hallucinations. If you tell your AI *"Never use scrollIntoView"*, it will save that rule in `Vault/Anti_Patterns.md`. The built-in linter (`npm run check-ai-rules`) actively reads this plain-English markdown file and will physically block the AI from ever making that mistake again—no coding required from you!
+
 ---
 
 ## 🇭🇰 繁體中文指示
@@ -61,3 +67,9 @@ AI 會讀取提示詞並自動運行安裝腳本。它會創建一個名為 `Vau
 > `/sync`
 
 AI 被編程為在看到此命令時立即重新閱讀其指示並更新你的 `Vault` 儀表板。
+
+### 使用多個 AI（大腦隔離規則）
+如果你使用 AI 為「另一個」 AI（如外部雲端代理）生成提示詞，請記住第二個 AI 無法讀取你本地的 `Vault` 文件夾！你的主要 AI 被指示遵循**大腦隔離規則**：它會自動將相關規則從你的知識庫複製貼上到提示詞中，這樣第二個 AI 就不會破壞你的項目。
+
+### Markdown 驅動的檢查器
+OmniBrain 會自動防止 AI 幻覺。如果你告訴 AI *「永遠不要使用 scrollIntoView」*，它會將該規則保存在 `Vault/Anti_Patterns.md` 中。內建的檢查器 (`npm run check-ai-rules`) 會主動讀取這個純文本 markdown 文件，並在物理上阻止 AI 再次犯這個錯誤——你完全不需要寫程式！

@@ -26,8 +26,7 @@ const directories = [
   'Vault/Features',
   'Vault/Agents',
   'Vault/Plans',
-  'scripts',
-  'scripts/rules'
+  'scripts'
 ];
 
 directories.forEach(dir => {
@@ -75,9 +74,6 @@ if (fs.existsSync(templateDir)) {
   copyFileSafe(path.join(templateDir, 'vault-archive.template.js'), path.join(__dirname, 'scripts', 'vault-archive.js'));
   copyFileSafe(path.join(templateDir, 'vault-autotag.template.js'), path.join(__dirname, 'scripts', 'vault-autotag.js'));
   copyFileSafe(path.join(templateDir, 'omnibrain-migrate.template.js'), path.join(__dirname, 'scripts', 'omnibrain-migrate.js'));
-  copyFileSafe(path.join(templateDir, 'rules', 'base-rules.template.js'), path.join(__dirname, 'scripts', 'rules', 'base-rules.js'));
-  copyFileSafe(path.join(templateDir, 'rules', 'react-rules.template.js'), path.join(__dirname, 'scripts', 'rules', 'react-rules.js'));
-  copyFileSafe(path.join(templateDir, 'rules', 'rules-readme.template.md'), path.join(__dirname, 'scripts', 'rules', 'README.md'));
 } else {
   console.error("\x1b[31m[!] Error: 'omnibrain-templates' folder is missing! Please ensure you downloaded the full repository.\x1b[0m");
   process.exit(1);
