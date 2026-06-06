@@ -29,6 +29,12 @@ If you have been chatting with your AI for a long time and it seems to forget th
 
 The AI is programmed to immediately re-read its instructions and update your `Vault` dashboard when it sees this command.
 
+### The Modular Agent Router (Vault/OS/)
+OmniBrain uses a **Modular Router Architecture** to save your AI's token limits and keep it focused. 
+- The `AGENT_PROMPT.md` is NOT a massive wall of instructions anymore. It is simply a "router."
+- Depending on what you ask the AI to do, the router tells the AI to read specific, detailed instruction files stored in the `Vault/OS/` folder (like `Coding_Directives.md` or `Vault_Directives.md`).
+- **If you want to change how your AI writes code**, do not edit the main prompt! Instead, edit `Vault/OS/Coding_Directives.md`.
+
 ### Using Multiple AIs (The Brain Isolation Rule)
 If you ever use your AI to generate a prompt for a *different* AI (like an external cloud agent), remember that the second AI cannot read your local `Vault` folder! Your primary AI is instructed to follow the **Brain Isolation Rule**: it will automatically copy-paste the relevant rules from your Vault into the prompt so the secondary AI doesn't break your project.
 
@@ -65,6 +71,12 @@ AI 會讀取提示詞並自動運行安裝腳本。它會創建一個名為 `Vau
 > `/sync`
 
 AI 被編程為在看到此命令時立即重新閱讀其指示並更新你的 `Vault` 儀表板。
+
+### 模組化代理路由器 (Vault/OS/)
+OmniBrain 使用**模組化路由器架構**來節省 AI 的 token 限制並保持其專注。
+- `AGENT_PROMPT.md` 不再是一大串冗長的指示。它只是一個「路由器」。
+- 根據你要求 AI 執行的操作，路由器會指示 AI 讀取存儲在 `Vault/OS/` 文件夾中的特定、詳細的指示文件（例如 `Coding_Directives.md` 或 `Vault_Directives.md`）。
+- **如果你想改變 AI 編寫程式碼的方式**，請不要編輯主提示詞！相反地，請編輯 `Vault/OS/Coding_Directives.md`。
 
 ### 使用多個 AI（大腦隔離規則）
 如果你使用 AI 為「另一個」 AI（如外部雲端代理）生成提示詞，請記住第二個 AI 無法讀取你本地的 `Vault` 文件夾！你的主要 AI 被指示遵循**大腦隔離規則**：它會自動將相關規則從你的知識庫複製貼上到提示詞中，這樣第二個 AI 就不會破壞你的項目。
