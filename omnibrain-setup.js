@@ -69,6 +69,7 @@ if (fs.existsSync(templateDir)) {
   copyFileSafe(path.join(templateDir, 'os-router-architecture.template.md'), path.join(__dirname, 'Vault', 'OS', 'Router_Architecture.md'));
   copyFileSafe(path.join(templateDir, 'os-vault-directives.template.md'), path.join(__dirname, 'Vault', 'OS', 'Vault_Directives.md'));
   copyFileSafe(path.join(templateDir, 'os-coding-directives.template.md'), path.join(__dirname, 'Vault', 'OS', 'Coding_Directives.md'));
+  copyFileSafe(path.join(templateDir, 'os-subagent-directives.template.md'), path.join(__dirname, 'Vault', 'OS', 'Subagent_Directives.md'));
   copyFileSafe(path.join(templateDir, 'system-moc.template.md'), path.join(__dirname, 'Vault', 'System', '_System_MOC.md'));
   copyFileSafe(path.join(templateDir, 'features-moc.template.md'), path.join(__dirname, 'Vault', 'Features', '_Features_MOC.md'));
   copyFileSafe(path.join(templateDir, 'agents-moc.template.md'), path.join(__dirname, 'Vault', 'Agents', '_Agents_MOC.md'));
