@@ -4,16 +4,23 @@
 
 Welcome! You do not need to know how to code to use this framework. OmniBrain is an "Operating System" that you install directly into your AI coding assistant (like Gemini, Cursor, or Claude) to stop it from making mistakes as your project grows. It acts as a permanent "long-term memory" and strict "rule enforcer" for your AI.
 
-### Step 1: Open Your Folder
-Unzip this repository and place all the files into the empty folder where you want to build your app.
+### Step 1: Prepare Your Folder
+Download this repository as a ZIP file (from the green "Code" button) and unzip it into the empty folder where you want to build your app.
 
-### Step 2: Talk to Your AI
-Open your AI coding assistant. Copy the entire contents of `AGENT_PROMPT.md` and paste it into the AI chat. 
+### Step 2: Open Your AI Editor
+Open that folder inside your favorite AI coding assistant (like **Cursor** or **Windsurf**). 
 
-### Step 3: Let the AI Do the Work
-The AI will read the prompt and automatically run the setup scripts. It will create a folder called `Vault`. 
+### Step 3: Start the Magic
+Inside your editor, open the file `AGENT_PROMPT.md`. Copy all the text inside it and paste it into your AI chat window.
 
-*(Optional but Highly Recommended: Download the free app **Obsidian** (https://obsidian.md) and open the `Vault` folder with it. This will give you a beautiful visual dashboard of what your AI is doing.)*
+### Step 4: Let the AI Do the Work
+The AI will read the prompt and automatically set everything up. It will create a folder called `Vault` which acts as its memory.
+
+**(Optional) Pro-Tip: Visualizing Your AI's Brain**
+OmniBrain uses structured links (like `Governs:: [[Target]]`) to map out your project. The AI understands this perfectly as plain text, but if *you* want to see it visually:
+1. Download the free app **Obsidian** (https://obsidian.md) and open the `Vault` folder inside it.
+2. If you want dynamic, auto-updating tables on your Dashboard, turn off "Safe Mode" in Obsidian's settings and install the Community Plugin called **Dataview**. 
+*This turns your Dashboard into a beautiful visual command center for your AI team!*
 
 That's it! Every day, just tell the AI what to build, and OmniBrain will handle the rest.
 
@@ -52,16 +59,23 @@ OmniBrain automatically prevents AI hallucinations. If you tell your AI *"Never 
 
 歡迎！您不需要懂程式設計就可以使用這個框架。OmniBrain 是一個「作業系統」，您可以直接把它安裝到您的 AI 程式開發助手（如 Gemini、Cursor 或 Claude）中，以防止它在您的專案成長時出錯。它能充當您 AI 的永久「長期記憶」和嚴格的「規則執行者」。
 
-### 第一步：開啟您的資料夾
-解壓縮這個儲存庫，並把所有檔案放到您想建立應用程式的空白資料夾中。
+### 第一步：準備您的資料夾
+將這個儲存庫下載為 ZIP 檔案（點擊綠色的「Code」按鈕），並將其解壓縮到您想建立應用程式的空白資料夾中。
 
-### 第二步：與您的 AI 對話
-開啟您的 AI 程式開發助手。複製 `AGENT_PROMPT.md` 的全部內容，並將其貼上到 AI 聊天視窗中。
+### 第二步：開啟您的 AI 編輯器
+在您最喜歡的 AI 程式開發助手（如 **Cursor** 或 **Windsurf**）中開啟該資料夾。
 
-### 第三步：讓 AI 處理工作
-AI 會讀取提示詞並自動執行安裝指令。它會建立一個名為 `Vault` 的資料夾。
+### 第三步：啟動魔法
+在您的編輯器中，開啟 `AGENT_PROMPT.md` 檔案。複製裡面的所有文字，並將其貼上到您的 AI 聊天視窗中。
 
-*（選用但強烈建議：下載免費應用程式 **Obsidian** (https://obsidian.md) 並用它開啟 `Vault` 資料夾。這將為您提供一個美觀的視覺儀表板，讓您看到 AI 正在做什麼。）*
+### 第四步：讓 AI 處理工作
+AI 會讀取提示詞並自動設定好一切。它會建立一個名為 `Vault` 的資料夾，作為它的記憶庫。
+
+**（選用）專家提示：視覺化您 AI 的大腦**
+OmniBrain 使用結構化的連結（例如 `Governs:: [[Target]]`）來為 AI 繪製專案架構圖。AI 可以完美地將其作為純文字讀取，但如果您*也*想視覺化地看到它：
+1. 下載免費應用程式 **Obsidian** (https://obsidian.md) 並用它開啟 `Vault` 資料夾。
+2. 如果您希望儀表板上顯示動態、自動更新的表格，請在 Obsidian 設定中關閉「安全模式 (Safe Mode)」並安裝名為 **Dataview** 的社群外掛。
+*這會讓您的儀表板變成一個美觀的視覺控制中心，讓您輕鬆掌握 AI 團隊的動態！*
 
 就這麼簡單！每天只需告訴 AI 要建立什麼，OmniBrain 就會處理剩下的事情。
 

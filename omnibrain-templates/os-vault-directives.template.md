@@ -7,6 +7,16 @@ tags: [omnibrain, vault, memory, kdp]
 
 # Vault Directives (Memory & Documentation)
 
+## 📌 Core Observations
+- Observation: Before modifying any file, the agent must check the maps of content and execute the Knowledge Base Handshake Protocol.
+- Observation: Upon session start, the Dashboard must be reviewed.
+- Observation: The Knowledge Distillation Protocol extracts rules from temporary plans and moves them to the permanent System rules.
+- Observation: Files in the Vault must contain YAML frontmatter and use semantic inline links (e.g., `Modifies:: [[Specific_Document_Name]]`).
+- Observation: Old plans are archived, not deleted.
+
+## 🔗 Relations
+- Governs:: [[Router_Architecture]]
+
 You are operating with a connected Obsidian knowledge base located in the `Vault/` directory.
 Whenever you are tasked with creating, updating, or revising a project plan or artifact, you must adhere to the following workflow to ensure permanent, interlinked knowledge tracking.
 
@@ -58,7 +68,7 @@ tags: [omnibrain, planning]
 ```
 
 ### Internal Wiki-Linking
-- **Modifies Link:** Every plan MUST start by explicitly linking to the specific architectural document it alters using `Modifies: [[`Specific_Document_Name`]]`. 
+- **Modifies Link:** Every plan MUST start by explicitly linking to the specific architectural document it alters using the Dataview semantic format: `Modifies:: [[Specific_Document_Name]]`. 
   - **CRITICAL:** You are FORBIDDEN from linking to root files like `[[_System_MOC]]`. You must link to the specific leaf node.
 
 ### Maps of Content (MOCs)

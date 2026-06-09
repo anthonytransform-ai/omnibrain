@@ -18,10 +18,10 @@ When you build large applications with AI, the AI eventually forgets old rules, 
 ## 🚀 How to Use (For Vibe Coders)
 You do not need to run any terminal commands or configure anything.
 
-1. Create an empty folder for your new app.
-2. Tell your AI coding assistant: *"Clone this repository [Your Repo URL] into my folder."*
-3. Next, copy the "Day 1 Magic Prompt" located in [`AGENT_PROMPT.md`](./AGENT_PROMPT.md) and paste it into your AI chat. 
-4. The AI will automatically scaffold your project's Knowledge Base (Vault) and set up the automated linting rules!
+1. **Download the code:** Click the green "Code" button at the top of this page and select **Download ZIP**, then unzip it into an empty folder where you want to build your app.
+2. **Open your AI Editor:** Open that folder inside your favorite AI coding assistant (like Cursor or Windsurf).
+3. **Start the Magic:** Open the file [`AGENT_PROMPT.md`](./AGENT_PROMPT.md), copy all the text inside, and paste it into your AI chat.
+4. The AI will automatically scaffold your project's Knowledge Base (Vault) and set up all the automated rules!
 
 For more detailed setup instructions, please read [`INSTRUCTIONS_FOR_HUMANS.md`](./INSTRUCTIONS_FOR_HUMANS.md).
 
@@ -53,10 +53,10 @@ Read our [`CONTRIBUTING.md`](./CONTRIBUTING.md) to see how you can submit Pull R
 ## 🚀 如何使用 (給 Vibe Coders)
 您不需要執行任何終端機指令或進行任何設定。
 
-1. 為您的新應用程式建立一個空白資料夾。
-2. 告訴您的 AI 程式開發助手：*「將這個儲存庫 [您的 Repo URL] 複製（Clone）到我的資料夾中。」*
-3. 接下來，複製位於 [`AGENT_PROMPT.md`](./AGENT_PROMPT.md) 中的「第 1 天魔法提示詞」，並將其貼上到您的 AI 聊天視窗中。
-4. AI 將會自動為您的專案建構知識庫 (Vault) 並設定自動化的檢查規則！
+1. **下載程式碼：** 點擊此頁面頂部的綠色「Code」按鈕並選擇 **Download ZIP**，然後將其解壓縮到您想建立應用程式的空白資料夾中。
+2. **開啟您的 AI 編輯器：** 在您最喜歡的 AI 程式開發助手（如 Cursor 或 Windsurf）中開啟該資料夾。
+3. **啟動魔法：** 開啟 [`AGENT_PROMPT.md`](./AGENT_PROMPT.md) 檔案，複製裡面的所有文字，並將其貼上到您的 AI 聊天視窗中。
+4. AI 將會自動為您的專案建構知識庫 (Vault) 並設定所有的自動化規則！
 
 如需更詳細的設定說明，請閱讀 [`INSTRUCTIONS_FOR_HUMANS.md`](./INSTRUCTIONS_FOR_HUMANS.md)。
 

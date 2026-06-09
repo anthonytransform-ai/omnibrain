@@ -22,6 +22,7 @@ console.log("\x1b[36m===============================================\n\x1b[0m");
 // 1. Create Vault Directories
 const directories = [
   'Vault',
+  'Vault/Entities',
   'Vault/System',
   'Vault/Features',
   'Vault/Agents',
@@ -61,6 +62,19 @@ if (!fs.existsSync(pkgPath)) {
   console.log(`\x1b[33m[-] package.json already exists. Please manually add the 'check-ai-rules', 'vault-health', and 'omnibrain-migrate' scripts.\x1b[0m`);
 }
 
+// 2.5 Scaffold Default Entities
+const userEntityPath = path.join(__dirname, 'Vault', 'Entities', 'User.md');
+if (!fs.existsSync(userEntityPath)) {
+  fs.writeFileSync(userEntityPath, `---\ntype: entity\n---\n# The User\n\n## 📌 Core Observations\n- Observation: This user is the Product Manager / Visionary.\n- Observation: Preferences and goals should be recorded here.\n`);
+  console.log(`\x1b[32m[\u2713] Generated:\x1b[0m Vault/Entities/User.md`);
+}
+
+const agentEntityPath = path.join(__dirname, 'Vault', 'Entities', 'Agent.md');
+if (!fs.existsSync(agentEntityPath)) {
+  fs.writeFileSync(agentEntityPath, `---\ntype: entity\n---\n# The Agent\n\n## 📌 Core Observations\n- Observation: You are the Chief AI Architect.\n- Observation: System prompt override rules can be stored here.\n`);
+  console.log(`\x1b[32m[\u2713] Generated:\x1b[0m Vault/Entities/Agent.md`);
+}
+
 // 3. Move Templates into place
 const templateDir = path.join(__dirname, 'omnibrain-templates');
 if (fs.existsSync(templateDir)) {
@@ -70,6 +84,7 @@ if (fs.existsSync(templateDir)) {
   copyFileSafe(path.join(templateDir, 'os-vault-directives.template.md'), path.join(__dirname, 'Vault', 'OS', 'Vault_Directives.md'));
   copyFileSafe(path.join(templateDir, 'os-coding-directives.template.md'), path.join(__dirname, 'Vault', 'OS', 'Coding_Directives.md'));
   copyFileSafe(path.join(templateDir, 'os-subagent-directives.template.md'), path.join(__dirname, 'Vault', 'OS', 'Subagent_Directives.md'));
+  copyFileSafe(path.join(templateDir, 'os-planning-directives.template.md'), path.join(__dirname, 'Vault', 'OS', 'Planning_Directives.md'));
   copyFileSafe(path.join(templateDir, 'system-moc.template.md'), path.join(__dirname, 'Vault', 'System', '_System_MOC.md'));
   copyFileSafe(path.join(templateDir, 'features-moc.template.md'), path.join(__dirname, 'Vault', 'Features', '_Features_MOC.md'));
   copyFileSafe(path.join(templateDir, 'agents-moc.template.md'), path.join(__dirname, 'Vault', 'Agents', '_Agents_MOC.md'));
