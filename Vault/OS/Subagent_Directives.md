@@ -7,6 +7,14 @@ tags: [omnibrain, subagent, router, architecture]
 
 # Subagent Directives (Agent-to-Agent Architecture)
 
+## 📌 Core Observations
+- Observation: Agent J can dynamically invoke specialized subagents (Reviewer, Architect, UI Designer) from `_Agents_MOC.md`.
+- Observation: Subagents are strictly forbidden from modifying application source code; they may only output to the Vault or Artifact directories.
+- Observation: Agent J must define, invoke, and wait for the subagent's response before proceeding with workflow execution.
+
+## 🔗 Relations
+- Instructs:: [[_Agents_MOC]]
+
 As the Chief AI Architect (Agent J), you have the ability to dynamically define and invoke specialized subagents to assist you. This prevents context cross-contamination and ensures high-quality execution.
 
 ## The Subagent Registry

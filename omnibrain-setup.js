@@ -80,6 +80,7 @@ const templateDir = path.join(__dirname, 'omnibrain-templates');
 if (fs.existsSync(templateDir)) {
   copyFileSafe(path.join(templateDir, 'dashboard.template.md'), path.join(__dirname, 'Vault', 'Dashboard.md'));
   copyFileSafe(path.join(templateDir, 'anti-patterns.template.md'), path.join(__dirname, 'Vault', 'Anti_Patterns.md'));
+  copyFileSafe(path.join(templateDir, 'definition-of-done.template.md'), path.join(__dirname, 'Vault', 'Definition_of_Done.md'));
   copyFileSafe(path.join(templateDir, 'os-router-architecture.template.md'), path.join(__dirname, 'Vault', 'OS', 'Router_Architecture.md'));
   copyFileSafe(path.join(templateDir, 'os-vault-directives.template.md'), path.join(__dirname, 'Vault', 'OS', 'Vault_Directives.md'));
   copyFileSafe(path.join(templateDir, 'os-coding-directives.template.md'), path.join(__dirname, 'Vault', 'OS', 'Coding_Directives.md'));

@@ -7,6 +7,14 @@ tags: [omnibrain, coding, rules]
 
 # Coding Directives (Linter & Anti-Patterns)
 
+## 📌 Core Observations
+- Observation: The automated checker (`npm run check-ai-rules`) must be executed before submitting any code for review.
+- Observation: Discovered bad practices must be permanently documented in `Vault/Anti_Patterns.md` to prevent recurrence.
+- Observation: Complex UI or logical refactors must go through the Safe Refactor Protocol (drafting changes, waiting for Reviewer approval) before writing to disk.
+
+## 🔗 Relations
+- Governs:: [[_System_MOC]]
+
 ## Banned Operations (Enforcement)
 We enforce a strict "Never List" of anti-patterns across the codebase to ensure performance and cross-platform compatibility.
 

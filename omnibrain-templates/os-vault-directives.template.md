@@ -68,7 +68,7 @@ tags: [omnibrain, planning]
 ```
 
 ### Internal Wiki-Linking
-- **Modifies Link:** Every plan MUST start by explicitly linking to the specific architectural document it alters using the Dataview semantic format: `Modifies:: [[Specific_Document_Name]]`. 
+- **Modifies Link:** Every plan MUST start by explicitly linking to the specific architectural document it alters using the standard semantic format: `Modifies: [[Specific_Document_Name]]`. 
   - **CRITICAL:** You are FORBIDDEN from linking to root files like `[[_System_MOC]]`. You must link to the specific leaf node.
 
 ### Maps of Content (MOCs)
