@@ -53,6 +53,14 @@ If you ever use your AI to generate a prompt for a *different* AI (like an exter
 ### Markdown-Driven Linting
 OmniBrain automatically prevents AI hallucinations. If you tell your AI *"Never use scrollIntoView"*, it will save that rule in `Vault/Anti_Patterns.md`. The built-in linter (`npm run check-ai-rules`) actively reads this plain-English markdown file and will physically block the AI from ever making that mistake again—no coding required from you!
 
+### Automated Vault Organization (Vault Keeper)
+You don't need to manually organize your AI's generated plans or walkthroughs. When the main AI finishes a task, it delegates the archival work to the **Vault Keeper** subagent. This "helper AI" quietly formats and files away the temporary documents into your `Vault/Plans/` directory, keeping your main AI's context clean and focused.
+
+### Context Engineering & Self-Correction
+OmniBrain forces your AI to adopt professional engineering habits:
+- **Context Engineering**: Before planning a new feature, your AI is strictly instructed to "read the manual" (your project's rules and architecture docs) so it doesn't make assumptions.
+- **Doubt-Driven Development**: Before writing complex logic, your AI must pause and "double-check its own work" from a fresh perspective to catch logic errors before they are saved to your disk.
+
 ---
 
 ## 🇭🇰 繁體中文指示
@@ -107,3 +115,11 @@ OmniBrain 內建了一個專家**子代理團隊**（如程式碼審查員、架
 
 ### Markdown 驅動的語法檢查
 OmniBrain 會自動防止 AI 幻覺。如果您告訴 AI *「永遠不要使用 scrollIntoView」*，它會將該規則儲存在 `Vault/Anti_Patterns.md` 中。內建的檢查工具 (`npm run check-ai-rules`) 會主動讀取這個純文字 Markdown 檔案，並從根本上阻止 AI 再次犯這個錯誤——您完全不需要寫程式！
+
+### 自動化知識庫整理 (Vault Keeper)
+您不需要手動整理 AI 產生的計畫或流程說明。當主 AI 完成任務時，它會將封存工作委託給 **Vault Keeper** 子代理。這個「助手 AI」會默默地將暫存文件格式化並歸檔到您的 `Vault/Plans/` 目錄中，讓您的主 AI 保持思緒清晰與專注。
+
+### 上下文工程與自我修正 (Context Engineering & Self-Correction)
+OmniBrain 會強制您的 AI 養成專業的工程習慣：
+- **上下文工程 (Context Engineering)**：在規劃新功能之前，您的 AI 會被嚴格要求先「閱讀手冊」（您專案的規則和架構文件），以免它憑空猜測。
+- **懷疑驅動開發 (Doubt-Driven Development)**：在撰寫複雜邏輯之前，您的 AI 必須暫停並以全新的視角「雙重檢查自己的工作」，在程式碼儲存到您的磁碟之前揪出邏輯錯誤。

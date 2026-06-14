@@ -89,6 +89,11 @@ if (fs.existsSync(templateDir)) {
   copyFileSafe(path.join(templateDir, 'system-moc.template.md'), path.join(__dirname, 'Vault', 'System', '_System_MOC.md'));
   copyFileSafe(path.join(templateDir, 'features-moc.template.md'), path.join(__dirname, 'Vault', 'Features', '_Features_MOC.md'));
   copyFileSafe(path.join(templateDir, 'agents-moc.template.md'), path.join(__dirname, 'Vault', 'Agents', '_Agents_MOC.md'));
+  copyFileSafe(path.join(templateDir, 'code-reviewer.template.md'), path.join(__dirname, 'Vault', 'Agents', 'Code_Reviewer.md'));
+  copyFileSafe(path.join(templateDir, 'architect.template.md'), path.join(__dirname, 'Vault', 'Agents', 'Architect.md'));
+  copyFileSafe(path.join(templateDir, 'ui-designer.template.md'), path.join(__dirname, 'Vault', 'Agents', 'UI_Designer.md'));
+  copyFileSafe(path.join(templateDir, 'vault-keeper.template.md'), path.join(__dirname, 'Vault', 'Agents', 'Vault_Keeper.md'));
+  copyFileSafe(path.join(templateDir, 'skills-index.template.md'), path.join(__dirname, 'Vault', 'System', 'Skills_Index.md'));
   copyFileSafe(path.join(templateDir, 'check-ai-rules.template.js'), path.join(__dirname, 'scripts', 'check-ai-rules.js'));
   copyFileSafe(path.join(templateDir, 'vault-health.template.js'), path.join(__dirname, 'scripts', 'vault-health.js'));
   copyFileSafe(path.join(templateDir, 'vault-archive.template.js'), path.join(__dirname, 'scripts', 'vault-archive.js'));

@@ -11,6 +11,8 @@ When you build large applications with AI, the AI eventually forgets old rules, 
 - **Zero Hallucinations:** OmniBrain includes an automated Markdown Linter. If you tell the AI "never use X", it writes that rule down and physically blocks itself from ever making that mistake again.
 - **Modular Agent Router:** Prevents "context bloat" by using a lightweight routing prompt that only loads the specific instructions (Coding, Architecture, or Vault Maintenance) your AI needs for the current task, saving tokens and improving focus.
 - **Multi-Agent Team:** OmniBrain comes with a native team of expert subagents (Code Reviewers, Architects, UI Designers). By typing 'Review my code' or 'Design the UI', your main AI will spawn specialized subagents to double-check work and prevent bugs.
+- **Context Engineering & Self-Correction:** Before planning a new feature, OmniBrain forces your AI to read the rules (Context Engineering). Before writing complex code, it forces the AI to double-check its own logic with a fresh perspective (Doubt-Driven Development).
+- **Automated Vault Organization:** A specialized "Vault Keeper" helper AI automatically archives your old plans and organizes your files, keeping your main AI focused and your project clean.
 - **Vault Maintenance:** The framework automatically archives old plans and distills architectural decisions into a single source of truth.
 
 ---
@@ -46,6 +48,8 @@ Read our [`CONTRIBUTING.md`](./CONTRIBUTING.md) to see how you can submit Pull R
 - **零幻覺：** OmniBrain 包含一個自動化的 Markdown 語法檢查工具（Linter）。如果您告訴 AI「永遠不要使用 X」，它會記下這個規則，並從根本上阻止自己再次犯下這個錯誤。
 - **模組化代理路由器：** 透過使用輕量級的路由提示詞，僅載入 AI 當前任務所需的特定指令（程式開發、架構或知識庫維護），防止「上下文過載」，從而節省 Token 並提高專注力。
 - **多代理團隊：** OmniBrain 配備了一個原生的專家子代理（Subagent）團隊（包含程式碼審查員、架構師、UI 設計師）。只要輸入「審查我的程式碼」或「設計 UI」，您的主 AI 就會呼叫專屬的子代理來進行雙重檢查並防止出錯。
+- **上下文工程與自我修正：** 在規劃新功能之前，OmniBrain 會強制您的 AI 先閱讀規則（上下文工程）。在撰寫複雜程式碼之前，它會強制 AI 以全新視角雙重檢查自己的邏輯（懷疑驅動開發，Doubt-Driven Development）。
+- **自動化知識庫整理：** 一個專門的「知識庫管理員 (Vault Keeper)」助手 AI 會自動封存您舊的計畫並整理檔案，保持專案整潔，讓主 AI 能保持專注。
 - **知識庫維護：** 框架會自動將舊計畫封存，並將架構決策萃取成單一的真實來源。
 
 ---

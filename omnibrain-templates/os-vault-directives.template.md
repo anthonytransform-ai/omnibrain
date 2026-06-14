@@ -49,6 +49,18 @@ At the end of your session, you MUST execute the vault maintenance suite to tag 
 
 ## Vault Management Rules
 
+### Project Isolation Rule
+Agent maintenance scripts or vault commands MUST be strictly scoped to the local project workspace. Do not scan, modify, or interact with files outside the local project directory. This prevents cross-project health-check bleeding.
+
+### Vault-wide Git Version Control Safeguard
+The project workspace should be tracked via a local Git repository. This acts as the ultimate safeguard against AI mass-overwrites. Ensure `.gitignore` rules prevent temporary artifacts or tool configurations from being tracked if necessary.
+
+### Vault Handoff Protocol
+The primary AI must NOT manually copy transient plans to the `Vault/Plans/` directory to prevent context window bloat. Instead, delegate the archiving and formatting to the Vault Keeper subagent.
+1. Draft the `implementation_plan.md` in your temporary artifact directory.
+2. Upon completion, invoke the `vault-keeper` subagent.
+3. Pass the paths of the transient artifacts to the Vault Keeper, who will format the YAML frontmatter and save them to the Vault.
+
 ### Pre-Archive Validation Checklist
 Before executing any vault write operations, the agent MUST run this verification check:
 1. **Frontmatter**: Does the note begin with a `---` properties block?

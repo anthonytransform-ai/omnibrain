@@ -5,5 +5,9 @@ dist/
 build/
 .next/
 coverage/
-OmniBrain_Vault/.obsidian/
-PRIVATE_AGENTS.md
+.obsidian/
+AGENTS.md
+
+scratch/
+
+scripts/
