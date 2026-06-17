@@ -1,15 +1,21 @@
 {
   "name": "omnibrain-framework",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "An AI Operating System for Vibe Coders",
   "main": "omnibrain-setup.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"No formal tests yet. Feel free to contribute!\" && exit 0"
+    "test": "echo \"No formal tests yet. Feel free to contribute!\" && exit 0",
+    "check-ai-rules": "node scripts/check-ai-rules.js",
+    "vault-autotag": "node scripts/vault-autotag.js",
+    "vault-archive": "node scripts/vault-archive.js",
+    "vault-health": "node scripts/vault-health.js",
+    "vault-maintenance": "npm run vault-autotag && npm run vault-health && npm run vault-archive",
+    "omnibrain-migrate": "node scripts/omnibrain-migrate.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/omnibrain.git"
+    "url": "https://github.com/anthonytransform-ai/omnibrain.git"
   },
   "keywords": [
     "ai",
@@ -21,3 +27,4 @@
   "author": "OmniBrain Contributors",
   "license": "MIT"
 }
+

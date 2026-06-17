@@ -7,74 +7,61 @@ tags: [omnibrain, vault, memory, kdp]
 
 # Vault Directives (Memory & Documentation)
 
-## 📌 Core Observations
-- Observation: Before modifying any file, the agent must check the maps of content and execute the Knowledge Base Handshake Protocol.
-- Observation: Upon session start, the Dashboard must be reviewed.
-- Observation: The Knowledge Distillation Protocol extracts rules from temporary plans and moves them to the permanent System rules.
-- Observation: Files in the Vault must contain YAML frontmatter and use semantic inline links (e.g., `Modifies:: [[Specific_Document_Name]]`).
+## Core Observations
+
+- Observation: The Dashboard is the session starting point.
+- Observation: Important temporary work must be captured in `Vault/_inbox/` before context changes.
+- Observation: The Knowledge Distillation Protocol moves durable truths from temporary notes into `Vault/System/` and `Vault/Features/`.
 - Observation: Old plans are archived, not deleted.
+- Observation: The framework must work in plain Markdown without a required plugin or vendor-specific tool.
 
-## 🔗 Relations
-- Governs:: [[Router_Architecture]]
+## Session Start Protocol
 
-You are operating with a connected Obsidian knowledge base located in the `Vault/` directory.
-Whenever you are tasked with creating, updating, or revising a project plan or artifact, you must adhere to the following workflow to ensure permanent, interlinked knowledge tracking.
+When the user starts a session:
 
-## Core Action Protocols
+1. Read `Vault/Dashboard.md`.
+2. Read the relevant MOC files.
+3. Read `Vault/Definition_of_Done.md` and `Vault/Anti_Patterns.md`.
+4. Load only the directive files needed for the current task.
 
-### Session Start Protocol (Good Morning)
-- Read `Vault/Dashboard.md` to establish daily priorities.
-- Review the MOCs (`_System_MOC.md`, `_Features_MOC.md`) to map the structural architecture of the project.
+## Knowledge Base Handshake Protocol
 
-### Knowledge Base Handshake Protocol
-To ensure the user remains in the loop:
-- **Confirmation Checklist**: At the end of every task, present a short verification summary and explicitly ask:
-  > **"Would you like me to run the Knowledge Distillation Protocol to update the core system docs, and then archive these artifacts?"**
-- **Action Trigger**: Only execute vault write operations AFTER the user has explicitly approved.
+At the end of a task, present a short summary and ask:
 
-### The Knowledge Distillation Protocol (KDP)
-We must shift from "Archiving Plans" to "Distilling Truths". 
-- **The Protocol**: Before archiving any `Walkthrough.md` or `Implementation_Plan.md`, analyze the completed task for new architectural patterns. 
-- **The Execution**: Update the definitive `System/` or `Features/` documents with this distilled knowledge.
-- **The Result**: The `Plans/` files become an archive for tracing history, while the `System/` folders remain the single, up-to-date source of truth.
+> Would you like me to archive these notes and update the project knowledge base?
 
-### The /sync Protocol
-If the user types `/sync`, you must:
-1. Re-read the router file to refresh your memory.
-2. Perform a full update of the `Vault/Dashboard.md` to reflect the current state of the project.
+Only archive or distill knowledge after the user approves, unless the user has already delegated that exact maintenance task.
 
-### Session Close Protocol (Handover)
-At the end of your session, you MUST execute the vault maintenance suite to tag orphans, check link health, and roll older plans into the archive:
-`npm run vault-maintenance`
+## Artifact Inbox Protocol
 
-## Vault Management Rules
+Before ending a session or switching tasks, save important notes in:
 
-### Pre-Archive Validation Checklist
-Before executing any vault write operations, the agent MUST run this verification check:
-1. **Frontmatter**: Does the note begin with a `---` properties block?
-2. **Wiki-Link Check**: Are cross-references written using Obsidian double brackets (`[[`WikiLink`]]`)?
-3. **Naming Check**: Does the filename exactly match `YYYY-MM-DD_HHMM_[ArtifactType]_[FeatureName].md`?
-
-### Obsidian YAML Frontmatter
-Every note in the vault must begin with a YAML frontmatter block:
-```yaml
----
-type: implementation_plan # [implementation_plan | task_list | walkthrough]
-feature: "Feature Name"
-date: YYYY-MM-DD HH:MM
-status: proposed # [proposed | active | completed | superseded]
-tags: [omnibrain, planning]
----
+```text
+Vault/_inbox/YYYY-MM-DD_HHMM_session-name/
 ```
 
-### Internal Wiki-Linking
-- **Modifies Link:** Every plan MUST start by explicitly linking to the specific architectural document it alters using the standard semantic format: `Modifies: [[Specific_Document_Name]]`. 
-  - **CRITICAL:** You are FORBIDDEN from linking to root files like `[[_System_MOC]]`. You must link to the specific leaf node.
+Recommended files:
 
-### Maps of Content (MOCs)
-- **Link to MOCs**: When creating a new feature or system note, add a link to it inside the appropriate MOC file (e.g., `_Features_MOC.md`).
-- **Global Tags**: Include descriptive tags in the YAML frontmatter without `#` prefixes.
+- `implementation_plan.md`
+- `task_list.md`
+- `walkthrough.md`
+- `review.md`
+- `handoff.md`
 
-## Execution Rules
-- Use file-system writing tools to save these files directly. Do not simply output the markdown into the chat window.
-- Never delete or modify older plans in `Vault/Plans/`. All revisions must result in a new sequential file.
+## Knowledge Distillation Protocol
+
+1. Read the completed walkthrough or review.
+2. Extract durable decisions, rules, and architecture facts.
+3. Update the specific `Vault/System/` or `Vault/Features/` note.
+4. Keep `Vault/Plans/` as history, not the source of truth.
+
+## Archive Rules
+
+- Use filenames like `YYYY-MM-DD_HHMM_Implementation_Plan_Feature_Name.md`.
+- Keep frontmatter at the top of durable notes.
+- Never delete older plans during normal work.
+- Link to specific notes where possible.
+
+## Project Isolation Rule
+
+Agents and maintenance scripts must stay inside the local project workspace. Do not scan or modify sibling projects unless the human explicitly asks.

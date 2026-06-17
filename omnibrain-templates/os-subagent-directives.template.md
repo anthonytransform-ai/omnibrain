@@ -2,31 +2,34 @@
 type: directive
 feature: "Agent OS Subagents"
 status: active
-tags: [omnibrain, subagent, router, architecture]
+tags: [omnibrain, subagent, review]
 ---
 
-# Subagent Directives (Agent-to-Agent Architecture)
+# Subagent Directives
 
-## 📌 Core Observations
-- Observation: The primary AI can dynamically invoke specialized subagents (Reviewer, Architect, UI Designer, Vault Keeper) from the `Vault/Agents/` directory.
-- Observation: Subagents are strictly forbidden from modifying application source code; they may only output to the Vault or Artifact directories.
-- Observation: The primary AI must define, invoke, and wait for the subagent's response before proceeding with workflow execution.
+## Purpose
 
-## 🔗 Relations
-- Instructs:: [[_Agents_MOC]]
+Some AI tools can create separate specialist agents. Others cannot. OmniBrain supports both.
 
-As the Chief AI Architect, you have the ability to dynamically define and invoke specialized subagents to assist you. This prevents context cross-contamination and ensures high-quality execution.
+If specialist agents are available, use the templates in `Vault/Agents/`. If they are not available, run the same checklist in the main chat.
 
-## The Subagent Registry
-You must use the subagent definitions exactly as they are defined in their dedicated modular files located within the `Vault/Agents/` directory (e.g., `Code_Reviewer.md`, `Architect.md`). You can reference `Vault/Agents/_Agents_MOC.md` for a complete list.
+## Available Specialist Roles
 
-## Tool Permissions & Isolation Rules
-1. **Architect and Code Reviewer Subagents** MUST be defined with write tools enabled so they can draft and save artifacts.
-2. **STRICT MANDATE:** Their System Prompt MUST explicitly forbid them from modifying any application code. They are only allowed to save files to the Vault or Artifacts directories.
+- `Architect.md`: checks plans before large work starts
+- `Code_Reviewer.md`: reviews code changes across five dimensions
+- `UI_Designer.md`: reviews interface and interaction quality
+- `Vault_Keeper.md`: archives notes and distills durable knowledge
 
-## The Agent-to-Agent Workflow
-When you spawn a subagent:
-1. Define the subagent natively using its template.
-2. Invoke the subagent.
-3. Pass data, context, or code diffs to the subagent's conversation ID.
-4. Wait for the subagent's response before proceeding.
+## Safety Rules
+
+- Specialist roles must not edit application source code unless the human explicitly asks.
+- Reviewers may write notes in `Vault/_inbox/`, `Vault/Plans/`, or other approved Vault folders.
+- The main AI remains responsible for explaining decisions to the human.
+
+## Review Workflow
+
+1. Load the relevant specialist template.
+2. Provide the minimum context needed.
+3. Ask for findings, risks, and approval/rejection.
+4. Apply only approved changes.
+5. Capture the review in `Vault/_inbox/` when it is useful for future memory.

@@ -1,125 +1,264 @@
-# How to Use OmniBrain (For Humans) / 如何使用 OmniBrain (人類指南)
+# Instructions For Humans
 
-## 🇺🇸 English Instructions
+This guide explains how to use OmniBrain in plain language.
 
-Welcome! You do not need to know how to code to use this framework. OmniBrain is an "Operating System" that you install directly into your AI coding assistant (like Gemini, Cursor, or Claude) to stop it from making mistakes as your project grows. It acts as a permanent "long-term memory" and strict "rule enforcer" for your AI.
+OmniBrain is a folder-based memory system for working with AI assistants. It helps the AI understand your project before it makes changes, and it gives you a tidy place to keep plans, decisions, reviews, and handoffs.
 
-### Step 1: Prepare Your Folder
-Download this repository as a ZIP file (from the green "Code" button) and unzip it into the empty folder where you want to build your app.
+## Before You Start
 
-### Step 2: Open Your AI Editor
-Open that folder inside your favorite AI coding assistant (like **Cursor** or **Windsurf**). 
+You need:
 
-### Step 3: Start the Magic
-Inside your editor, open the file `AGENT_PROMPT.md`. Copy all the text inside it and paste it into your AI chat window.
+- a project folder,
+- an AI assistant that can read and edit files,
+- optionally Node.js if you want to run the setup and health-check commands,
+- optionally Obsidian if you want a nicer reading and note-taking experience.
 
-### Step 4: Let the AI Do the Work
-The AI will read the prompt and automatically set everything up. It will create a folder called `Vault` which acts as its memory.
+Obsidian is optional. No Obsidian community plugin is required.
 
-**(Optional) Pro-Tip: Visualizing Your AI's Brain**
-OmniBrain uses structured links (like `Governs:: [[Target]]`) to map out your project. The AI understands this perfectly as plain text, but if *you* want to see it visually:
-1. Download the free app **Obsidian** (https://obsidian.md) and open the `Vault` folder inside it.
-2. If you want dynamic, auto-updating tables on your Dashboard, turn off "Safe Mode" in Obsidian's settings and install the Community Plugin called **Dataview**. 
-*This turns your Dashboard into a beautiful visual command center for your AI team!*
+## First Setup
 
-That's it! Every day, just tell the AI what to build, and OmniBrain will handle the rest.
+1. Put the OmniBrain files inside your project folder.
+2. Open the project in your preferred AI assistant.
+3. Ask the AI assistant to read `AGENT_PROMPT.md`.
+4. If Node.js is available, ask the AI assistant to run:
 
-### Adding to an Existing Project
-If you are adding OmniBrain to a project that already has code or legacy documentation:
-1. Run the setup normally (OmniBrain will not delete your existing files).
-2. Tell your AI: *"I have just installed OmniBrain. Please run `npm run omnibrain-migrate` to analyze my existing codebase and legacy documents, and integrate them into the new Vault structure."*
-3. Open `AGENT_PROMPT.md` and add a note at the top telling the AI to also read your existing instruction files (e.g., *"Read `CLAUDE.md` for our old project rules"*).
+```bash
+npm run setup
+```
 
-### The `/sync` Command
-If you have been chatting with your AI for a long time and it seems to forget the rules, or you just want to force it to update the documentation, simply type:
-> `/sync`
+5. Open `Vault/Project_Context.md`.
+6. Write your project goal, current status, important links, and anything the AI must remember.
 
-The AI is programmed to immediately re-read its instructions and update your `Vault` dashboard when it sees this command.
+## How To Start A Work Session
 
-### The Modular Agent Router (Vault/OS/)
-OmniBrain uses a **Modular Router Architecture** to save your AI's token limits and keep it focused. 
-- The `AGENT_PROMPT.md` is NOT a massive wall of instructions anymore. It is simply a "router."
-- Depending on what you ask the AI to do, the router tells the AI to read specific, detailed instruction files stored in the `Vault/OS/` folder (like `Coding_Directives.md` or `Vault_Directives.md`).
-- **If you want to change how your AI writes code**, do not edit the main prompt! Instead, edit `Vault/OS/Coding_Directives.md`.
+At the start of a serious work session, use this prompt:
 
-### The Multi-Agent Team & Safe Refactoring
-OmniBrain comes with a built-in team of expert **Subagents** (like Code Reviewers, Architects, and UI Designers). 
-- **Triggering Subagents**: Just tell your AI *"Review my code"*, *"Audit the architecture"*, or *"Design the UI"*. Your AI will automatically spawn a subagent to help.
-- **Safe Refactor Protocol**: When you want to make large changes to your codebase, ask your AI to run the Safe Refactor Protocol. Subagents are strictly forbidden from writing application code—they act as a safety net. They will draft plans and review code diffs *before* the main AI applies changes, ensuring your project never breaks!
+```text
+Please sync with the OmniBrain vault first. Read the project context, dashboard, latest daily log, active plans, and relevant operating notes. Then tell me the current project state before making changes.
+```
 
-### Using Multiple AIs (The Brain Isolation Rule)
-If you ever use your AI to generate a prompt for a *different* AI (like an external cloud agent), remember that the second AI cannot read your local `Vault` folder! Your primary AI is instructed to follow the **Brain Isolation Rule**: it will automatically copy-paste the relevant rules from your Vault into the prompt so the secondary AI doesn't break your project.
+This prevents the AI assistant from guessing.
 
-### Markdown-Driven Linting
-OmniBrain automatically prevents AI hallucinations. If you tell your AI *"Never use scrollIntoView"*, it will save that rule in `Vault/Anti_Patterns.md`. The built-in linter (`npm run check-ai-rules`) actively reads this plain-English markdown file and will physically block the AI from ever making that mistake again—no coding required from you!
+## Where Things Go
 
-### Automated Vault Organization (Vault Keeper)
-You don't need to manually organize your AI's generated plans or walkthroughs. When the main AI finishes a task, it delegates the archival work to the **Vault Keeper** subagent. This "helper AI" quietly formats and files away the temporary documents into your `Vault/Plans/` directory, keeping your main AI's context clean and focused.
+Use these folders as a simple habit:
 
-### Context Engineering & Self-Correction
-OmniBrain forces your AI to adopt professional engineering habits:
-- **Context Engineering**: Before planning a new feature, your AI is strictly instructed to "read the manual" (your project's rules and architecture docs) so it doesn't make assumptions.
-- **Doubt-Driven Development**: Before writing complex logic, your AI must pause and "double-check its own work" from a fresh perspective to catch logic errors before they are saved to your disk.
+- `Vault/_inbox` - raw AI-generated artifacts waiting for review.
+- `Vault/Plans` - accepted plans and completed handoffs.
+- `Vault/Reviews` - review notes and external review results.
+- `Vault/Decisions` - important choices that should be remembered.
+- `Vault/Daily_Logs` - dated work notes.
+- `Vault/OS` - working rules for the AI assistant.
+- `Vault/Agents` - review checklists for specialist roles.
+
+## Artifact Inbox
+
+When the AI creates a long plan, review, or handoff, it should not always go straight into the main vault.
+
+Ask the AI to put new artifacts in `Vault/_inbox` first.
+
+After you approve the useful ones, ask the AI to move them into `Vault/Plans`, `Vault/Reviews`, or another correct folder.
+
+Useful prompt:
+
+```text
+Please archive the approved _inbox artifacts into the right OmniBrain folders and update the daily log.
+```
+
+## Review Roles
+
+OmniBrain includes practical role checklists, such as:
+
+- Architect,
+- Code Reviewer,
+- UI Designer,
+- Vault Keeper.
+
+These are not separate people. They are ways to ask the AI assistant to review the work from a particular angle.
+
+Useful prompt:
+
+```text
+Please review this plan using the Architect and Code Reviewer checklists before implementing it.
+```
+
+If your AI tool supports separate agents, it may use these roles as separate helpers. If not, the main AI assistant can still use the same checklists.
+
+## External Sandbox Review
+
+Sometimes you may want a second opinion from another AI tool or sandbox environment.
+
+Use external sandbox review when you want:
+
+- an independent code review,
+- test suggestions,
+- risk checking,
+- a challenge to an implementation plan,
+- a second opinion before release.
+
+This is optional. OmniBrain does not depend on any specific external review product.
+
+Useful prompt:
+
+```text
+Please prepare an external sandbox review package with context, changed files, risks, and exact questions for the reviewer.
+```
+
+## Maintenance
+
+If Node.js is available, these commands help keep the vault tidy:
+
+```bash
+npm run vault-health
+npm run vault-maintenance
+```
+
+Run them after larger changes or before handing the project to another AI assistant.
+
+## If The AI Gets Confused
+
+Ask it to stop and resync:
+
+```text
+Stop. Please reread the OmniBrain vault, summarize the current project state, and list the files you will use before continuing.
+```
+
+## The Main Rule
+
+OmniBrain is here to make AI work easier to control.
+
+Keep useful context. Archive approved plans. Keep raw artifacts in `_inbox` until they are reviewed. Do not let the vault become a dumping ground.
 
 ---
 
-## 🇭🇰 繁體中文指示
+# 給使用者的說明
 
-歡迎！您不需要懂程式設計就可以使用這個框架。OmniBrain 是一個「作業系統」，您可以直接把它安裝到您的 AI 程式開發助手（如 Gemini、Cursor 或 Claude）中，以防止它在您的專案成長時出錯。它能充當您 AI 的永久「長期記憶」和嚴格的「規則執行者」。
+這份說明用簡單語言介紹如何使用 OmniBrain。
 
-### 第一步：準備您的資料夾
-將這個儲存庫下載為 ZIP 檔案（點擊綠色的「Code」按鈕），並將其解壓縮到您想建立應用程式的空白資料夾中。
+OmniBrain 是一套以資料夾為核心的 AI 工作記憶系統。它可以幫 AI 助手在修改前先了解你的專案，也讓你有一個整齊位置保存計劃、決定、審查記錄和交接資料。
 
-### 第二步：開啟您的 AI 編輯器
-在您最喜歡的 AI 程式開發助手（如 **Cursor** 或 **Windsurf**）中開啟該資料夾。
+## 開始前需要甚麼
 
-### 第三步：啟動魔法
-在您的編輯器中，開啟 `AGENT_PROMPT.md` 檔案。複製裡面的所有文字，並將其貼上到您的 AI 聊天視窗中。
+你需要：
 
-### 第四步：讓 AI 處理工作
-AI 會讀取提示詞並自動設定好一切。它會建立一個名為 `Vault` 的資料夾，作為它的記憶庫。
+- 一個專案資料夾；
+- 一個可以讀取和修改檔案的 AI 助手；
+- 如果想使用設定和健康檢查指令，可選擇安裝 Node.js；
+- 如果想用較舒服的方式閱讀和整理筆記，可選擇使用 Obsidian。
 
-**（選用）專家提示：視覺化您 AI 的大腦**
-OmniBrain 使用結構化的連結（例如 `Governs:: [[Target]]`）來為 AI 繪製專案架構圖。AI 可以完美地將其作為純文字讀取，但如果您*也*想視覺化地看到它：
-1. 下載免費應用程式 **Obsidian** (https://obsidian.md) 並用它開啟 `Vault` 資料夾。
-2. 如果您希望儀表板上顯示動態、自動更新的表格，請在 Obsidian 設定中關閉「安全模式 (Safe Mode)」並安裝名為 **Dataview** 的社群外掛。
-*這會讓您的儀表板變成一個美觀的視覺控制中心，讓您輕鬆掌握 AI 團隊的動態！*
+Obsidian 不是必需。不需要安裝任何 Obsidian 社群外掛。
 
-就這麼簡單！每天只需告訴 AI 要建立什麼，OmniBrain 就會處理剩下的事情。
+## 第一次設定
 
-### 新增到現有專案
-如果您正在將 OmniBrain 新增到已經有程式碼或舊版文件的專案中：
-1. 正常執行安裝（OmniBrain 不會刪除您現有的檔案）。
-2. 告訴您的 AI：*「我剛剛安裝了 OmniBrain。請執行 `npm run omnibrain-migrate` 來分析我現有的程式碼庫和舊文件，並將它們整合到新的知識庫 (Vault) 結構中。」*
-3. 開啟 `AGENT_PROMPT.md` 並在頂部加入註解，告訴 AI 也要讀取您現有的指示文件（例如，*「請閱讀 `CLAUDE.md` 以了解我們舊的專案規則」*）。
+1. 把 OmniBrain 檔案放入你的專案資料夾。
+2. 用你偏好的 AI 助手打開這個專案。
+3. 請 AI 助手閱讀 `AGENT_PROMPT.md`。
+4. 如果可以使用 Node.js，請 AI 助手運行：
 
-### `/sync` 指令
-如果您和 AI 聊了很久，它似乎忘記了規則，或者您只是想強迫它更新文件，只需輸入：
-> `/sync`
+```bash
+npm run setup
+```
 
-AI 已被設定為在看到此指令時立即重新閱讀其指示並更新您的 `Vault` 儀表板。
+5. 打開 `Vault/Project_Context.md`。
+6. 寫下專案目標、目前狀態、重要連結，以及 AI 必須記住的事。
 
-### 模組化代理路由器 (Vault/OS/)
-OmniBrain 使用**模組化路由器架構**來節省 AI 的 Token 限制並保持其專注力。
-- `AGENT_PROMPT.md` 不再是一大串冗長的指示。它只是一個「路由器」。
-- 根據您要求 AI 執行的操作，路由器會指示 AI 讀取儲存在 `Vault/OS/` 資料夾中的特定、詳細的指示文件（例如 `Coding_Directives.md` 或 `Vault_Directives.md`）。
-- **如果您想改變 AI 撰寫程式碼的方式**，請不要編輯主提示詞！相反地，請編輯 `Vault/OS/Coding_Directives.md`。
+## 每次開始工作時
 
-### 多代理團隊與安全重構 (Multi-Agent Team & Safe Refactoring)
-OmniBrain 內建了一個專家**子代理團隊**（如程式碼審查員、架構師和 UI 設計師）。
-- **觸發子代理**：只需告訴您的 AI *「審查我的程式碼 (Review my code)」*、*「審查架構 (Audit the architecture)」* 或 *「設計 UI (Design the UI)」*。您的 AI 將自動呼叫一個子代理來提供協助。
-- **安全重構協議**：當您想對程式碼庫進行大幅更改時，請要求您的 AI 執行安全重構協議。子代理被嚴格禁止撰寫應用程式的程式碼——它們充當安全網。它們會在主 AI 套用更改*之前*起草計畫並審查程式碼差異，確保您的專案永遠不會損壞！
+正式開始工作前，可以使用這段提示：
 
-### 使用多個 AI（大腦隔離規則）
-如果您使用 AI 為「另一個」 AI（如外部雲端代理）生成提示詞，請記住第二個 AI 無法讀取您本機的 `Vault` 資料夾！您的主 AI 被指示要遵循**大腦隔離規則**：它會自動將相關規則從您的知識庫複製貼上到提示詞中，這樣第二個 AI 就不會破壞您的專案。
+```text
+請先同步 OmniBrain vault。閱讀專案背景、工作面板、最新每日記錄、目前計劃和相關工作指引。然後先告訴我目前專案狀態，再開始修改。
+```
 
-### Markdown 驅動的語法檢查
-OmniBrain 會自動防止 AI 幻覺。如果您告訴 AI *「永遠不要使用 scrollIntoView」*，它會將該規則儲存在 `Vault/Anti_Patterns.md` 中。內建的檢查工具 (`npm run check-ai-rules`) 會主動讀取這個純文字 Markdown 檔案，並從根本上阻止 AI 再次犯這個錯誤——您完全不需要寫程式！
+這樣可以避免 AI 助手靠猜測工作。
 
-### 自動化知識庫整理 (Vault Keeper)
-您不需要手動整理 AI 產生的計畫或流程說明。當主 AI 完成任務時，它會將封存工作委託給 **Vault Keeper** 子代理。這個「助手 AI」會默默地將暫存文件格式化並歸檔到您的 `Vault/Plans/` 目錄中，讓您的主 AI 保持思緒清晰與專注。
+## 內容應該放在哪裡
 
-### 上下文工程與自我修正 (Context Engineering & Self-Correction)
-OmniBrain 會強制您的 AI 養成專業的工程習慣：
-- **上下文工程 (Context Engineering)**：在規劃新功能之前，您的 AI 會被嚴格要求先「閱讀手冊」（您專案的規則和架構文件），以免它憑空猜測。
-- **懷疑驅動開發 (Doubt-Driven Development)**：在撰寫複雜邏輯之前，您的 AI 必須暫停並以全新的視角「雙重檢查自己的工作」，在程式碼儲存到您的磁碟之前揪出邏輯錯誤。
+你可以用以下簡單習慣：
+
+- `Vault/_inbox` - 等待審查的 AI 原始產物。
+- `Vault/Plans` - 已接受計劃和完成交接資料。
+- `Vault/Reviews` - 審查記錄和外部審查結果。
+- `Vault/Decisions` - 需要保留的重要決定。
+- `Vault/Daily_Logs` - 按日期整理的工作記錄。
+- `Vault/OS` - 給 AI 助手的工作規則。
+- `Vault/Agents` - 專門審查角色的清單。
+
+## 收件匣
+
+當 AI 產生很長的計劃、審查或交接資料時，不一定要立即放入主要 vault。
+
+請 AI 先把新產物放入 `Vault/_inbox`。
+
+當你確認哪些內容有用後，再請 AI 移到 `Vault/Plans`、`Vault/Reviews` 或其他正確位置。
+
+可用提示：
+
+```text
+請把已批准的 _inbox 產物封存到正確的 OmniBrain 資料夾，並更新每日記錄。
+```
+
+## 審查角色
+
+OmniBrain 包含一些實用的審查清單，例如：
+
+- 架構審查；
+- 程式碼審查；
+- 介面審查；
+- 知識庫整理。
+
+這些不是另一批真人，而是讓 AI 助手用不同角度檢查工作的方式。
+
+可用提示：
+
+```text
+請先用架構審查和程式碼審查清單檢查這個計劃，然後才開始實作。
+```
+
+如果你的 AI 工具支援分開的助手，它可以把這些角色交給不同助手處理。若不支援，主 AI 助手仍然可以使用同一套清單。
+
+## 外部沙盒審查
+
+有時你可能想請另一個 AI 工具或沙盒環境提供第二意見。
+
+當你需要以下事情時，可以使用外部沙盒審查：
+
+- 獨立程式碼審查；
+- 測試建議；
+- 風險檢查；
+- 挑戰一個實作計劃；
+- 發布前第二意見。
+
+這是可選功能。OmniBrain 不依賴任何指定外部審查產品。
+
+可用提示：
+
+```text
+請準備一份外部沙盒審查包，包含背景、已修改檔案、風險和要問審查者的具體問題。
+```
+
+## 維護
+
+如果可以使用 Node.js，以下指令可協助保持 vault 整齊：
+
+```bash
+npm run vault-health
+npm run vault-maintenance
+```
+
+建議在較大修改後，或把專案交給另一個 AI 助手前運行。
+
+## 如果 AI 助手混亂了
+
+請它停下來重新同步：
+
+```text
+停。請重新閱讀 OmniBrain vault，整理目前專案狀態，並列出你會使用哪些檔案，然後才繼續。
+```
+
+## 最重要的規則
+
+OmniBrain 是用來令 AI 工作更容易掌控。
+
+保留有用背景。封存已批准計劃。原始產物先放在 `_inbox`，審查後才移入正式位置。不要讓 vault 變成雜物箱。
+

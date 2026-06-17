@@ -1,77 +1,176 @@
-# OmniBrain (全知大腦) - The Vibe Coder's AI Framework
+# OmniBrain
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+OmniBrain is a portable memory system for AI-assisted work.
 
-Welcome to **OmniBrain**! This project provides a structured "Memory Bank" and AI-Constraint framework specifically designed for non-programmers (Vibe Coders) who use AI Agents (like Cursor, Claude, ChatGPT, or Gemini) to build software. 
+It helps a person turn a normal project folder into a shared workspace where an AI assistant can remember goals, decisions, plans, review notes, and project history across many sessions.
 
-### Why Use OmniBrain?
-When you build large applications with AI, the AI eventually forgets old rules, hallucinates bad code, or breaks existing features because its context window gets overwhelmed. OmniBrain solves this by acting as a permanent "Long-Term Memory" for your AI.
-- **No Coding Required:** You just install it and talk to your AI. OmniBrain does the rest.
-- **Zero Hallucinations:** OmniBrain includes an automated Markdown Linter. If you tell the AI "never use X", it writes that rule down and physically blocks itself from ever making that mistake again.
-- **Modular Agent Router:** Prevents "context bloat" by using a lightweight routing prompt that only loads the specific instructions (Coding, Architecture, or Vault Maintenance) your AI needs for the current task, saving tokens and improving focus.
-- **Multi-Agent Team:** OmniBrain comes with a native team of expert subagents (Code Reviewers, Architects, UI Designers). By typing 'Review my code' or 'Design the UI', your main AI will spawn specialized subagents to double-check work and prevent bugs.
-- **Context Engineering & Self-Correction:** Before planning a new feature, OmniBrain forces your AI to read the rules (Context Engineering). Before writing complex code, it forces the AI to double-check its own logic with a fresh perspective (Doubt-Driven Development).
-- **Automated Vault Organization:** A specialized "Vault Keeper" helper AI automatically archives your old plans and organizes your files, keeping your main AI focused and your project clean.
-- **Vault Maintenance:** The framework automatically archives old plans and distills architectural decisions into a single source of truth.
+You do not need to know how to code to use OmniBrain. It is designed for people who work with AI by explaining goals, reviewing results, and making decisions.
+
+## What OmniBrain Gives You
+
+- **Project memory** - your AI assistant can read the project purpose, current status, important decisions, and recent work before it starts.
+- **Clear working rhythm** - new ideas, plans, reviews, and handoffs have a proper place.
+- **Artifact inbox** - raw AI-generated notes go into `Vault/_inbox` first, so useful work is not lost and messy work does not pollute the main memory.
+- **Approved plan archive** - accepted plans and completed handoffs move into `Vault/Plans`.
+- **Review roles** - the vault includes practical review checklists for architecture, code review, UI review, and vault keeping.
+- **External sandbox review** - you can ask a separate AI or sandbox environment to review code, suggest tests, or challenge a plan without making it part of your daily workflow.
+- **No vendor lock-in** - OmniBrain is plain folders and Markdown files. It can be used with Codex, another AI coding assistant, Obsidian, or a normal text editor.
+
+## Who It Is For
+
+OmniBrain is useful if:
+
+- you use AI to build or manage projects,
+- you are not a full-time developer,
+- your AI chats are becoming too long to follow,
+- you want decisions and project memory to survive across sessions,
+- you want a calmer way to work with AI instead of restarting context every time.
+
+## How To Use It
+
+1. Put OmniBrain in your project folder.
+2. Ask your AI assistant to read `AGENT_PROMPT.md`.
+3. Let the assistant run the setup script if your environment supports Node.js:
+
+```bash
+npm run setup
+```
+
+4. Open the generated `Vault` folder.
+5. Fill in `Vault/Project_Context.md` with your project goal, current status, and important links.
+6. Start each serious work session by asking the AI to sync with the vault.
+
+Useful prompt:
+
+```text
+Please read the OmniBrain vault, understand the current project state, and tell me what you know before making changes.
+```
+
+## What Gets Created
+
+After setup, OmniBrain creates a `Vault` folder with:
+
+- `Project_Context.md` - the project briefing.
+- `Dashboard.md` - a simple working dashboard.
+- `_inbox/` - raw AI artifacts waiting for review.
+- `Plans/` - approved plans and completed handoffs.
+- `Reviews/` - review notes and external review results.
+- `Decisions/` - important decisions.
+- `Daily_Logs/` - dated working notes.
+- `OS/` - operating guidance for the AI assistant.
+- `Agents/` - role checklists for review and project maintenance.
+
+## Maintenance Commands
+
+If Node.js is available, these commands help keep the vault tidy:
+
+```bash
+npm run vault-health
+npm run vault-maintenance
+```
+
+`vault-health` checks links and basic structure.
+
+`vault-maintenance` can run the available maintenance checks together.
+
+## Optional Obsidian Use
+
+OmniBrain works well in Obsidian, but Obsidian is optional.
+
+No community plugin is required. You can use the vault as normal Markdown files.
+
+## Important Principle
+
+OmniBrain should make AI work easier to understand, not harder.
+
+If a note is useful for future work, keep it. If it is only temporary noise, leave it in `_inbox` until it is reviewed or deleted.
 
 ---
 
-## 🚀 How to Use (For Vibe Coders)
-You do not need to run any terminal commands or configure anything.
+# OmniBrain（繁體中文）
 
-1. **Download the code:** Click the green "Code" button at the top of this page and select **Download ZIP**, then unzip it into an empty folder where you want to build your app.
-2. **Open your AI Editor:** Open that folder inside your favorite AI coding assistant (like Cursor or Windsurf).
-3. **Start the Magic:** Open the file [`AGENT_PROMPT.md`](./AGENT_PROMPT.md), copy all the text inside, and paste it into your AI chat.
-4. The AI will automatically scaffold your project's Knowledge Base (Vault) and set up all the automated rules!
+OmniBrain 是一套可攜式的 AI 工作記憶系統。
 
-For more detailed setup instructions, please read [`INSTRUCTIONS_FOR_HUMANS.md`](./INSTRUCTIONS_FOR_HUMANS.md).
+它可以把一個普通專案資料夾，變成你和 AI 助手一起工作的共享空間。AI 助手可以在每次開始前讀取專案目標、重要決定、計劃、審查記錄和最近進度，不用每次都由零開始。
 
----
+你不需要懂寫程式也可以使用 OmniBrain。它是為用 AI 說明目標、審查結果、作決定的人而設計。
 
-## 🛠️ For Open Source Contributors
-Are you a developer who wants to make OmniBrain better? We would love your help!
+## OmniBrain 可以幫你做甚麼
 
-The true power of this framework comes from its **Templates** and **AI Linter Rules**. If you have discovered a fantastic System Prompt, or you have written a regex rule that prevents AI hallucination, please contribute it!
+- **保存專案記憶** - AI 助手可以先了解專案目的、目前狀態、重要決定和最近工作。
+- **建立清楚的工作節奏** - 新想法、計劃、審查和交接資料都有固定位置。
+- **收件匣** - AI 產生的原始筆記先放入 `Vault/_inbox`，有用的內容不會遺失，未整理的內容也不會弄亂主要記憶。
+- **已批准計劃封存** - 已接受的計劃和完成的交接資料放入 `Vault/Plans`。
+- **審查角色** - vault 內有架構、程式碼、介面和知識庫整理的審查清單。
+- **外部沙盒審查** - 你可以請另一個 AI 或沙盒環境獨立檢查程式碼、建議測試，或挑戰一個計劃，而不用把它變成日常流程的一部分。
+- **不綁定單一平台** - OmniBrain 只是資料夾和 Markdown 檔案，可以配合 Codex、其他 AI 開發助手、Obsidian，或普通文字編輯器使用。
 
-Read our [`CONTRIBUTING.md`](./CONTRIBUTING.md) to see how you can submit Pull Requests.
+## 適合甚麼人
 
----
+OmniBrain 適合你，如果：
 
-## 🇭🇰 繁體中文說明
+- 你用 AI 建立或管理專案；
+- 你不是全職工程師；
+- 你的 AI 對話太長，開始難以追蹤；
+- 你希望重要決定和專案記憶可以保留下來；
+- 你想用較穩定、清楚的方法和 AI 合作。
 
-歡迎來到 **OmniBrain**！這個專案提供了一個結構化的「記憶庫」與 AI 限制框架，專為使用 AI 助理（如 Cursor、Claude、ChatGPT 或 Gemini）來開發軟體的非程式開發人員（Vibe Coders）所設計。
+## 使用方法
 
-### 為什麼要使用 OmniBrain？
-當您使用 AI 建立大型應用程式時，AI 最終會忘記舊規則、產生糟糕的程式碼幻覺，或是因為上下文視窗（Context Window）不堪負荷而破壞現有功能。OmniBrain 透過充當 AI 的永久「長期記憶」來解決這個問題。
-- **無需寫程式：** 您只需安裝它並與您的 AI 對話。OmniBrain 會處理剩下的所有事情。
-- **零幻覺：** OmniBrain 包含一個自動化的 Markdown 語法檢查工具（Linter）。如果您告訴 AI「永遠不要使用 X」，它會記下這個規則，並從根本上阻止自己再次犯下這個錯誤。
-- **模組化代理路由器：** 透過使用輕量級的路由提示詞，僅載入 AI 當前任務所需的特定指令（程式開發、架構或知識庫維護），防止「上下文過載」，從而節省 Token 並提高專注力。
-- **多代理團隊：** OmniBrain 配備了一個原生的專家子代理（Subagent）團隊（包含程式碼審查員、架構師、UI 設計師）。只要輸入「審查我的程式碼」或「設計 UI」，您的主 AI 就會呼叫專屬的子代理來進行雙重檢查並防止出錯。
-- **上下文工程與自我修正：** 在規劃新功能之前，OmniBrain 會強制您的 AI 先閱讀規則（上下文工程）。在撰寫複雜程式碼之前，它會強制 AI 以全新視角雙重檢查自己的邏輯（懷疑驅動開發，Doubt-Driven Development）。
-- **自動化知識庫整理：** 一個專門的「知識庫管理員 (Vault Keeper)」助手 AI 會自動封存您舊的計畫並整理檔案，保持專案整潔，讓主 AI 能保持專注。
-- **知識庫維護：** 框架會自動將舊計畫封存，並將架構決策萃取成單一的真實來源。
+1. 把 OmniBrain 放入你的專案資料夾。
+2. 請 AI 助手閱讀 `AGENT_PROMPT.md`。
+3. 如果你的環境支援 Node.js，可以請 AI 助手運行設定指令：
 
----
+```bash
+npm run setup
+```
 
-## 🚀 如何使用 (給 Vibe Coders)
-您不需要執行任何終端機指令或進行任何設定。
+4. 打開建立好的 `Vault` 資料夾。
+5. 在 `Vault/Project_Context.md` 寫下專案目標、目前狀態和重要連結。
+6. 每次開始正式工作前，先請 AI 助手同步 vault 內容。
 
-1. **下載程式碼：** 點擊此頁面頂部的綠色「Code」按鈕並選擇 **Download ZIP**，然後將其解壓縮到您想建立應用程式的空白資料夾中。
-2. **開啟您的 AI 編輯器：** 在您最喜歡的 AI 程式開發助手（如 Cursor 或 Windsurf）中開啟該資料夾。
-3. **啟動魔法：** 開啟 [`AGENT_PROMPT.md`](./AGENT_PROMPT.md) 檔案，複製裡面的所有文字，並將其貼上到您的 AI 聊天視窗中。
-4. AI 將會自動為您的專案建構知識庫 (Vault) 並設定所有的自動化規則！
+可用提示：
 
-如需更詳細的設定說明，請閱讀 [`INSTRUCTIONS_FOR_HUMANS.md`](./INSTRUCTIONS_FOR_HUMANS.md)。
+```text
+請先閱讀 OmniBrain vault，了解目前專案狀態，然後告訴我你知道了甚麼，再開始修改。
+```
 
----
+## 建立後會有甚麼
 
-## 👥 Contributors & Maintainers
-This project thrives on community input. A massive thank you to everyone who has contributed to making AI-assisted coding safer and more structured!
+設定完成後，OmniBrain 會建立一個 `Vault` 資料夾，當中包括：
 
-- **K & Agent J** - Vision & Original Concept
-- *(Your name could be here! Submit a Pull Request to get added to the list.)*
+- `Project_Context.md` - 專案簡介。
+- `Dashboard.md` - 簡單工作面板。
+- `_inbox/` - 等待整理的 AI 原始產物。
+- `Plans/` - 已批准計劃和完成交接資料。
+- `Reviews/` - 審查記錄和外部審查結果。
+- `Decisions/` - 重要決定。
+- `Daily_Logs/` - 每日工作記錄。
+- `OS/` - 給 AI 助手的工作指引。
+- `Agents/` - 不同審查和整理角色的清單。
 
----
+## 維護指令
 
-*Licensed under the MIT License.*
+如果可以使用 Node.js，以下指令可協助保持 vault 整齊：
+
+```bash
+npm run vault-health
+npm run vault-maintenance
+```
+
+`vault-health` 會檢查連結和基本結構。
+
+`vault-maintenance` 可以一次運行可用的維護檢查。
+
+## 可選擇使用 Obsidian
+
+OmniBrain 很適合配合 Obsidian 使用，但 Obsidian 不是必需。
+
+不需要安裝任何社群外掛。你也可以只把 vault 當作普通 Markdown 檔案使用。
+
+## 重要原則
+
+OmniBrain 應該令 AI 合作更清楚，而不是更複雜。
+
+如果一份筆記對未來有用，就保留下來。若只是臨時資料，先放在 `_inbox`，待審查後再封存或刪除。
+

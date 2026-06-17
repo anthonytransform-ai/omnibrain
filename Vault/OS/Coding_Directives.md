@@ -24,10 +24,13 @@ Before submitting any code for review or concluding a development task, you MUST
 ## Anti-Patterns
 If you identify a bad practice or recurring architectural error, document it in `Vault/Anti_Patterns.md`. The linter will automatically parse this markdown file to enforce the rule.
 
-If the human user corrects a recurring architectural mistake, proactively propose writing a new rule in `Vault/Anti_Patterns.md` to prevent yourself from making it again.
+If the user corrects a recurring architectural mistake, proactively propose writing a new rule in `Vault/Anti_Patterns.md` to prevent yourself from making it again.
+
+## Doubt-Driven Development
+Before writing non-trivial or complex logic, you MUST execute an adversarial "fresh-context" review of your own proposed logic. Double-check your assumptions, edge cases, and architectural constraints. Do not blindly write code without challenging your initial approach.
 
 ## The Safe Refactor Protocol (Agent-to-Agent Loop)
-For any complex UI or logical refactor (typically edits exceeding 50 lines or structural changes), you (Agent J) are FORBIDDEN from immediately writing the code to the disk.
+For any complex UI or logical refactor (typically edits exceeding 50 lines or structural changes), you are FORBIDDEN from immediately writing the code to the disk.
 
 1. **Draft the Changes:** Prepare the exact code edits you plan to make.
 2. **Summon the Reviewer:** Ensure the `Code Reviewer` subagent is active.
