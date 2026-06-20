@@ -9,12 +9,18 @@ tags: [omnibrain, system]
 
 Use this page as the map for the project's durable operating knowledge.
 
+## Read First
+
+- [[Product_Vision]] - deeper product goals, audience, and experience principles.
+
 ## OS Directives
 
 - [[Router_Architecture]]
 - [[Planning_Directives]]
 - [[Coding_Directives]]
 - [[Vault_Directives]]
+- [[Knowledge_Format]]
+- [[Staged_Workflow]]
 - [[Subagent_Directives]]
 - [[Artifact_Durability]]
 - [[External_Sandbox_Review]]

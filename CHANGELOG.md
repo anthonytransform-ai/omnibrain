@@ -1,5 +1,27 @@
 # OmniBrain Changelog / 更新日誌
 
+## v1.3.1 - 2026-06-20
+
+### English
+**Full public workflow port**
+
+- Added staged workflow guidance for large, risky, or unclear AI-assisted changes.
+- Added project context, product vision, knowledge format, and daily-log starter templates.
+- Added public-safe knowledge maintenance rules for MOCs, daily logs, source discipline, and preserve-then-enrich updates.
+- Added artifact mirroring guidance so useful AI-created work can be copied into the vault without depending on any specific AI platform.
+- Added `npm run setup` as the public setup command.
+- Updated public prompts and documentation with clearer workflow phrases for sync, staging, archive, and knowledge updates.
+
+### 繁體中文
+**完整公開工作流程移植**
+
+- 加入分階段工作指引，協助處理較大、較高風險或範圍不清楚的 AI 協作修改。
+- 加入專案背景、產品願景、知識格式和每日記錄起始模板。
+- 加入公開安全的知識整理規則，涵蓋內容地圖、每日記錄、來源說明，以及「保留後補充」的更新方式。
+- 加入產物鏡像保存指引，讓有用的 AI 產物可以保存到 vault，而不依賴特定 AI 平台。
+- 加入 `npm run setup` 作為公開設定指令。
+- 更新公開提示詞和文件，讓同步、分階段、封存和知識更新流程更清楚。
+
 ## v1.0.6 - 2026-06-17
 
 ### English
@@ -32,7 +54,7 @@ This release brings OmniBrain up to date with the latest v1.1 architecture of th
 **What's New:**
 - **Pre-Flight Identity Check**: The AI is now required to read `Dashboard.md` and explicitly confirm the project's tech stack, database, and deployment target before planning any features. This anchors the AI and significantly reduces "hallucination" where the AI suggests code from a different framework.
 - **Extracted QA Checklist (Definition of Done)**: The Coverage Audit has been extracted from the planning directives into its own `Definition_of_Done.md` file. This makes it easier for teams to customize their specific QA requirements (e.g., mobile responsiveness, error handling).
-- **Cleaner Directives**: Removed all legacy Obsidian Dataview syntax and hardcoded references, ensuring maximum compatibility with any markdown editor.
+- **Cleaner Directives**: Removed legacy plugin-specific syntax and hardcoded references, ensuring maximum compatibility with any markdown editor.
 - **Improved Automation**: `omnibrain-setup.js` now automatically scaffolds the new `Definition_of_Done.md`.
 
 ---
@@ -45,7 +67,7 @@ This release brings OmniBrain up to date with the latest v1.1 architecture of th
 **更新重點：**
 - **起飛前身分確認 (Pre-Flight Identity Check)**：現在強制要求 AI 在規劃任何新功能前，必須讀取 `Dashboard.md` 並明確列出專案的技術堆疊 (Tech Stack)、資料庫與部署目標。此舉能有效「錨定」AI，大幅降低 AI 產生「幻覺」並給出錯誤框架程式碼的機率。
 - **獨立的品質保證清單 (Definition of Done)**：將覆蓋率審查 (Coverage Audit) 從規劃指令中獨立出來，建立專屬的 `Definition_of_Done.md` 檔案。這讓開發團隊能更輕鬆地自訂專屬的 QA 需求（例如：響應式設計、錯誤處理等）。
-- **更純淨的指令檔**：移除了所有舊版的 Obsidian Dataview 語法與寫死 (Hardcoded) 的路徑參照，確保與各種 Markdown 編輯器達到最高相容性。
+- **更純淨的指令檔**：移除了舊版外掛專用語法與寫死 (Hardcoded) 的路徑參照，確保與各種 Markdown 編輯器達到最高相容性。
 - **自動化升級**：`omnibrain-setup.js` 現在會自動建立全新的 `Definition_of_Done.md` 檔案。
 ## v1.2.0 - Platform-neutral artifact safety
 

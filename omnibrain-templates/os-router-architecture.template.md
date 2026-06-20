@@ -21,3 +21,18 @@ If you need to add new operational rules, coding guidelines, or agent instructio
 1. **Never** append them blindly to `AGENT_PROMPT.md` or prompt instructions.
 2. Find the relevant Directive in this `OS/` folder and update it.
 3. If a new domain of instructions is created, add it as a new modular file in this folder and add a single routing line to `AGENT_PROMPT.md`.
+
+## Memory Checkpoints
+
+Global prompts should say what kind of task is happening. The exact steps should live in the matching directive.
+
+Use these checkpoints:
+
+- Session start -> `Vault/OS/Vault_Directives.md`
+- Feature planning -> `Vault/OS/Planning_Directives.md`
+- Risky or multi-part work -> `Vault/OS/Staged_Workflow.md`
+- Knowledge updates -> `Vault/OS/Knowledge_Format.md` and `Vault/OS/Vault_Directives.md`
+- Coding and quality -> `Vault/OS/Coding_Directives.md`
+- Review roles -> `Vault/OS/Subagent_Directives.md`
+
+This keeps the main prompt small while still giving the AI a clear path to the right instructions.

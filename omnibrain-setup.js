@@ -27,6 +27,9 @@ const directories = [
   'Vault/Features',
   'Vault/Agents',
   'Vault/Plans',
+  'Vault/Reviews',
+  'Vault/Decisions',
+  'Vault/Daily_Logs',
   'Vault/_inbox',
   'Vault/OS',
   'scripts'
@@ -49,6 +52,7 @@ if (!fs.existsSync(pkgPath)) {
     description: "An AI Agent managed project.",
     type: "module",
     scripts: {
+      "setup": "node omnibrain-setup.js",
       "check-ai-rules": "node scripts/check-ai-rules.js",
       "vault-autotag": "node scripts/vault-autotag.js",
       "vault-archive": "node scripts/vault-archive.js",
@@ -57,12 +61,13 @@ if (!fs.existsSync(pkgPath)) {
       "omnibrain-migrate": "node scripts/omnibrain-migrate.js"
     }
   };
-  fs.writeFileSync(pkgPath, JSON.stringify(pkgContent, null, 2));
+  fs.writeFileSync(pkgPath, JSON.stringify(pkgContent, null, 2) + '\n');
   console.log(`\x1b[32m[\u2713] Generated:\x1b[0m package.json`);
 } else {
   const pkgContent = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
   pkgContent.scripts = {
     ...(pkgContent.scripts || {}),
+    "setup": "node omnibrain-setup.js",
     "check-ai-rules": "node scripts/check-ai-rules.js",
     "vault-autotag": "node scripts/vault-autotag.js",
     "vault-archive": "node scripts/vault-archive.js",
@@ -70,7 +75,7 @@ if (!fs.existsSync(pkgPath)) {
     "vault-maintenance": "npm run vault-autotag && npm run vault-health && npm run vault-archive",
     "omnibrain-migrate": "node scripts/omnibrain-migrate.js"
   };
-  fs.writeFileSync(pkgPath, JSON.stringify(pkgContent, null, 2));
+  fs.writeFileSync(pkgPath, JSON.stringify(pkgContent, null, 2) + '\n');
   console.log(`\x1b[32m[✓] Updated:\x1b[0m package.json scripts`);
 }
 
@@ -91,17 +96,22 @@ if (!fs.existsSync(agentEntityPath)) {
 const templateDir = path.join(__dirname, 'omnibrain-templates');
 if (fs.existsSync(templateDir)) {
   copyFileSafe(path.join(templateDir, 'dashboard.template.md'), path.join(__dirname, 'Vault', 'Dashboard.md'));
+  copyFileSafe(path.join(templateDir, 'project-context.template.md'), path.join(__dirname, 'Vault', 'Project_Context.md'));
   copyFileSafe(path.join(templateDir, 'anti-patterns.template.md'), path.join(__dirname, 'Vault', 'Anti_Patterns.md'));
   copyFileSafe(path.join(templateDir, 'definition-of-done.template.md'), path.join(__dirname, 'Vault', 'Definition_of_Done.md'));
   copyFileSafe(path.join(templateDir, 'os-router-architecture.template.md'), path.join(__dirname, 'Vault', 'OS', 'Router_Architecture.md'));
   copyFileSafe(path.join(templateDir, 'os-vault-directives.template.md'), path.join(__dirname, 'Vault', 'OS', 'Vault_Directives.md'));
+  copyFileSafe(path.join(templateDir, 'knowledge-format.template.md'), path.join(__dirname, 'Vault', 'OS', 'Knowledge_Format.md'));
+  copyFileSafe(path.join(templateDir, 'staged-workflow.template.md'), path.join(__dirname, 'Vault', 'OS', 'Staged_Workflow.md'));
   copyFileSafe(path.join(templateDir, 'artifact-durability.template.md'), path.join(__dirname, 'Vault', 'OS', 'Artifact_Durability.md'));
   copyFileSafe(path.join(templateDir, 'external-sandbox-review.template.md'), path.join(__dirname, 'Vault', 'OS', 'External_Sandbox_Review.md'));
   copyFileSafe(path.join(templateDir, 'os-coding-directives.template.md'), path.join(__dirname, 'Vault', 'OS', 'Coding_Directives.md'));
   copyFileSafe(path.join(templateDir, 'os-subagent-directives.template.md'), path.join(__dirname, 'Vault', 'OS', 'Subagent_Directives.md'));
   copyFileSafe(path.join(templateDir, 'os-planning-directives.template.md'), path.join(__dirname, 'Vault', 'OS', 'Planning_Directives.md'));
   copyFileSafe(path.join(templateDir, 'system-moc.template.md'), path.join(__dirname, 'Vault', 'System', '_System_MOC.md'));
+  copyFileSafe(path.join(templateDir, 'product-vision.template.md'), path.join(__dirname, 'Vault', 'System', 'Product_Vision.md'));
   copyFileSafe(path.join(templateDir, 'features-moc.template.md'), path.join(__dirname, 'Vault', 'Features', '_Features_MOC.md'));
+  copyFileSafe(path.join(templateDir, 'daily-log-template.template.md'), path.join(__dirname, 'Vault', 'Daily_Logs', 'README.md'));
   copyFileSafe(path.join(templateDir, 'agents-moc.template.md'), path.join(__dirname, 'Vault', 'Agents', '_Agents_MOC.md'));
   copyFileSafe(path.join(templateDir, 'code-reviewer.template.md'), path.join(__dirname, 'Vault', 'Agents', 'Code_Reviewer.md'));
   copyFileSafe(path.join(templateDir, 'architect.template.md'), path.join(__dirname, 'Vault', 'Agents', 'Architect.md'));
@@ -122,8 +132,9 @@ console.log("\x1b[36m\n===============================================\x1b[0m");
 console.log("\x1b[32m\u2728 OmniBrain Setup Complete! \u2728\x1b[0m");
 console.log("\x1b[36m===============================================\x1b[0m");
 console.log("Next steps for the AI Agent:");
-console.log("1. Read Vault/Dashboard.md to understand the current project state.");
-console.log("2. Read Vault/Agents/_Agents_MOC.md to understand your role.");
-console.log("3. Run 'npm run vault-health' to ensure the Vault is intact.");
-console.log("4. Begin coding!\n");
+console.log("1. Read Vault/Dashboard.md and Vault/Project_Context.md.");
+console.log("2. Read the latest note in Vault/Daily_Logs if one exists.");
+console.log("3. Read Vault/Agents/_Agents_MOC.md to understand review roles.");
+console.log("4. Run 'npm run vault-health' to ensure the Vault is intact.");
+console.log("5. Begin with a plan before coding.\n");
 

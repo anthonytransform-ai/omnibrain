@@ -17,7 +17,9 @@ Welcome to OmniBrain. If you are reading this, you are likely an AI assistant he
 OmniBrain uses a modular router to prevent context bloat. Load only the files relevant to the current task:
 
 - Architecture, plans, and memory: `Vault/OS/Vault_Directives.md`
+- Knowledge maintenance: `Vault/OS/Knowledge_Format.md`
 - Artifact capture: `Vault/OS/Artifact_Durability.md`
+- Staged risky work: `Vault/OS/Staged_Workflow.md`
 - Feature planning: `Vault/OS/Planning_Directives.md`
 - Coding and quality: `Vault/OS/Coding_Directives.md`
 - Review roles: `Vault/OS/Subagent_Directives.md`
@@ -25,12 +27,18 @@ OmniBrain uses a modular router to prevent context bloat. Load only the files re
 - Memory architecture: `Vault/OS/Router_Architecture.md`
 
 **Core Triggers:**
+- "Please sync with the OmniBrain vault first": run the Session Start Protocol.
 - "Good morning": run the Session Start Protocol.
+- "Let's do this in stages": run the Staged Workflow.
+- "Please archive the approved artifacts": run the archive flow.
+- "Please update the project knowledge": run the Knowledge Distillation Protocol.
 - "That's all for the day": run the Session Close Protocol.
 - "Update Knowledge": run the Knowledge Distillation Protocol.
 - "Build a new feature" or "Draft a plan": run the planning flow.
 - "Review my code" or "Audit the architecture": run the review flow.
 - "Design the UI": run the UI design review flow.
+
+Before major product, design, onboarding, or user-facing work, read `Vault/System/Product_Vision.md`.
 
 Confirm you understand by saying: "OmniBrain initialized. I am ready to help build safely."
 
@@ -46,11 +54,21 @@ Confirm you understand by saying: "OmniBrain initialized. I am ready to help bui
 OmniBrain 使用模組化路由，避免上下文過載。請只載入目前任務需要的文件：
 
 - 架構、計劃和記憶：`Vault/OS/Vault_Directives.md`
+- 知識整理：`Vault/OS/Knowledge_Format.md`
 - 工作草稿保存：`Vault/OS/Artifact_Durability.md`
+- 分階段處理大型或高風險工作：`Vault/OS/Staged_Workflow.md`
 - 功能規劃：`Vault/OS/Planning_Directives.md`
 - 程式品質：`Vault/OS/Coding_Directives.md`
 - 審查角色：`Vault/OS/Subagent_Directives.md`
 - 可選的外部審查：`Vault/OS/External_Sandbox_Review.md`
 - 記憶架構：`Vault/OS/Router_Architecture.md`
+
+**常用觸發語：**
+- 「請先同步 OmniBrain vault」：執行工作開始流程。
+- 「我們分階段處理」：使用分階段工作流程。
+- 「請封存已批准的產物」：執行封存流程。
+- 「請更新專案知識」：執行知識整理流程。
+
+在處理產品方向、介面、使用者文件或 onboarding 前，請先讀取 `Vault/System/Product_Vision.md`。
 
 請回覆：「OmniBrain 已初始化。我準備好協助安全地建立專案。」來確認你理解。

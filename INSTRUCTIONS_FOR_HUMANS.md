@@ -28,6 +28,7 @@ npm run setup
 
 5. Open `Vault/Project_Context.md`.
 6. Write your project goal, current status, important links, and anything the AI must remember.
+7. Open `Vault/System/Product_Vision.md` when you want the AI to understand deeper product goals, audience, or user experience principles.
 
 ## How To Start A Work Session
 
@@ -51,6 +52,16 @@ Use these folders as a simple habit:
 - `Vault/OS` - working rules for the AI assistant.
 - `Vault/Agents` - review checklists for specialist roles.
 
+## Staged Work
+
+For large, risky, or unclear changes, ask the AI to slow down:
+
+```text
+Let's do this in stages.
+```
+
+The AI should inspect the current state, scope one stage, ask for approval when needed, implement only that stage, verify it, and then decide with you whether to continue.
+
 ## Artifact Inbox
 
 When the AI creates a long plan, review, or handoff, it should not always go straight into the main vault.
@@ -62,8 +73,20 @@ After you approve the useful ones, ask the AI to move them into `Vault/Plans`, `
 Useful prompt:
 
 ```text
-Please archive the approved _inbox artifacts into the right OmniBrain folders and update the daily log.
+Please archive the approved artifacts.
 ```
+
+If the AI tool created useful notes in a temporary or hidden workspace, ask it to mirror the approved content into OmniBrain before the notes disappear.
+
+## Knowledge Updates
+
+When a plan, review, or walkthrough creates durable truth, use:
+
+```text
+Please update the project knowledge.
+```
+
+The AI should preserve the existing note's purpose and structure, then add the new truth in the right `Vault/System/` or `Vault/Features/` note.
 
 ## Review Roles
 
@@ -161,6 +184,7 @@ npm run setup
 
 5. 打開 `Vault/Project_Context.md`。
 6. 寫下專案目標、目前狀態、重要連結，以及 AI 必須記住的事。
+7. 如果希望 AI 理解更完整的產品目標、使用者或體驗原則，可以打開 `Vault/System/Product_Vision.md` 補充資料。
 
 ## 每次開始工作時
 
@@ -184,6 +208,16 @@ npm run setup
 - `Vault/OS` - 給 AI 助手的工作規則。
 - `Vault/Agents` - 專門審查角色的清單。
 
+## 分階段工作
+
+如果修改較大、較高風險，或範圍還不清楚，可以請 AI 放慢：
+
+```text
+我們分階段處理。
+```
+
+AI 應該先檢查目前狀態，界定一個小階段，需要時先取得你的確認，只執行該階段，完成後驗證，再和你決定是否繼續。
+
 ## 收件匣
 
 當 AI 產生很長的計劃、審查或交接資料時，不一定要立即放入主要 vault。
@@ -195,8 +229,20 @@ npm run setup
 可用提示：
 
 ```text
-請把已批准的 _inbox 產物封存到正確的 OmniBrain 資料夾，並更新每日記錄。
+請封存已批准的產物。
 ```
+
+如果 AI 工具把有用資料放在暫時或隱藏的位置，請它先把已批准內容鏡像保存到 OmniBrain，避免之後遺失。
+
+## 更新專案知識
+
+當計劃、審查或交接資料產生了日後需要遵守的專案事實，可以使用：
+
+```text
+請更新專案知識。
+```
+
+AI 應該保留原有筆記的用途和結構，再把新的穩定內容補充到正確的 `Vault/System/` 或 `Vault/Features/` 筆記。
 
 ## 審查角色
 

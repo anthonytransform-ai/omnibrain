@@ -12,6 +12,9 @@ You do not need to know how to code to use OmniBrain. It is designed for people 
 - **Clear working rhythm** - new ideas, plans, reviews, and handoffs have a proper place.
 - **Artifact inbox** - raw AI-generated notes go into `Vault/_inbox` first, so useful work is not lost and messy work does not pollute the main memory.
 - **Approved plan archive** - accepted plans and completed handoffs move into `Vault/Plans`.
+- **Staged workflow** - large or risky changes can be split into small approved stages before implementation.
+- **Product vision anchor** - the AI can read a short project context and a deeper product vision before planning user-facing work.
+- **Knowledge format** - project memory uses simple maps, daily logs, and preserve-then-enrich updates so future AI sessions can understand what changed.
 - **Review roles** - the vault includes practical review checklists for architecture, code review, UI review, and vault keeping.
 - **External sandbox review** - you can ask a separate AI or sandbox environment to review code, suggest tests, or challenge a plan without making it part of your daily workflow.
 - **No vendor lock-in** - OmniBrain is plain folders and Markdown files. It can be used with Codex, another AI coding assistant, Obsidian, or a normal text editor.
@@ -46,6 +49,14 @@ Useful prompt:
 Please read the OmniBrain vault, understand the current project state, and tell me what you know before making changes.
 ```
 
+Other useful prompts:
+
+```text
+Let's do this in stages.
+Please archive the approved artifacts.
+Please update the project knowledge.
+```
+
 ## What Gets Created
 
 After setup, OmniBrain creates a `Vault` folder with:
@@ -59,6 +70,7 @@ After setup, OmniBrain creates a `Vault` folder with:
 - `Daily_Logs/` - dated working notes.
 - `OS/` - operating guidance for the AI assistant.
 - `Agents/` - role checklists for review and project maintenance.
+- `System/Product_Vision.md` - deeper product goals and audience notes.
 
 ## Maintenance Commands
 
@@ -101,6 +113,9 @@ OmniBrain 是一套可攜式的 AI 工作記憶系統。
 - **建立清楚的工作節奏** - 新想法、計劃、審查和交接資料都有固定位置。
 - **收件匣** - AI 產生的原始筆記先放入 `Vault/_inbox`，有用的內容不會遺失，未整理的內容也不會弄亂主要記憶。
 - **已批准計劃封存** - 已接受的計劃和完成的交接資料放入 `Vault/Plans`。
+- **分階段工作流程** - 較大或較高風險的修改，可以先拆成較小階段，確認後再執行。
+- **產品願景錨點** - AI 可以先閱讀簡短專案背景和較完整的產品願景，再規劃使用者會看到的改動。
+- **知識格式** - 專案記憶使用簡單地圖、每日記錄和「保留後補充」的更新方式，方便之後的 AI 會話理解改動。
 - **審查角色** - vault 內有架構、程式碼、介面和知識庫整理的審查清單。
 - **外部沙盒審查** - 你可以請另一個 AI 或沙盒環境獨立檢查程式碼、建議測試，或挑戰一個計劃，而不用把它變成日常流程的一部分。
 - **不綁定單一平台** - OmniBrain 只是資料夾和 Markdown 檔案，可以配合 Codex、其他 AI 開發助手、Obsidian，或普通文字編輯器使用。
@@ -135,6 +150,14 @@ npm run setup
 請先閱讀 OmniBrain vault，了解目前專案狀態，然後告訴我你知道了甚麼，再開始修改。
 ```
 
+其他常用提示：
+
+```text
+我們分階段處理。
+請封存已批准的產物。
+請更新專案知識。
+```
+
 ## 建立後會有甚麼
 
 設定完成後，OmniBrain 會建立一個 `Vault` 資料夾，當中包括：
@@ -148,6 +171,7 @@ npm run setup
 - `Daily_Logs/` - 每日工作記錄。
 - `OS/` - 給 AI 助手的工作指引。
 - `Agents/` - 不同審查和整理角色的清單。
+- `System/Product_Vision.md` - 較完整的產品目標和使用者說明。
 
 ## 維護指令
 

@@ -35,6 +35,18 @@ Use it for:
 4. If approved, move a clean copy into `Vault/Plans/`.
 5. Update `Vault/System/` or `Vault/Features/` only with durable truths.
 
+## Artifact Mirroring
+
+If an AI tool stores plans, reviews, or handoffs in a temporary or hidden workspace, mirror the useful content into the vault before it disappears.
+
+Use this prompt:
+
+```text
+Please archive the approved artifacts.
+```
+
+Mirroring means copying the approved content into OmniBrain. It does not mean trusting every temporary note as permanent truth.
+
 ## Rules
 
 - Never delete old plans to make room for new ones.
