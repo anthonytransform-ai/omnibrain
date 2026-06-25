@@ -9,14 +9,8 @@ tags: [omnibrain, features]
 
 This hub connects all feature-specific documentation.
 
-## Current Feature Notes
-
-Add feature notes here as they become durable project knowledge.
-
-Examples:
-
-- `[[Authentication]]`
-- `[[Dashboard]]`
+- [[Project/Features/Installer_Isolation|Installer Isolation]] - Safe integration boundaries for user projects.
+- [[Project/Features/Migration_Protocol|Migration Protocol]] - Safe, non-destructive upgrade path for v1 vaults.
 
 ## How To Use This Map
 

@@ -13,6 +13,7 @@ This map indexes the project's durable operating knowledge, system standards, an
 - [[Project_Overview]] - The project identity card and permissions boundary.
 - [[Definition_of_Done]] - Quality assurance and sprint checklist.
 - [[Project/System/Product_Vision|Product Vision]] - Deep product goals, target audience, and product direction.
+- [[Project/System/OmniBrain_Architecture|OmniBrain Architecture]] - Architectural and operational guidelines for v2.
 
 ## Core OS Configuration
 - [[Core_OS/Runtime/Entry|Runtime Entry]] - Vault boot sequence and agent routing logic.
