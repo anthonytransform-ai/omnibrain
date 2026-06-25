@@ -1,310 +1,219 @@
 # Instructions For Humans
 
-This guide explains how to use OmniBrain in plain language.
+This guide explains how to use OmniBrain v2 in plain, non-technical language.
 
-OmniBrain is a folder-based memory system for working with AI assistants. It helps the AI understand your project before it makes changes, and it gives you a tidy place to keep plans, decisions, reviews, and handoffs.
-
-## Before You Start
-
-You need:
-
-- a project folder,
-- an AI assistant that can read and edit files,
-- optionally Node.js if you want to run the setup and health-check commands,
-- optionally Obsidian if you want a nicer reading and note-taking experience.
-
-Obsidian is optional. No Obsidian community plugin is required.
-
-## First Setup
-
-1. Put the OmniBrain files inside your project folder.
-2. Open the project in your preferred AI assistant.
-3. Ask the AI assistant to read `AGENT_PROMPT.md`.
-4. If Node.js is available, ask the AI assistant to run:
-
-```bash
-npm run setup
-```
-
-5. Open `Vault/Project_Context.md`.
-6. Write your project goal, current status, important links, and anything the AI must remember.
-7. Open `Vault/System/Product_Vision.md` when you want the AI to understand deeper product goals, audience, or user experience principles.
-
-## How To Start A Work Session
-
-At the start of a serious work session, use this prompt:
-
-```text
-Please sync with the OmniBrain vault first. Read the project context, dashboard, latest daily log, active plans, and relevant operating notes. Then tell me the current project state before making changes.
-```
-
-This prevents the AI assistant from guessing.
-
-## Where Things Go
-
-Use these folders as a simple habit:
-
-- `Vault/_inbox` - raw AI-generated artifacts waiting for review.
-- `Vault/Plans` - accepted plans and completed handoffs.
-- `Vault/Reviews` - review notes and external review results.
-- `Vault/Decisions` - important choices that should be remembered.
-- `Vault/Daily_Logs` - dated work notes.
-- `Vault/OS` - working rules for the AI assistant.
-- `Vault/Agents` - review checklists for specialist roles.
-
-## Staged Work
-
-For large, risky, or unclear changes, ask the AI to slow down:
-
-```text
-Let's do this in stages.
-```
-
-The AI should inspect the current state, scope one stage, ask for approval when needed, implement only that stage, verify it, and then decide with you whether to continue.
-
-## Artifact Inbox
-
-When the AI creates a long plan, review, or handoff, it should not always go straight into the main vault.
-
-Ask the AI to put new artifacts in `Vault/_inbox` first.
-
-After you approve the useful ones, ask the AI to move them into `Vault/Plans`, `Vault/Reviews`, or another correct folder.
-
-Useful prompt:
-
-```text
-Please archive the approved artifacts.
-```
-
-If the AI tool created useful notes in a temporary or hidden workspace, ask it to mirror the approved content into OmniBrain before the notes disappear.
-
-## Knowledge Updates
-
-When a plan, review, or walkthrough creates durable truth, use:
-
-```text
-Please update the project knowledge.
-```
-
-The AI should preserve the existing note's purpose and structure, then add the new truth in the right `Vault/System/` or `Vault/Features/` note.
-
-## Review Roles
-
-OmniBrain includes practical role checklists, such as:
-
-- Architect,
-- Code Reviewer,
-- UI Designer,
-- Vault Keeper.
-
-These are not separate people. They are ways to ask the AI assistant to review the work from a particular angle.
-
-Useful prompt:
-
-```text
-Please review this plan using the Architect and Code Reviewer checklists before implementing it.
-```
-
-If your AI tool supports separate agents, it may use these roles as separate helpers. If not, the main AI assistant can still use the same checklists.
-
-## External Sandbox Review
-
-Sometimes you may want a second opinion from another AI tool or sandbox environment.
-
-Use external sandbox review when you want:
-
-- an independent code review,
-- test suggestions,
-- risk checking,
-- a challenge to an implementation plan,
-- a second opinion before release.
-
-This is optional. OmniBrain does not depend on any specific external review product.
-
-Useful prompt:
-
-```text
-Please prepare an external sandbox review package with context, changed files, risks, and exact questions for the reviewer.
-```
-
-## Maintenance
-
-If Node.js is available, these commands help keep the vault tidy:
-
-```bash
-npm run vault-health
-npm run vault-maintenance
-```
-
-Run them after larger changes or before handing the project to another AI assistant.
-
-## If The AI Gets Confused
-
-Ask it to stop and resync:
-
-```text
-Stop. Please reread the OmniBrain vault, summarize the current project state, and list the files you will use before continuing.
-```
-
-## The Main Rule
-
-OmniBrain is here to make AI work easier to control.
-
-Keep useful context. Archive approved plans. Keep raw artifacts in `_inbox` until they are reviewed. Do not let the vault become a dumping ground.
+OmniBrain v2 is a folder-based project memory system for people who build software using AI assistants. It creates a clean structure separating the AI's operating instructions from your actual project documentation. By opening the `Vault` folder in Obsidian Desktop, you get a clean visual dashboard, while the AI assistant reads the files directly from disk to stay on track.
 
 ---
 
-# 給使用者的說明
+## 🛠️ Getting Started (Prerequisites)
 
-這份說明用簡單語言介紹如何使用 OmniBrain。
+To use OmniBrain, you need:
+1. **A project folder** on your computer.
+2. **An AI coding assistant** (such as Gemini Antigravity, Claude, or any tool that has access to your workspace files).
+3. **Obsidian Desktop** (Free download from [obsidian.md](https://obsidian.md)).
+4. **Node.js** (Optional, but required to run the automated setup and health checks).
 
-OmniBrain 是一套以資料夾為核心的 AI 工作記憶系統。它可以幫 AI 助手在修改前先了解你的專案，也讓你有一個整齊位置保存計劃、決定、審查記錄和交接資料。
+---
 
-## 開始前需要甚麼
+## 🚀 Setup Guide
 
-你需要：
-
-- 一個專案資料夾；
-- 一個可以讀取和修改檔案的 AI 助手；
-- 如果想使用設定和健康檢查指令，可選擇安裝 Node.js；
-- 如果想用較舒服的方式閱讀和整理筆記，可選擇使用 Obsidian。
-
-Obsidian 不是必需。不需要安裝任何 Obsidian 社群外掛。
-
-## 第一次設定
-
-1. 把 OmniBrain 檔案放入你的專案資料夾。
-2. 用你偏好的 AI 助手打開這個專案。
-3. 請 AI 助手閱讀 `AGENT_PROMPT.md`。
-4. 如果可以使用 Node.js，請 AI 助手運行：
-
+### Step 1: Install Vault Files
+Ask your AI assistant to read `AGENTS.md` and run the installer:
 ```bash
 npm run setup
 ```
+*(This command will safely create the new folders. If a file like `Project_Overview.md` already exists, it will NOT overwrite it unless you run `npm run setup -- --force`.)*
 
-5. 打開 `Vault/Project_Context.md`。
-6. 寫下專案目標、目前狀態、重要連結，以及 AI 必須記住的事。
-7. 如果希望 AI 理解更完整的產品目標、使用者或體驗原則，可以打開 `Vault/System/Product_Vision.md` 補充資料。
+### Step 2: Configure Obsidian
+1. Open Obsidian Desktop.
+2. Select **"Open folder as vault"** and choose the `Vault/` directory inside your project.
+3. Turn on Core Plugins:
+   - Go to Settings (cog icon) -> **Core Plugins**.
+   - Enable **Templates**.
+   - Enable **Daily Notes**.
+4. Enable Dataview Community Plugin:
+   - Go to Settings -> **Community Plugins**.
+   - Turn off "Restricted Mode".
+   - Click "Browse", search for **Dataview**, install it, and enable it.
+5. Set up Folder Paths:
+   - **Templates:** Go to Settings -> Templates. Set the "Template folder path" to `Obsidian/Templates`.
+   - **Daily Notes:** Go to Settings -> Daily Notes.
+     - Set "New file location" to `Project/Daily_Logs`.
+     - Set "Template file location" to `Obsidian/Templates/Daily_Log.md`.
 
-## 每次開始工作時
-
-正式開始工作前，可以使用這段提示：
-
-```text
-請先同步 OmniBrain vault。閱讀專案背景、工作面板、最新每日記錄、目前計劃和相關工作指引。然後先告訴我目前專案狀態，再開始修改。
-```
-
-這樣可以避免 AI 助手靠猜測工作。
-
-## 內容應該放在哪裡
-
-你可以用以下簡單習慣：
-
-- `Vault/_inbox` - 等待審查的 AI 原始產物。
-- `Vault/Plans` - 已接受計劃和完成交接資料。
-- `Vault/Reviews` - 審查記錄和外部審查結果。
-- `Vault/Decisions` - 需要保留的重要決定。
-- `Vault/Daily_Logs` - 按日期整理的工作記錄。
-- `Vault/OS` - 給 AI 助手的工作規則。
-- `Vault/Agents` - 專門審查角色的清單。
-
-## 分階段工作
-
-如果修改較大、較高風險，或範圍還不清楚，可以請 AI 放慢：
-
-```text
-我們分階段處理。
-```
-
-AI 應該先檢查目前狀態，界定一個小階段，需要時先取得你的確認，只執行該階段，完成後驗證，再和你決定是否繼續。
-
-## 收件匣
-
-當 AI 產生很長的計劃、審查或交接資料時，不一定要立即放入主要 vault。
-
-請 AI 先把新產物放入 `Vault/_inbox`。
-
-當你確認哪些內容有用後，再請 AI 移到 `Vault/Plans`、`Vault/Reviews` 或其他正確位置。
-
-可用提示：
-
-```text
-請封存已批准的產物。
-```
-
-如果 AI 工具把有用資料放在暫時或隱藏的位置，請它先把已批准內容鏡像保存到 OmniBrain，避免之後遺失。
-
-## 更新專案知識
-
-當計劃、審查或交接資料產生了日後需要遵守的專案事實，可以使用：
-
-```text
-請更新專案知識。
-```
-
-AI 應該保留原有筆記的用途和結構，再把新的穩定內容補充到正確的 `Vault/System/` 或 `Vault/Features/` 筆記。
-
-## 審查角色
-
-OmniBrain 包含一些實用的審查清單，例如：
-
-- 架構審查；
-- 程式碼審查；
-- 介面審查；
-- 知識庫整理。
-
-這些不是另一批真人，而是讓 AI 助手用不同角度檢查工作的方式。
-
-可用提示：
-
-```text
-請先用架構審查和程式碼審查清單檢查這個計劃，然後才開始實作。
-```
-
-如果你的 AI 工具支援分開的助手，它可以把這些角色交給不同助手處理。若不支援，主 AI 助手仍然可以使用同一套清單。
-
-## 外部沙盒審查
-
-有時你可能想請另一個 AI 工具或沙盒環境提供第二意見。
-
-當你需要以下事情時，可以使用外部沙盒審查：
-
-- 獨立程式碼審查；
-- 測試建議；
-- 風險檢查；
-- 挑戰一個實作計劃；
-- 發布前第二意見。
-
-這是可選功能。OmniBrain 不依賴任何指定外部審查產品。
-
-可用提示：
-
-```text
-請準備一份外部沙盒審查包，包含背景、已修改檔案、風險和要問審查者的具體問題。
-```
-
-## 維護
-
-如果可以使用 Node.js，以下指令可協助保持 vault 整齊：
-
+### Step 3: Verify the Setup
+Run this terminal command (or ask the AI to run it) to verify Obsidian is configured correctly:
 ```bash
-npm run vault-health
-npm run vault-maintenance
+npm run obsidian-check
 ```
 
-建議在較大修改後，或把專案交給另一個 AI 助手前運行。
+---
 
-## 如果 AI 助手混亂了
+## 🧭 Vault Layout for Humans
 
-請它停下來重新同步：
+When you open Obsidian, you will work within these sections:
 
-```text
-停。請重新閱讀 OmniBrain vault，整理目前專案狀態，並列出你會使用哪些檔案，然後才繼續。
+- **Dashboard.md** (Root): Your human control panel. It uses Dataview to dynamically list active plans, recent daily logs, and features.
+- **Project/**: This is your project's memory.
+  - `Project_Overview.md`: Fill this in with your tech stack, database details, and deployment targets.
+  - `Current_State.md`: Tracks what is being worked on right now and list active blockers.
+  - `Definition_of_Done.md`: Your checklist for when a task is officially complete.
+  - `Plans/`: Stores implementation plans. When a plan is done, the AI archives it here.
+  - `Daily_Logs/`: Stores daily logs. In Obsidian, click the "Open today's daily note" ribbon button to automatically scaffold today's log using the template.
+  - `_inbox/`: Staging folder where the AI writes draft plans or reviews before you approve them.
+- **Core_OS/**: Operating instructions for the AI. You do not need to modify these files. They define workflows (planning, implementation, review) and formatting standards.
+
+---
+
+## 🤝 Pair Programming with your AI
+
+To ensure your AI assistant never gets lost or forgets your project goals, adopt these simple habits:
+
+### 1. The Session Start Handshake
+At the start of each session, tell the AI:
+> "Please read the bootstrap AGENTS.md, orient yourself, and summarize the current project state from Project/Current_State.md."
+This forces the AI to look at the project memory instead of guessing what was done last time.
+
+### 2. Staged Work for Risky Changes
+If you are asking the AI to perform a large UI change, write a major script, or update database structures, tell the AI:
+> "Let's do this in stages."
+The AI will halt, load the Staged Change workflow, write down a plan with discrete steps in `Project/_inbox/`, and wait for your approval before writing any code.
+
+### 3. Update Project Knowledge
+When the AI completes a coding task, tell the AI:
+> "Please update the project knowledge."
+The AI will extract durable truths (like a new API route, styling variables, or setup instructions) and add them to files under `Project/System/` or `Project/Features/`, then clean up the temporary plans.
+
+---
+
+## 🧹 Vault Maintenance
+
+To keep the files organized, run these commands occasionally:
+
+- **Check Vault Integrity:**
+  ```bash
+  npm run vault-health
+  ```
+  This scans all files for broken links, checks for valid frontmatter, and alerts you if the AI has leaked operational instructions (like "You are a coding agent") into your project memory.
+- **Archive Completed Plans:**
+  ```bash
+  npm run vault-archive
+  ```
+  Scans plans older than 7 days. If they are marked `status: completed` in their frontmatter, it reports them. Run `npm run vault-archive -- --apply` to move them into year-month subfolders.
+- **Repair Missing Frontmatter:**
+  ```bash
+  npm run vault-autotag -- --apply
+  ```
+  Automatically adds type headers to orphan files that lack frontmatter.
+
+---
+
+# 給使用者的說明（繁體中文）
+
+這份指南用簡單且不涉及深奧技術的語言，說明如何使用 OmniBrain v2。
+
+OmniBrain v2 是一個以資料夾為基礎的專案記憶系統，專為使用 AI 助手開發軟體的人所設計。它將 AI 的運行規則（Core_OS）與您的專案事實文件（Project）分開。透過在 Obsidian Desktop 中開啟 `Vault` 資料夾，您可以獲得精美的工作面板，而 AI 助手則會直接讀取磁碟上的檔案以保持開發方向正確。
+
+---
+
+## 🛠️ 開始前的準備工作
+
+您需要準備：
+1. 電腦中的一個**專案資料夾**。
+2. 一個可以讀取和修改檔案的 **AI 開發助手** (例如 Gemini Antigravity, Claude, 或任何能存取工作區檔案的工具)。
+3. **Obsidian Desktop** (從 [obsidian.md](https://obsidian.md) 免費下載並安裝)。
+4. **Node.js** (選用，但若要執行自動化安裝與健康檢查則為必需)。
+
+---
+
+## 🚀 安裝與設定步驟
+
+### 步驟 1：安裝 Vault 檔案
+請 AI 助手閱讀 `AGENTS.md` 並執行安裝程式：
+```bash
+npm run setup
+```
+*(此指令會建立 v2 目錄結構。若 `Project_Overview.md` 等專案事實檔案已存在，預設「不會」將其覆寫。如需強制更新範本，請使用 `npm run setup -- --force`。)*
+
+### 步驟 2：設定 Obsidian
+1. 開啟 Obsidian Desktop。
+2. 選擇 **"Open folder as vault"** (將資料夾開啟為儲存庫) 並選擇您專案中的 `Vault/` 目錄。
+3. 啟用核心外掛 (Core Plugins)：
+   - 點擊左下角設定 (齒輪圖示) -> **Core Plugins**。
+   - 啟用 **Templates** (範本) 外掛。
+   - 啟用 **Daily Notes** (每日筆記) 外掛。
+4. 安裝並啟用 Dataview 社群外掛：
+   - 點擊設定 -> **Community Plugins**。
+   - 關閉 "Restricted Mode" (安全模式)。
+   - 點擊 "Browse" (瀏覽)，搜尋 **Dataview**，安裝並啟用它。
+5. 設定資料夾與範本路徑：
+   - **Templates (範本):** 進入設定 -> Templates。將 "Template folder path" (範本資料夾路徑) 設定為 `Obsidian/Templates`。
+   - **Daily Notes (每日筆記):** 進入設定 -> Daily Notes。
+     - 將 "New file location" (新筆記儲存位置) 設定為 `Project/Daily_Logs`。
+     - 將 "Template file location" (範本檔案位置) 設定為 `Obsidian/Templates/Daily_Log.md`。
+
+### 步驟 3：驗證設定
+在終端機中執行以下指令（或請 AI 執行），以檢查 Obsidian 外掛是否均正確啟用：
+```bash
+npm run obsidian-check
 ```
 
-## 最重要的規則
+---
 
-OmniBrain 是用來令 AI 工作更容易掌控。
+## 🧭 Vault 的版面配置
 
-保留有用背景。封存已批准計劃。原始產物先放在 `_inbox`，審查後才移入正式位置。不要讓 vault 變成雜物箱。
+當您在 Obsidian 中開啟儲存庫時，將會看到以下主要部分：
 
+- **Dashboard.md** (根目錄)：專屬人類的控制面版。它會透過 Dataview 自動搜尋並列出進行中的計劃、最近的每日筆記與功能清單。
+- **Project/**：儲存您專案的記憶。
+  - `Project_Overview.md`：在此填寫您的技術堆疊、資料庫規格與部署目標。
+  - `Current_State.md`：記錄目前正在進行的工作以及存在的阻礙 (Blocker)。
+  - `Definition_of_Done.md`：專案功能驗收與 QA 的標準檢查清單。
+  - `Plans/`：存放開發計劃。當計劃完成後，AI 會將其歸檔於此。
+  - `Daily_Logs/`：存放每日開發日誌。在 Obsidian 中，點擊左側「開啟今天的每日筆記」圖示，即可使用範本自動建立今天的日誌。
+  - `_inbox/`：AI 暫存草稿計劃或審查報告的收件匣，確認後才搬移到正式目錄。
+- **Core_OS/**：AI 的運作指引與標準，您不需修改此目錄的檔案。
+
+---
+
+## 🤝 如何與 AI 助手協同工作
+
+為確保您的 AI 助手不會混亂或遺忘專案目標，請建立以下簡單的合作習慣：
+
+### 1. 會話開始協定 (Start Handshake)
+在每次新對話開始時，告訴 AI：
+> 「請閱讀引導檔案 AGENTS.md，了解目前的專案進度，並從 Project/Current_State.md 摘要專案狀態。」
+這能確保 AI 從專案事實檔案開始，而不是憑空猜測上次做到了哪裡。
+
+### 2. Risky Work 的分階段流程 (Staged Work)
+若要讓 AI 進行大幅度介面調整、撰寫關鍵 API 或更動資料庫結構時，告訴 AI：
+> 「我們分階段處理。」
+AI 將暫停當前工作，讀取 Staged Change 工作流，在 `Project/_inbox/` 中寫下各階段規劃，並在動工前等待您的核准。
+
+### 3. 更新專案知識 (Update Knowledge)
+當一個功能開發完畢且測試通過時，告訴 AI：
+> 「請更新專案知識。」
+AI 會將此次學到的事實（例如新註冊的路由、共用變數或安裝方式）整理寫入 `Project/System/` 或 `Project/Features/` 中，並清理暫存的計劃檔案。
+
+---
+
+## 🧹 儲存庫維護指令
+
+為保持檔案整齊，您可以定期執行以下終端機維護指令：
+
+- **檢查 Vault 完整性：**
+  ```bash
+  npm run vault-health
+  ```
+  這會檢查有無失效連結、YAML 格式是否正確，並檢查 AI 是否把運行指令（例如 "You are a coding agent"）意外寫入了專案事實文件中。
+- **封存已完成計劃：**
+  ```bash
+  npm run vault-archive
+  ```
+  這會搜尋大於 7 天且標記為 `status: completed` 的計劃。使用 `npm run vault-archive -- --apply` 可將其移到以年月分類的封存資料夾。
+- **自動標記 Frontmatter：**
+  ```bash
+  npm run vault-autotag -- --apply
+  ```
+  為遺漏 YAML Frontmatter 的計劃檔案自動加上類型與標籤。

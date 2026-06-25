@@ -1,5 +1,27 @@
 # OmniBrain Changelog / 更新日誌
 
+## v2.0.0 - 2026-06-25
+
+### English
+**OmniBrain v2: Obsidian-integrated, Markdown-first AI Memory System**
+
+- **Slim J_OS Runtime:** Refactored to separate AI operating instructions (`Core_OS/`) from project-specific memory (`Project/`).
+- **Obsidian Integration:** Main Dashboard now transcludes Dataview queries (`Obsidian/Queries/Dashboard.md`) for humans, while AI agents boot cleanly via a lightweight 10-line `AGENTS.md`.
+- **Safe Installer:** Setup is now idempotent and non-destructive by default. Added `omnibrain.config.json` configuration and `--force` parameter support.
+- **Upgraded Validation:** Health check validation scans links robustly, validates frontmatter, and catches instruction leakage in project memory. Added `obsidian-check` to verify local Dataview configuration.
+- **Vault Migration:** Migration utility backs up v1 vault to `_legacy/` and automatically cleans the root to set up a clean v2 structure.
+- **Sandboxed Test Suite:** Added a robust test runner (`npm test`) validating idempotency, file protection, link integrity, leakage detection, and plugin presence.
+
+### 繁體中文
+**OmniBrain v2：結合 Obsidian 的 Markdown 優先 AI 記憶系統**
+
+- **輕量化 J_OS 執行期：** 將 AI 運行規則（`Core_OS/`）與專案事實記憶（`Project/`）進行嚴格分離。
+- **Obsidian 深度整合：** 主控制面板（`Dashboard.md`）改用 Dataview 查詢語法（`Obsidian/Queries/Dashboard.md`），AI 助手則透過 10 行的 `AGENTS.md` 自動引導開機。
+- **無損安全安裝：** 初始化設定預設為無損（跳過已存在檔案），支援 `omnibrain.config.json` 設定檔及 `--force` 強制更新參數。
+- **強化的健康度檢查：** `vault-health` 指令支援萬用連結解析、 frontmatter 驗證以及 Project 記憶區之 AI 指令洩漏檢查；新增 `obsidian-check` 驗證本地 Dataview 外掛啟用狀態。
+- **資料庫遷移：** 遷移指令自動將 v1 檔案備份至 `_legacy/`，並清空根目錄以建立乾淨的 v2 結構。
+- **沙盒測試套件：** 新增測試指令（`npm test`）驗證 setup 冪等性、檔案防覆寫保護、連結完整性、洩漏檢查及外掛狀態。
+
 ## v1.3.1 - 2026-06-20
 
 ### English

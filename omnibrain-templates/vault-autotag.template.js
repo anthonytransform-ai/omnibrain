@@ -4,29 +4,47 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const VAULT_PLANS_DIR = path.resolve(__dirname, '../Vault/Plans');
+const projectRootDir = path.resolve(__dirname, '..');
+const VAULT_PLANS_DIR = path.join(projectRootDir, 'Vault/Project/Plans');
 
-console.log("[Vault AutoTag] Running automated orphan plan resolution...");
+const args = process.argv.slice(2);
+const apply = args.includes('--apply');
+
+console.log("[Vault AutoTag] Scanning for orphan plans lacking frontmatter...");
 
 if (fs.existsSync(VAULT_PLANS_DIR)) {
   const files = fs.readdirSync(VAULT_PLANS_DIR);
-  let taggedCount = 0;
+  let orphanCount = 0;
+  let repairedCount = 0;
 
   files.forEach(file => {
     if (file.endsWith('.md')) {
       const filePath = path.join(VAULT_PLANS_DIR, file);
       const content = fs.readFileSync(filePath, 'utf8');
 
-      // Basic heuristic: if it lacks frontmatter, tag it.
+      // Check if it lacks frontmatter
       if (!content.startsWith('---')) {
-        const updatedContent = `---\ntype: plan\ntags: [autotagged, orphan]\n---\n\nModifies: [[_System_MOC]]\n\n${content}`;
-        fs.writeFileSync(filePath, updatedContent);
-        console.log(`  Fixed: ${file}`);
-        taggedCount++;
+        orphanCount++;
+        if (apply) {
+          const updatedContent = `---\ntype: plan\ntags: [autotagged, orphan]\nstatus: active\n---\n\nModifies: [[_System_MOC]]\n\n${content}`;
+          fs.writeFileSync(filePath, updatedContent);
+          console.log(`  [REPAIRED] ${file}`);
+          repairedCount++;
+        } else {
+          console.log(`  [ORPHAN] ${file} (lacks frontmatter)`);
+        }
       }
     }
   });
-  console.log(`[Vault AutoTag] Complete. Repaired ${taggedCount} files.`);
+
+  if (apply) {
+    console.log(`[Vault AutoTag] Complete. Repaired ${repairedCount} files.`);
+  } else {
+    console.log(`[Vault AutoTag] Scan complete. Found ${orphanCount} orphan files.`);
+    if (orphanCount > 0) {
+      console.log(`  -> Run 'npm run vault-autotag -- --apply' to automatically add frontmatter.`);
+    }
+  }
 } else {
-  console.log(`[Vault AutoTag] Plans directory not found.`);
+  console.log(`[Vault AutoTag] Plans directory not found at ${VAULT_PLANS_DIR}`);
 }

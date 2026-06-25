@@ -1,200 +1,195 @@
-# OmniBrain
+# OmniBrain v2
 
-OmniBrain is a portable memory system for AI-assisted work.
+OmniBrain is a portable, Markdown-first memory system for AI-assisted work, optimized for a seamless human experience using Obsidian Desktop.
 
-It helps a person turn a normal project folder into a shared workspace where an AI assistant can remember goals, decisions, plans, review notes, and project history across many sessions.
+It turns any project folder into a structured workspace where AI agents and coding assistants can retain memory of goals, decisions, plans, review notes, and history across sessions, while providing you with an organized dashboard in Obsidian.
 
-You do not need to know how to code to use OmniBrain. It is designed for people who work with AI by explaining goals, reviewing results, and making decisions.
-
-## What OmniBrain Gives You
-
-- **Project memory** - your AI assistant can read the project purpose, current status, important decisions, and recent work before it starts.
-- **Clear working rhythm** - new ideas, plans, reviews, and handoffs have a proper place.
-- **Artifact inbox** - raw AI-generated notes go into `Vault/_inbox` first, so useful work is not lost and messy work does not pollute the main memory.
-- **Approved plan archive** - accepted plans and completed handoffs move into `Vault/Plans`.
-- **Staged workflow** - large or risky changes can be split into small approved stages before implementation.
-- **Product vision anchor** - the AI can read a short project context and a deeper product vision before planning user-facing work.
-- **Knowledge format** - project memory uses simple maps, daily logs, and preserve-then-enrich updates so future AI sessions can understand what changed.
-- **Review roles** - the vault includes practical review checklists for architecture, code review, UI review, and vault keeping.
-- **External sandbox review** - you can ask a separate AI or sandbox environment to review code, suggest tests, or challenge a plan without making it part of your daily workflow.
-- **No vendor lock-in** - OmniBrain is plain folders and Markdown files. It can be used with Codex, another AI coding assistant, Obsidian, or a normal text editor.
-
-## Who It Is For
-
-OmniBrain is useful if:
-
-- you use AI to build or manage projects,
-- you are not a full-time developer,
-- your AI chats are becoming too long to follow,
-- you want decisions and project memory to survive across sessions,
-- you want a calmer way to work with AI instead of restarting context every time.
-
-## How To Use It
-
-1. Put OmniBrain in your project folder.
-2. Ask your AI assistant to read `AGENT_PROMPT.md`.
-3. Let the assistant run the setup script if your environment supports Node.js:
-
-```bash
-npm run setup
-```
-
-4. Open the generated `Vault` folder.
-5. Fill in `Vault/Project_Context.md` with your project goal, current status, and important links.
-6. Start each serious work session by asking the AI to sync with the vault.
-
-Useful prompt:
-
-```text
-Please read the OmniBrain vault, understand the current project state, and tell me what you know before making changes.
-```
-
-Other useful prompts:
-
-```text
-Let's do this in stages.
-Please archive the approved artifacts.
-Please update the project knowledge.
-```
-
-## What Gets Created
-
-After setup, OmniBrain creates a `Vault` folder with:
-
-- `Project_Context.md` - the project briefing.
-- `Dashboard.md` - a simple working dashboard.
-- `_inbox/` - raw AI artifacts waiting for review.
-- `Plans/` - approved plans and completed handoffs.
-- `Reviews/` - review notes and external review results.
-- `Decisions/` - important decisions.
-- `Daily_Logs/` - dated working notes.
-- `OS/` - operating guidance for the AI assistant.
-- `Agents/` - role checklists for review and project maintenance.
-- `System/Product_Vision.md` - deeper product goals and audience notes.
-
-## Maintenance Commands
-
-If Node.js is available, these commands help keep the vault tidy:
-
-```bash
-npm run vault-health
-npm run vault-maintenance
-```
-
-`vault-health` checks links and basic structure.
-
-`vault-maintenance` can run the available maintenance checks together.
-
-## Optional Obsidian Use
-
-OmniBrain works well in Obsidian, but Obsidian is optional.
-
-No community plugin is required. You can use the vault as normal Markdown files.
-
-## Important Principle
-
-OmniBrain should make AI work easier to understand, not harder.
-
-If a note is useful for future work, keep it. If it is only temporary noise, leave it in `_inbox` until it is reviewed or deleted.
+You do not need to be a developer to use OmniBrain. It is designed for non-technical visionaries and product managers who pair-program or build with AI.
 
 ---
 
-# OmniBrain（繁體中文）
+## Key Principles of v2
 
-OmniBrain 是一套可攜式的 AI 工作記憶系統。
+- **Markdown-first for AI Agents:** Agents boot using a clean, 10-line `AGENTS.md` entry point, minimizing token clutter and keeping context loaded only as needed.
+- **Obsidian-first for Humans:** Humans open the vault in Obsidian Desktop to view clean boards, logs, and Dataview dashboard queries.
+- **Strict Separation of Planes:** AI operational rules and guidelines live in `Core_OS/`. Project-specific facts, history, and status live in `Project/`.
+- **Non-Destructive Safety:** Setup and maintenance scripts default to check/report modes, protecting your project memory from accidental overwrites.
+- **Task-Scoped Loading:** Workflows load only the relevant project memory files to prevent context bloat.
 
-它可以把一個普通專案資料夾，變成你和 AI 助手一起工作的共享空間。AI 助手可以在每次開始前讀取專案目標、重要決定、計劃、審查記錄和最近進度，不用每次都由零開始。
+---
 
-你不需要懂寫程式也可以使用 OmniBrain。它是為用 AI 說明目標、審查結果、作決定的人而設計。
+## Required Tools (Human UI)
 
-## OmniBrain 可以幫你做甚麼
+OmniBrain v2 officially supports and recommends:
+- **Obsidian Desktop** (to open the local `Vault` directory as a vault).
+- **Templates** (Core Plugin) — configured to point to `Obsidian/Templates`.
+- **Daily Notes** (Core Plugin) — configured to point to `Project/Daily_Logs` using the template `Obsidian/Templates/Daily_Log.md`.
+- **Dataview** (Community Plugin) — required to render the read-only dashboard queries.
 
-- **保存專案記憶** - AI 助手可以先了解專案目的、目前狀態、重要決定和最近工作。
-- **建立清楚的工作節奏** - 新想法、計劃、審查和交接資料都有固定位置。
-- **收件匣** - AI 產生的原始筆記先放入 `Vault/_inbox`，有用的內容不會遺失，未整理的內容也不會弄亂主要記憶。
-- **已批准計劃封存** - 已接受的計劃和完成的交接資料放入 `Vault/Plans`。
-- **分階段工作流程** - 較大或較高風險的修改，可以先拆成較小階段，確認後再執行。
-- **產品願景錨點** - AI 可以先閱讀簡短專案背景和較完整的產品願景，再規劃使用者會看到的改動。
-- **知識格式** - 專案記憶使用簡單地圖、每日記錄和「保留後補充」的更新方式，方便之後的 AI 會話理解改動。
-- **審查角色** - vault 內有架構、程式碼、介面和知識庫整理的審查清單。
-- **外部沙盒審查** - 你可以請另一個 AI 或沙盒環境獨立檢查程式碼、建議測試，或挑戰一個計劃，而不用把它變成日常流程的一部分。
-- **不綁定單一平台** - OmniBrain 只是資料夾和 Markdown 檔案，可以配合 Codex、其他 AI 開發助手、Obsidian，或普通文字編輯器使用。
+---
 
-## 適合甚麼人
+## How to Install & Run
 
-OmniBrain 適合你，如果：
+1. Place the OmniBrain repository contents inside your project root.
+2. In your AI coding assistant, run the setup task to scaffold the folders:
+   ```bash
+   npm run setup
+   ```
+   *(Note: Setup is safe and will never overwrite existing project files. To force template updates, use `npm run setup -- --force`.)*
+3. Open the `Vault/` directory in Obsidian Desktop.
+4. Follow the onboarding instructions in `Vault/Obsidian/INSTALL.md` to enable community plugins and templates.
+5. Verify your installation by running:
+   ```bash
+   npm run obsidian-check
+   ```
+6. Ask your AI coding assistant to read the project root `AGENTS.md` and orient itself.
 
-- 你用 AI 建立或管理專案；
-- 你不是全職工程師；
-- 你的 AI 對話太長，開始難以追蹤；
-- 你希望重要決定和專案記憶可以保留下來；
-- 你想用較穩定、清楚的方法和 AI 合作。
+---
 
-## 使用方法
+## What Gets Created
 
-1. 把 OmniBrain 放入你的專案資料夾。
-2. 請 AI 助手閱讀 `AGENT_PROMPT.md`。
-3. 如果你的環境支援 Node.js，可以請 AI 助手運行設定指令：
-
-```bash
-npm run setup
-```
-
-4. 打開建立好的 `Vault` 資料夾。
-5. 在 `Vault/Project_Context.md` 寫下專案目標、目前狀態和重要連結。
-6. 每次開始正式工作前，先請 AI 助手同步 vault 內容。
-
-可用提示：
+The `Vault/` directory scaffolds the following clean structure:
 
 ```text
-請先閱讀 OmniBrain vault，了解目前專案狀態，然後告訴我你知道了甚麼，再開始修改。
+Vault/
+├─ Core_OS/
+│  ├─ Runtime/Entry.md               ← Agent boot protocol
+│  ├─ Registries/Workflow_Registry.md ← Operational workflow index
+│  ├─ Workflows/                     ← Feature scoping, planning, implementation, review rules
+│  ├─ Standards/Anti_Patterns.md     ← Lint rules parsed by check-ai-rules
+│  ├─ Standards/Knowledge_Format.md  ← Frontmatter and formatting guidelines
+│  └─ Validation/Vault_Health_Check.md ← Vault sanity rules
+│
+├─ Project/
+│  ├─ Project_Overview.md            ← Tech stack and permission boundaries
+│  ├─ Current_State.md               ← Active tasks, blockers, and recent changes
+│  ├─ Definition_of_Done.md          ← Sprint checklists and QA rules
+│  ├─ System/_System_MOC.md          ← Index for system architecture and vision docs
+│  ├─ Features/_Features_MOC.md      ← Index for feature-specific rules
+│  ├─ Plans/                         ← Active/completed implementation plans
+│  ├─ Daily_Logs/                    ← Dated human and AI logs
+│  └─ _inbox/                        ← Staging area for raw AI artifacts
+│
+├─ Obsidian/
+│  ├─ INSTALL.md                     ← User onboarding instructions
+│  ├─ Templates/Daily_Log.md         ← Daily note template
+│  └─ Queries/Dashboard.md           ← Dataview dashboard query scripts
+│
+└─ Dashboard.md                      ← Root Dashboard transcluding query embeds
 ```
 
-其他常用提示：
+---
+
+## CLI Utilities
+
+If Node.js is available in your workspace, the following scripts help maintain and test the vault:
+
+| Command | Purpose | Default Mode | Force / Apply Flag |
+| :--- | :--- | :--- | :--- |
+| `npm run setup` | Scaffolds directories and copies v2 templates | Non-destructive (skips existing) | `npm run setup -- --force` |
+| `npm run obsidian-check` | Checks that Obsidian is opened and Dataview is active | Validation report | N/A |
+| `npm run vault-health` | Scans links, frontmatter, and looks for rule leakage | Integrity validator | N/A |
+| `npm run vault-autotag` | Fixes plans missing frontmatter tags | Report-only | `npm run vault-autotag -- --apply` |
+| `npm run vault-archive` | Archives completed plans older than 7 days | Report-only | `npm run vault-archive -- --apply` |
+| `npm run vault-maintenance` | Combines autotag, health validation, and archiving | Report-only | Runs autotag/archive with `--apply` |
+| `npm run omnibrain-migrate` | Migrates v1 vault files into the v2 structure | Interactive backing up | Automatically backs up to `_legacy/` |
+| `npm test` | Runs the test suite verifying setup, safety, and health checks | Clean sandbox runner | N/A |
+
+---
+
+# OmniBrain v2（繁體中文）
+
+OmniBrain 是一套可攜式的 Markdown 檔案記憶系統，專為搭配 AI 進行軟體開發而設計，並針對 **Obsidian Desktop** 提供最佳的人類操作介面。
+
+它能將任何專案資料夾轉換為結構化的工作空間，讓 AI 代理程式在多次會話之間能確實記住目標、決定、計劃、審查和歷史進度，同時在 Obsidian 中提供直覺的工作面板。
+
+你不需要是程式設計師也能使用 OmniBrain。它是為使用 AI Scoping 專案、審查結果和制定決策的專案經理與願景提出者所設計。
+
+---
+
+## v2 核心原則
+
+- **AI 代理 Markdown 優先：** AI 從乾淨的 10 行 `AGENTS.md` 開始開機引導，避免 context 浪費，僅在需要時加載細節。
+- **人類 Obsidian 優先：** 人類在 Obsidian Desktop 中開啟 `Vault` 資料夾，即可瀏覽乾淨的看板、每日記錄以及由 Dataview 驅動的 Dashboard。
+- **嚴格的控制面與記憶面分離：** AI 的運行規則、標準與流程檔案放置於 `Core_OS/`。專案事實、規劃與歷史進度放置於 `Project/`。
+- **無損安全設計：** 所有初始化與維護指令預設為「僅報告」模式，保護您的專案檔案不被意外覆寫。
+- **任務範疇限制載入：** AI 僅載入與目前任務相關的專案記憶檔案，避免對話上下文膨脹。
+
+---
+
+## 軟體需求（Obsidian 社群外掛）
+
+OmniBrain v2 官方支援並推薦：
+- **Obsidian Desktop** (在 Obsidian 中將 `Vault/` 資料夾開啟為儲存庫)。
+- **Templates** (內建核心外掛) — 設定範本路徑為 `Obsidian/Templates`。
+- **Daily Notes** (內建核心外掛) — 設定記錄路徑為 `Project/Daily_Logs`，範本路徑為 `Obsidian/Templates/Daily_Log.md`。
+- **Dataview** (社群外掛) — 用於在 Dashboard 中渲染唯讀的動態查詢結果。
+
+---
+
+## 安裝與執行步驟
+
+1. 將此儲存庫的所有內容複製到專案根目錄下。
+2. 請 AI 助手或在終端機執行初始化，以建立目錄結構：
+   ```bash
+   npm run setup
+   ```
+   *(註：此動作不會覆寫您已存在的專案檔案。如需強制更新範本，請使用 `npm run setup -- --force`。)*
+3. 在 Obsidian Desktop 中開啟 `Vault/` 資料夾。
+4. 按照 `Vault/Obsidian/INSTALL.md` 中的指引啟用核心外掛與 Dataview 社群外掛。
+5. 執行以下指令驗證 Obsidian 設定是否完成：
+   ```bash
+   npm run obsidian-check
+   ```
+6. 請您的 AI 助手閱讀專案根目錄的 `AGENTS.md` 以進行引導與任務開始。
+
+---
+
+## 資料夾結構說明
+
+`Vault/` 目錄將建立以下結構：
 
 ```text
-我們分階段處理。
-請封存已批准的產物。
-請更新專案知識。
+Vault/
+├─ Core_OS/
+│  ├─ Runtime/Entry.md               ← AI 開機開機引導協議
+│  ├─ Registries/Workflow_Registry.md ← AI 任務工作流路由表
+│  ├─ Workflows/                     ← 專案規劃、實作、Staged Change、知識 distill 與審查規則
+│  ├─ Standards/Anti_Patterns.md     ← AI 程式碼品質 Lint 規則
+│  ├─ Standards/Knowledge_Format.md  ← YAML 與 Markdown 文件標準格式
+│  └─ Validation/Vault_Health_Check.md ← Vault 健康度檢查規則
+│
+├─ Project/
+│  ├─ Project_Overview.md            ← 專案開發規格與 AI 權限邊界
+│  ├─ Current_State.md               ← 進行中工作、Blocker 與最新每日日誌連結
+│  ├─ Definition_of_Done.md          ← 驗收與 QA 檢查清單
+│  ├─ System/_System_MOC.md          ← 系統架構與產品願景文件地圖
+│  ├─ Features/_Features_MOC.md      ← 專案功能規格文件地圖
+│  ├─ Plans/                         ← 執行中與完成的開發計劃
+│  ├─ Daily_Logs/                    ← 每日開發與會話日誌
+│  └─ _inbox/                        ← 暫存的原始 AI 產出物
+│
+├─ Obsidian/
+│  ├─ INSTALL.md                     ← Obsidian 啟用步驟說明
+│  ├─ Templates/Daily_Log.md         ← 每日筆記範本
+│  └─ Queries/Dashboard.md           ← Dataview 看板查詢語法
+│
+└─ Dashboard.md                      ← 整合 Dataview 查詢之人類主工作面板
 ```
 
-## 建立後會有甚麼
+---
 
-設定完成後，OmniBrain 會建立一個 `Vault` 資料夾，當中包括：
+## 終端機維護指令
 
-- `Project_Context.md` - 專案簡介。
-- `Dashboard.md` - 簡單工作面板。
-- `_inbox/` - 等待整理的 AI 原始產物。
-- `Plans/` - 已批准計劃和完成交接資料。
-- `Reviews/` - 審查記錄和外部審查結果。
-- `Decisions/` - 重要決定。
-- `Daily_Logs/` - 每日工作記錄。
-- `OS/` - 給 AI 助手的工作指引。
-- `Agents/` - 不同審查和整理角色的清單。
-- `System/Product_Vision.md` - 較完整的產品目標和使用者說明。
+若您的工作區有 Node.js 環境，可使用以下指令進行維護與測試：
 
-## 維護指令
-
-如果可以使用 Node.js，以下指令可協助保持 vault 整齊：
-
-```bash
-npm run vault-health
-npm run vault-maintenance
-```
-
-`vault-health` 會檢查連結和基本結構。
-
-`vault-maintenance` 可以一次運行可用的維護檢查。
-
-## 可選擇使用 Obsidian
-
-OmniBrain 很適合配合 Obsidian 使用，但 Obsidian 不是必需。
-
-不需要安裝任何社群外掛。你也可以只把 vault 當作普通 Markdown 檔案使用。
-
-## 重要原則
-
-OmniBrain 應該令 AI 合作更清楚，而不是更複雜。
-
-如果一份筆記對未來有用，就保留下來。若只是臨時資料，先放在 `_inbox`，待審查後再封存或刪除。
-
+| 指令 | 用途 | 預設模式 | 強制 / 執行參數 |
+| :--- | :--- | :--- | :--- |
+| `npm run setup` | 建立目錄並複製 v2 範本 | 無損（跳過已存在檔案） | `npm run setup -- --force` |
+| `npm run obsidian-check` | 檢查 Obsidian 是否開啟並啟用 Dataview | 驗證報告 | 無 |
+| `npm run vault-health` | 檢查連結、YAML 格式與是否存在 AI 規則洩漏 | 完整性檢查 | 無 |
+| `npm run vault-autotag` | 為遺漏 YAML 標籤的 Plans 自動新增 frontmatter | 僅報告 | `npm run vault-autotag -- --apply` |
+| `npm run vault-archive` | 封存大於 7 天且已完成的 Plans | 僅報告 | `npm run vault-archive -- --apply` |
+| `npm run vault-maintenance` | 同時執行 autotag、health 檢查與計劃封存 | 僅報告 | 執行 autotag/archive 時帶入 `--apply` |
+| `npm run omnibrain-migrate` | 將舊版 v1 Vault 檔案搬移至 v2 結構中 | 自動備份 | 自動將舊檔案搬移至 `_legacy/` |
+| `npm test` | 在沙盒環境中執行 setup、安全保護與健康度整合測試 | 測試執行 | 無 |
