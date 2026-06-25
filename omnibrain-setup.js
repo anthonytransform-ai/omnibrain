@@ -69,7 +69,7 @@ if (!fs.existsSync(configPath)) {
   const configContent = {
     project_id: "omnibrain-project",
     source_roots: ["src"],
-    vault_version: "2.0.0"
+    vault_version: "2.0.1"
   };
   fs.writeFileSync(configPath, JSON.stringify(configContent, null, 2) + '\n');
   console.log(`\x1b[32m[\u2713] Generated:\x1b[0m omnibrain.config.json`);
@@ -84,7 +84,8 @@ const targetScripts = {
   "vault-autotag": "node scripts/vault-autotag.js",
   "vault-archive": "node scripts/vault-archive.js",
   "vault-health": "node scripts/vault-health.js",
-  "vault-maintenance": "npm run vault-autotag -- --apply && npm run vault-health && npm run vault-archive -- --apply",
+  "vault-maintenance": "npm run vault-autotag && npm run vault-health && npm run vault-archive",
+  "vault-maintenance:apply": "npm run vault-autotag -- --apply && npm run vault-health && npm run vault-archive -- --apply",
   "obsidian-check": "node scripts/obsidian-check.js",
   "omnibrain-migrate": "node scripts/omnibrain-migrate.js"
 };
@@ -92,7 +93,7 @@ const targetScripts = {
 if (!fs.existsSync(pkgPath)) {
   const pkgContent = {
     name: "omnibrain-project",
-    version: "2.0.0",
+    version: "2.0.1",
     description: "An AI Agent managed project (v2).",
     type: "module",
     scripts: targetScripts
@@ -139,6 +140,7 @@ if (fs.existsSync(templateDir)) {
   copyIfMissing(path.join(templateDir, 'definition-of-done.template.md'), path.join(__dirname, 'Vault', 'Project', 'Definition_of_Done.md'), force);
   copyIfMissing(path.join(templateDir, 'system-moc.template.md'), path.join(__dirname, 'Vault', 'Project', 'System', '_System_MOC.md'), force);
   copyIfMissing(path.join(templateDir, 'features-moc.template.md'), path.join(__dirname, 'Vault', 'Project', 'Features', '_Features_MOC.md'), force);
+  copyIfMissing(path.join(templateDir, 'product-vision.template.md'), path.join(__dirname, 'Vault', 'Project', 'System', 'Product_Vision.md'), force);
 
   // Obsidian Configurations & Views
   copyIfMissing(path.join(templateDir, 'obsidian-install.template.md'), path.join(__dirname, 'Vault', 'Obsidian', 'INSTALL.md'), force);

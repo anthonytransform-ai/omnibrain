@@ -1,6 +1,6 @@
 {
   "name": "omnibrain-framework",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "An AI Operating System for Vibe Coders",
   "main": "omnibrain-setup.js",
   "type": "module",
@@ -11,9 +11,10 @@
     "vault-autotag": "node scripts/vault-autotag.js",
     "vault-archive": "node scripts/vault-archive.js",
     "vault-health": "node scripts/vault-health.js",
-    "vault-maintenance": "npm run vault-autotag -- --apply && npm run vault-health && npm run vault-archive -- --apply",
+    "vault-maintenance": "npm run vault-autotag && npm run vault-health && npm run vault-archive",
     "omnibrain-migrate": "node scripts/omnibrain-migrate.js",
-    "obsidian-check": "node scripts/obsidian-check.js"
+    "obsidian-check": "node scripts/obsidian-check.js",
+    "vault-maintenance:apply": "npm run vault-autotag -- --apply && npm run vault-health && npm run vault-archive -- --apply"
   },
   "repository": {
     "type": "git",
