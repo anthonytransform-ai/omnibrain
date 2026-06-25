@@ -7,35 +7,55 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const sandboxDir = path.join(rootDir, 'scratch', 'test-run-sandbox');
+const projectDir = path.join(sandboxDir, 'project');
+const frameworkDir = path.join(projectDir, 'omnibrain');
 
 console.log("\x1b[36m===============================================\x1b[0m");
-console.log("\x1b[36m   OmniBrain v2 Test Suite                     \x1b[0m");
+console.log("\x1b[36m   OmniBrain v2.0.2 Test Suite                 \x1b[0m");
 console.log("\x1b[36m===============================================\n\x1b[0m");
 
-// Helper to initialize clean room sandbox
+// Helper to initialize clean room sandbox simulating a host project
 function initSandbox() {
   if (fs.existsSync(sandboxDir)) {
     fs.rmSync(sandboxDir, { recursive: true, force: true });
   }
   fs.mkdirSync(sandboxDir, { recursive: true });
+  fs.mkdirSync(projectDir, { recursive: true });
+  fs.mkdirSync(frameworkDir, { recursive: true });
 
-  // Copy setup files and templates
-  fs.copyFileSync(path.join(rootDir, 'omnibrain-setup.js'), path.join(sandboxDir, 'omnibrain-setup.js'));
-  fs.copyFileSync(path.join(rootDir, 'omnibrain.config.json'), path.join(sandboxDir, 'omnibrain.config.json'));
-  fs.cpSync(path.join(rootDir, 'omnibrain-templates'), path.join(sandboxDir, 'omnibrain-templates'), { recursive: true });
+  // 1. Create host project package.json (mock user owned)
+  fs.writeFileSync(
+    path.join(projectDir, 'package.json'),
+    JSON.stringify({ name: "my-existing-app", version: "1.0.0", scripts: { test: "exit 0" } }, null, 2)
+  );
+
+  // 2. Create host project scripts/vault-health.js (mock user owned)
+  const mockScriptsDir = path.join(projectDir, 'scripts');
+  fs.mkdirSync(mockScriptsDir, { recursive: true });
+  fs.writeFileSync(path.join(mockScriptsDir, 'vault-health.js'), '// Original host script\nconsole.log("original health");\n');
+
+  // Copy framework files to project/omnibrain/
+  fs.copyFileSync(path.join(rootDir, 'omnibrain-setup.js'), path.join(frameworkDir, 'omnibrain-setup.js'));
+  fs.copyFileSync(path.join(rootDir, 'omnibrain.config.json'), path.join(frameworkDir, 'omnibrain.config.json'));
+  fs.cpSync(path.join(rootDir, 'omnibrain-templates'), path.join(frameworkDir, 'omnibrain-templates'), { recursive: true });
 }
 
 let testPassed = true;
 
-// Test 1: Setup Idempotency
-console.log('[TEST 1] Setup Idempotency...');
+// Test 1: Existing package protection (and setup idempotency)
+console.log('[TEST 1] Existing package protection...');
 initSandbox();
 try {
-  execSync('node omnibrain-setup.js', { cwd: sandboxDir, stdio: 'pipe' });
-  const output = execSync('node omnibrain-setup.js', { cwd: sandboxDir, stdio: 'pipe' }).toString();
+  const originalPkg = fs.readFileSync(path.join(projectDir, 'package.json'), 'utf8');
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+  const output = execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' }).toString();
+  const postPkg = fs.readFileSync(path.join(projectDir, 'package.json'), 'utf8');
   
-  if (output.includes('Skipped (already exists)')) {
-    console.log('\x1b[32m  [PASS] Setup runs idempotently and skips existing files.\x1b[0m');
+  if (originalPkg !== postPkg) {
+    console.error('\x1b[31m  [FAIL] Target package.json was modified.\x1b[0m');
+    testPassed = false;
+  } else if (output.includes('Skipped (already exists)')) {
+    console.log('\x1b[32m  [PASS] Setup runs idempotently and protects target package.json.\x1b[0m');
   } else {
     console.error('\x1b[31m  [FAIL] Setup did not report skipping existing files.\x1b[0m');
     testPassed = false;
@@ -45,46 +65,136 @@ try {
   testPassed = false;
 }
 
-// Test 2: Non-destructive Safety
-console.log('\n[TEST 2] Non-destructive Safety...');
+// Test 2: Existing scripts protection
+console.log('\n[TEST 2] Existing scripts protection...');
 initSandbox();
 try {
-  execSync('node omnibrain-setup.js', { cwd: sandboxDir, stdio: 'pipe' });
-  const overviewFile = path.join(sandboxDir, 'Vault/Project/Project_Overview.md');
-  fs.writeFileSync(overviewFile, 'CUSTOM_USER_DATA');
+  const originalScript = fs.readFileSync(path.join(projectDir, 'scripts/vault-health.js'), 'utf8');
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+  execSync('node omnibrain/omnibrain-setup.js --force', { cwd: projectDir, stdio: 'pipe' });
+  const postScript = fs.readFileSync(path.join(projectDir, 'scripts/vault-health.js'), 'utf8');
 
-  execSync('node omnibrain-setup.js', { cwd: sandboxDir, stdio: 'pipe' });
-  let content = fs.readFileSync(overviewFile, 'utf8');
-  if (content === 'CUSTOM_USER_DATA') {
-    console.log('\x1b[32m  [PASS] Setup did not overwrite custom file without --force.\x1b[0m');
+  if (originalScript === postScript) {
+    console.log('\x1b[32m  [PASS] Setup and setup --force left host scripts/vault-health.js unchanged.\x1b[0m');
   } else {
-    console.error('\x1b[31m  [FAIL] Setup overwrote custom file without --force.\x1b[0m');
-    testPassed = false;
-  }
-
-  execSync('node omnibrain-setup.js --force', { cwd: sandboxDir, stdio: 'pipe' });
-  content = fs.readFileSync(overviewFile, 'utf8');
-  if (content !== 'CUSTOM_USER_DATA') {
-    console.log('\x1b[32m  [PASS] Setup overwrote custom file when --force was specified.\x1b[0m');
-  } else {
-    console.error('\x1b[31m  [FAIL] Setup failed to overwrite custom file with --force.\x1b[0m');
+    console.error('\x1b[31m  [FAIL] Host scripts/vault-health.js was modified.\x1b[0m');
     testPassed = false;
   }
 } catch (e) {
-  console.error('\x1b[31m  [FAIL] Non-destructive safety test encountered an error.\x1b[0m', e.message);
+  console.error('\x1b[31m  [FAIL] Existing scripts protection test encountered an error.\x1b[0m', e.message);
   testPassed = false;
 }
 
-// Test 3: Broken Link Detection
-console.log('\n[TEST 3] Health Check Broken Link Detection...');
+// Test 3: Existing AGENTS protection
+console.log('\n[TEST 3] Existing AGENTS protection...');
+initSandbox();
+fs.writeFileSync(path.join(projectDir, 'AGENTS.md'), 'CUSTOM_AGENTS_CONTENT');
+try {
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+  const contentAfterSetup = fs.readFileSync(path.join(projectDir, 'AGENTS.md'), 'utf8');
+  const snippetExistsSetup = fs.existsSync(path.join(frameworkDir, 'AGENTS.omnibrain-snippet.md'));
+
+  execSync('node omnibrain/omnibrain-setup.js --force', { cwd: projectDir, stdio: 'pipe' });
+  const contentAfterForce = fs.readFileSync(path.join(projectDir, 'AGENTS.md'), 'utf8');
+  const snippetExistsForce = fs.existsSync(path.join(frameworkDir, 'AGENTS.omnibrain-snippet.md'));
+
+  if (contentAfterSetup !== 'CUSTOM_AGENTS_CONTENT' || contentAfterForce !== 'CUSTOM_AGENTS_CONTENT') {
+    console.error('\x1b[31m  [FAIL] Existing AGENTS.md was modified.\x1b[0m');
+    testPassed = false;
+  } else if (!snippetExistsSetup || !snippetExistsForce) {
+    console.error('\x1b[31m  [FAIL] omnibrain/AGENTS.omnibrain-snippet.md was not created.\x1b[0m');
+    testPassed = false;
+  } else {
+    console.log('\x1b[32m  [PASS] Existing AGENTS.md is unchanged and snippet exists.\x1b[0m');
+  }
+} catch (e) {
+  console.error('\x1b[31m  [FAIL] Existing AGENTS protection test encountered an error.\x1b[0m', e.message);
+  testPassed = false;
+}
+
+// Test 4: Fresh project bootstrap
+console.log('\n[TEST 4] Fresh project bootstrap...');
+initSandbox();
+// Ensure AGENTS.md is absent in sandbox
+if (fs.existsSync(path.join(projectDir, 'AGENTS.md'))) {
+  fs.unlinkSync(path.join(projectDir, 'AGENTS.md'));
+}
+try {
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+  const agentsFile = path.join(projectDir, 'AGENTS.md');
+  if (fs.existsSync(agentsFile)) {
+    const content = fs.readFileSync(agentsFile, 'utf8');
+    if (content.includes('J_OS')) {
+      console.error('\x1b[31m  [FAIL] Created AGENTS.md mentions J_OS.\x1b[0m');
+      testPassed = false;
+    } else if (content.includes('OmniBrain Workspace Bootstrap') && content.includes('Vault/Core_OS/Runtime/Entry.md')) {
+      console.log('\x1b[32m  [PASS] Setup creates public OmniBrain-only bootstrap with no J_OS wording.\x1b[0m');
+    } else {
+      console.error('\x1b[31m  [FAIL] Created AGENTS.md has wrong format.\x1b[0m', content);
+      testPassed = false;
+    }
+  } else {
+    console.error('\x1b[31m  [FAIL] AGENTS.md was not created.\x1b[0m');
+    testPassed = false;
+  }
+} catch (e) {
+  console.error('\x1b[31m  [FAIL] Fresh project bootstrap test failed.\x1b[0m', e.message);
+  testPassed = false;
+}
+
+// Test 5: Force boundary
+console.log('\n[TEST 5] Force boundary check...');
 initSandbox();
 try {
-  execSync('node omnibrain-setup.js', { cwd: sandboxDir, stdio: 'pipe' });
-  const overviewFile = path.join(sandboxDir, 'Vault/Project/Project_Overview.md');
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+
+  const entryFile = path.join(projectDir, 'Vault/Core_OS/Runtime/Entry.md');
+  const overviewFile = path.join(projectDir, 'Vault/Project/Project_Overview.md');
+
+  fs.writeFileSync(entryFile, 'DELIBERATELY_ALTERED_ENTRY');
+  fs.writeFileSync(overviewFile, 'DELIBERATELY_ALTERED_OVERVIEW');
+
+  execSync('node omnibrain/omnibrain-setup.js --force', { cwd: projectDir, stdio: 'pipe' });
+
+  const entryPost = fs.readFileSync(entryFile, 'utf8');
+  const overviewPost = fs.readFileSync(overviewFile, 'utf8');
+
+  if (entryPost === 'DELIBERATELY_ALTERED_ENTRY') {
+    console.error('\x1b[31m  [FAIL] Core_OS/Runtime/Entry.md was not refreshed with --force.\x1b[0m');
+    testPassed = false;
+  } else if (overviewPost !== 'DELIBERATELY_ALTERED_OVERVIEW') {
+    console.error('\x1b[31m  [FAIL] Project/Project_Overview.md was overwritten despite force boundary.\x1b[0m');
+    testPassed = false;
+  } else {
+    console.log('\x1b[32m  [PASS] Force boundary protects Project_Overview.md while refreshing Entry.md.\x1b[0m');
+  }
+} catch (e) {
+  console.error('\x1b[31m  [FAIL] Force boundary test failed.\x1b[0m', e.message);
+  testPassed = false;
+}
+
+// Test 6: Clean health pass
+console.log('\n[TEST 6] Clean health pass...');
+initSandbox();
+try {
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+  execSync('node omnibrain/scripts/vault-health.js', { cwd: projectDir, stdio: 'pipe' });
+  console.log('\x1b[32m  [PASS] Newly generated vault passes vault-health check cleanly.\x1b[0m');
+} catch (e) {
+  console.error('\x1b[31m  [FAIL] Newly generated vault failed health check.\x1b[0m', e.stdout ? e.stdout.toString() : e.message);
+  testPassed = false;
+}
+
+// Test 7: Health Check Broken Link Detection
+console.log('\n[TEST 7] Health Check Broken Link Detection...');
+initSandbox();
+try {
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+  const overviewFile = path.join(projectDir, 'Vault/Project/Project_Overview.md');
   fs.appendFileSync(overviewFile, '\nLet us check this broken link [[NonExistentFile]].\n');
 
   try {
-    execSync('node scripts/vault-health.js', { cwd: sandboxDir, stdio: 'pipe' });
+    execSync('node omnibrain/scripts/vault-health.js', { cwd: projectDir, stdio: 'pipe' });
     console.error('\x1b[31m  [FAIL] Health check passed despite having a broken link.\x1b[0m');
     testPassed = false;
   } catch (e) {
@@ -101,16 +211,16 @@ try {
   testPassed = false;
 }
 
-// Test 4: Instruction Leakage Scanner
-console.log('\n[TEST 4] Health Check Instruction Leakage Detection...');
+// Test 8: Health Check Instruction Leakage Detection
+console.log('\n[TEST 8] Health Check Instruction Leakage Detection...');
 initSandbox();
 try {
-  execSync('node omnibrain-setup.js', { cwd: sandboxDir, stdio: 'pipe' });
-  const stateFile = path.join(sandboxDir, 'Vault/Project/Current_State.md');
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+  const stateFile = path.join(projectDir, 'Vault/Project/Current_State.md');
   fs.appendFileSync(stateFile, '\nLet us add some system prompt leakage.\n');
 
   try {
-    execSync('node scripts/vault-health.js', { cwd: sandboxDir, stdio: 'pipe' });
+    execSync('node omnibrain/scripts/vault-health.js', { cwd: projectDir, stdio: 'pipe' });
     console.error('\x1b[31m  [FAIL] Health check passed despite having instruction leakage.\x1b[0m');
     testPassed = false;
   } catch (e) {
@@ -127,15 +237,15 @@ try {
   testPassed = false;
 }
 
-// Test 5: Obsidian Check Plugin Validation
-console.log('\n[TEST 5] Obsidian Check Plugin Validation...');
+// Test 9: Obsidian Check Plugin Validation
+console.log('\n[TEST 9] Obsidian Check Plugin Validation...');
 initSandbox();
 try {
-  execSync('node omnibrain-setup.js', { cwd: sandboxDir, stdio: 'pipe' });
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
 
-  // Case 5a: No .obsidian folder
+  // Case 9a: No .obsidian folder
   try {
-    execSync('node scripts/obsidian-check.js', { cwd: sandboxDir, stdio: 'pipe' });
+    execSync('node omnibrain/scripts/obsidian-check.js', { cwd: projectDir, stdio: 'pipe' });
     console.error('\x1b[31m  [FAIL] obsidian-check passed when .obsidian folder was missing.\x1b[0m');
     testPassed = false;
   } catch (e) {
@@ -148,11 +258,11 @@ try {
     }
   }
 
-  // Case 5b: .obsidian exists but no community-plugins.json
-  const obsDir = path.join(sandboxDir, 'Vault/.obsidian');
+  // Case 9b: .obsidian exists but no community-plugins.json
+  const obsDir = path.join(projectDir, 'Vault/.obsidian');
   fs.mkdirSync(obsDir, { recursive: true });
   try {
-    execSync('node scripts/obsidian-check.js', { cwd: sandboxDir, stdio: 'pipe' });
+    execSync('node omnibrain/scripts/obsidian-check.js', { cwd: projectDir, stdio: 'pipe' });
     console.error('\x1b[31m  [FAIL] obsidian-check passed when community-plugins.json was missing.\x1b[0m');
     testPassed = false;
   } catch (e) {
@@ -165,11 +275,11 @@ try {
     }
   }
 
-  // Case 5c: community-plugins.json exists but lacks dataview
+  // Case 9c: community-plugins.json exists but lacks dataview
   const pluginsFile = path.join(obsDir, 'community-plugins.json');
   fs.writeFileSync(pluginsFile, JSON.stringify(['other-plugin']));
   try {
-    execSync('node scripts/obsidian-check.js', { cwd: sandboxDir, stdio: 'pipe' });
+    execSync('node omnibrain/scripts/obsidian-check.js', { cwd: projectDir, stdio: 'pipe' });
     console.error('\x1b[31m  [FAIL] obsidian-check passed when dataview was disabled.\x1b[0m');
     testPassed = false;
   } catch (e) {
@@ -182,10 +292,10 @@ try {
     }
   }
 
-  // Case 5d: Dataview enabled
+  // Case 9d: Dataview enabled
   fs.writeFileSync(pluginsFile, JSON.stringify(['other-plugin', 'dataview']));
   try {
-    execSync('node scripts/obsidian-check.js', { cwd: sandboxDir, stdio: 'pipe' });
+    execSync('node omnibrain/scripts/obsidian-check.js', { cwd: projectDir, stdio: 'pipe' });
     console.log('\x1b[32m  [PASS] Correctly passes when Dataview is enabled.\x1b[0m');
   } catch (e) {
     console.error('\x1b[31m  [FAIL] obsidian-check failed when Dataview was enabled.\x1b[0m', e.stdout.toString());
@@ -196,51 +306,14 @@ try {
   testPassed = false;
 }
 
-// Test 6: Fresh Setup + Clean Health Pass
-console.log('\n[TEST 6] Clean Setup + Clean Health Pass...');
+// Test 10: Migration Refusal on existing v2
+console.log('\n[TEST 10] Migration Refusal on Existing v2...');
 initSandbox();
 try {
-  // Run setup
-  execSync('node omnibrain-setup.js', { cwd: sandboxDir, stdio: 'pipe' });
-  // Run health check (should exit 0 cleanly!)
-  execSync('node scripts/vault-health.js', { cwd: sandboxDir, stdio: 'pipe' });
-  console.log('\x1b[32m  [PASS] Freshly generated vault passes vault-health with no errors.\x1b[0m');
-} catch (e) {
-  const errorOutput = e.stdout ? (e.stdout.toString() + '\n' + e.stderr.toString()) : e.message;
-  console.error('\x1b[31m  [FAIL] Fresh vault health check failed.\x1b[0m', errorOutput);
-  testPassed = false;
-}
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
 
-// Test 7: Public AGENTS.md Bootstrap Dual-Mode validation
-console.log('\n[TEST 7] Public AGENTS.md Dual-Mode Behavior...');
-initSandbox();
-try {
-  execSync('node omnibrain-setup.js', { cwd: sandboxDir, stdio: 'pipe' });
-  const agentsFile = path.join(sandboxDir, 'AGENTS.md');
-  const content = fs.readFileSync(agentsFile, 'utf8');
-
-  // Verify it contains the dual-mode block
-  if (content.includes('J_OS Workspace Bridge') && content.includes('OmniBrain Mode (Default User Mode)')) {
-    console.log('\x1b[32m  [PASS] AGENTS.md contains both J_OS developer bridge and default OmniBrain user boot.\x1b[0m');
-  } else {
-    console.error('\x1b[31m  [FAIL] AGENTS.md is missing dual-mode bootstrap instructions.\x1b[0m');
-    testPassed = false;
-  }
-} catch (e) {
-  console.error('\x1b[31m  [FAIL] Dual-mode AGENTS.md validation failed.\x1b[0m', e.message);
-  testPassed = false;
-}
-
-// Test 8: Migration Refusal on existing v2
-console.log('\n[TEST 8] Migration Refusal on Existing v2...');
-initSandbox();
-try {
-  // Run setup to create v2 vault
-  execSync('node omnibrain-setup.js', { cwd: sandboxDir, stdio: 'pipe' });
-
-  // Run migration on v2 vault
   try {
-    execSync('node scripts/omnibrain-migrate.js --from-v1', { cwd: sandboxDir, stdio: 'pipe' });
+    execSync('node omnibrain/scripts/omnibrain-migrate.js --from-v1', { cwd: projectDir, stdio: 'pipe' });
     console.error('\x1b[31m  [FAIL] Migration script ran on a v2 vault without throwing error.\x1b[0m');
     testPassed = false;
   } catch (e) {
@@ -257,12 +330,12 @@ try {
   testPassed = false;
 }
 
-// Test 9: Non-destructive Maintenance (autotag/archive report-only)
-console.log('\n[TEST 9] Non-destructive Maintenance checks...');
+// Test 11: Non-destructive Maintenance (autotag/archive report-only)
+console.log('\n[TEST 11] Non-destructive Maintenance checks...');
 initSandbox();
 try {
-  execSync('node omnibrain-setup.js', { cwd: sandboxDir, stdio: 'pipe' });
-  const plansDir = path.join(sandboxDir, 'Vault/Project/Plans');
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+  const plansDir = path.join(projectDir, 'Vault/Project/Plans');
   
   // Create an orphan plan file (missing frontmatter)
   const orphanPlan = path.join(plansDir, 'Orphan_Plan.md');
@@ -276,7 +349,7 @@ try {
   fs.utimesSync(eligiblePlan, oldTime, oldTime);
 
   // Run autotag in report-only mode
-  execSync('node scripts/vault-autotag.js', { cwd: sandboxDir, stdio: 'pipe' });
+  execSync('node omnibrain/scripts/vault-autotag.js', { cwd: projectDir, stdio: 'pipe' });
   let content = fs.readFileSync(orphanPlan, 'utf8');
   if (!content.startsWith('---')) {
     console.log('\x1b[32m  [PASS] vault-autotag is report-only by default.\x1b[0m');
@@ -286,7 +359,7 @@ try {
   }
 
   // Run archive in report-only mode
-  execSync('node scripts/vault-archive.js', { cwd: sandboxDir, stdio: 'pipe' });
+  execSync('node omnibrain/scripts/vault-archive.js', { cwd: projectDir, stdio: 'pipe' });
   if (fs.existsSync(eligiblePlan)) {
     console.log('\x1b[32m  [PASS] vault-archive is report-only by default.\x1b[0m');
   } else {

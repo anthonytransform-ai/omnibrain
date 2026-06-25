@@ -4,7 +4,21 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const projectRootDir = path.resolve(__dirname, '..');
+const frameworkDir = path.resolve(__dirname, '..');
+
+let projectRootDir;
+const prIndex = process.argv.indexOf('--project-root');
+if (prIndex !== -1 && process.argv[prIndex + 1]) {
+  projectRootDir = path.resolve(process.argv[prIndex + 1]);
+} else {
+  if (path.basename(frameworkDir) === 'omnibrain') {
+    projectRootDir = path.dirname(frameworkDir);
+  } else {
+    projectRootDir = frameworkDir;
+  }
+}
+console.log(`Resolved target project root: ${projectRootDir}`);
+
 const VAULT_PLANS_DIR = path.join(projectRootDir, 'Vault/Project/Plans');
 
 const args = process.argv.slice(2);

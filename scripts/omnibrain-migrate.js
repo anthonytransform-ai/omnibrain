@@ -5,7 +5,21 @@ import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const projectRootDir = path.resolve(__dirname, '..');
+const frameworkDir = path.resolve(__dirname, '..');
+
+let projectRootDir;
+const prIndex = process.argv.indexOf('--project-root');
+if (prIndex !== -1 && process.argv[prIndex + 1]) {
+  projectRootDir = path.resolve(process.argv[prIndex + 1]);
+} else {
+  if (path.basename(frameworkDir) === 'omnibrain') {
+    projectRootDir = path.dirname(frameworkDir);
+  } else {
+    projectRootDir = frameworkDir;
+  }
+}
+console.log(`Resolved target project root: ${projectRootDir}`);
+
 const vaultDir = path.join(projectRootDir, 'Vault');
 
 const args = process.argv.slice(2);
@@ -94,7 +108,8 @@ if (itemsToBackup.length === 0) {
 // 3. Execute setup in --force mode to generate new v2 structure
 console.log('[Setup] Executing fresh OmniBrain v2 structure generation...');
 try {
-  execSync('node omnibrain-setup.js --force', { cwd: projectRootDir, stdio: 'inherit' });
+  const setupCmd = `node omnibrain-setup.js --force --project-root ${JSON.stringify(projectRootDir)}`;
+  execSync(setupCmd, { cwd: frameworkDir, stdio: 'inherit' });
   console.log(`[Setup] Successful.\n`);
 } catch (e) {
   console.error(`\x1b[31m[!] Error executing omnibrain-setup.js: ${e.message}\x1b[0m`);
@@ -104,7 +119,8 @@ try {
 // 4. Run Vault Health Check to verify v2 integrity
 console.log('[Validation] Running Vault Health Check...');
 try {
-  execSync('node scripts/vault-health.js', { cwd: projectRootDir, stdio: 'inherit' });
+  const healthCmd = `node scripts/vault-health.js --project-root ${JSON.stringify(projectRootDir)}`;
+  execSync(healthCmd, { cwd: frameworkDir, stdio: 'inherit' });
   console.log(`\x1b[32m\u2714 Migration and validation complete! Vault is structurally sound.\x1b[0m`);
   process.exit(0);
 } catch (e) {

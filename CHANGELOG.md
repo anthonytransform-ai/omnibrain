@@ -1,5 +1,19 @@
 # OmniBrain Changelog / 更新日誌
 
+## v2.0.2 - 2026-06-25
+
+### English
+- **Isolated Installation:** The installer no longer creates, merges, or modifies the host application's `package.json` or its `scripts/` folder.
+- **Isolated framework folder:** Public users now clone/install OmniBrain inside an isolated `omnibrain/` subdirectory, and execute maintenance commands via direct node calls (e.g. `node omnibrain/...`).
+- **Clean Public Bootstrap:** The public bootstrap file (`agents.template.md`) is now fully separated from J_OS routing. The framework repository's root `AGENTS.md` uses visible Markdown routing without HTML comments.
+- **Safe Force Boundaries:** The `--force` flag in setup now only refreshes framework-owned operational files (`Vault/Core_OS/**` and `Vault/Obsidian/**`) and never overwrites user-owned project memory files (`Vault/Project/**`).
+
+### 繁體中文
+- **隔離式安裝：** 初始化設定不再新增、合併或修改宿主專案的 `package.json` 或其 `scripts/` 資料夾。
+- **獨立框架目錄：** 公開使用者現在將 OmniBrain 安裝於獨立的 `omnibrain/` 子目錄中，並直接使用 node 執行維護指令（例如 `node omnibrain/...`）。
+- **純淨公開引導：** 公開引導範本（`agents.template.md`）與 J_OS 路由協議完全分離。框架的根目錄 `AGENTS.md` 使用完全可見的 Markdown 路由，不使用 HTML 註解隱藏。
+- **安全覆寫邊界：** `--force` 參數現在僅會覆寫框架擁有的運行規則檔案（`Vault/Core_OS/**` 與 `Vault/Obsidian/**`），絕不覆寫使用者擁有的專案事實記憶檔案（`Vault/Project/**`）。
+
 ## v2.0.0 - 2026-06-25
 
 ### English
