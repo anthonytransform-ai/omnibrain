@@ -11,3 +11,5 @@ AGENTS.md
 scratch/
 
 scripts/test-clean-room.js
+
+.j_os/project-link.local.md
