@@ -15,6 +15,7 @@ This page tracks active tasks, blockers, and recent updates.
   - Upgraded project architecture to v2.0.2 to support complete installer isolation (no package.json or scripts/ collisions).
   - Cleaned public agents template and updated root AGENTS.md with visible markdown developer routing.
   - Added mock-project sandbox tests covering package/scripts protection, force boundaries, and health check validation.
+  - Synchronized v2.0.2 plan and walkthrough artifacts to Master Vault and Git repo.
 
 ## Project Navigation Links
 - **Overview:** [[Project_Overview]]
