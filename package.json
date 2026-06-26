@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "setup": "node omnibrain-setup.js",
-    "test": "node scripts/run-tests.js",
+    "test": "node scripts/run-tests-with-module-default.js",
     "check-ai-rules": "node scripts/check-ai-rules.js",
     "vault-autotag": "node scripts/vault-autotag.js",
     "vault-archive": "node scripts/vault-archive.js",
