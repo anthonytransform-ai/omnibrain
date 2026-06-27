@@ -7,10 +7,43 @@ tags: [omnibrain, feature, migration]
 
 # Feature: Safe Migration Protocol
 
-This feature provides a safe, non-destructive pathway for migrating a legacy v1 vault structure into the v2 structure.
+This feature provides a guarded migration path from a legacy local OmniBrain v1 Vault to the v2 structure. It does not upgrade, move, or configure J_OS.
+
+## Required Preconditions
+
+- Use this only for a confirmed local OmniBrain v1 Vault.
+- Save a separate copy of the project before an applied migration. The tool protects the Vault, but it is not transactional.
+- Do not use it on a partly upgraded v2 Vault. The v2 guard detects `Vault/Core_OS/Runtime/Entry.md`; an incomplete v2 structure may not be detected.
+
+## Safe First Step
+
+First run:
+
+```bash
+node omnibrain/scripts/omnibrain-migrate.js --from-v1 --dry-run
+```
+
+To apply the migration:
+
+```bash
+node omnibrain/scripts/omnibrain-migrate.js --from-v1
+```
 
 ## Core Protections
-- **Dry Run Support:** Run with `--dry-run` to log all proposed actions without altering any files.
-- **Backup Safeguards:** All legacy files are moved to `Vault/_legacy/OmniBrain_v1`. Existing backups are never overwritten; backups are timestamped dynamically if a collision is detected.
-- **V2 Guard Rails:** The migration script refuses to run if an existing v2 vault is already configured (detected by the presence of `Vault/Core_OS/Runtime/Entry.md`).
-- **Required Option:** Must be explicitly called with `--from-v1` to run.
+
+- **Explicit activation:** The command stops unless `--from-v1` is supplied.
+- **Dry-run support:** `--dry-run` reports the intended backup, setup, and validation steps without changing files.
+- **V2 guard rail:** Migration stops when `Vault/Core_OS/Runtime/Entry.md` already exists.
+- **Collision-safe backups:** Existing backups are retained. A timestamped legacy directory is used when `Vault/_legacy/OmniBrain_v1` already exists.
+- **Post-migration validation:** The tool runs `vault-health` after creating the v2 structure.
+
+## Important Limits
+
+- The tool places every top-level item in the local `Vault/`, except `_legacy`, into the legacy backup area before regenerating the v2 Vault. This can include local Obsidian settings such as `.obsidian`.
+- An error during the transfer or later setup ends the command; earlier changes are not automatically reversed.
+- After success, reopen the local Vault in Obsidian and review plugin settings. Use `obsidian-check` after Dataview is enabled.
+- Review legacy notes before distilling durable facts into the new `Project/System/` and `Project/Features/` records.
+
+## Recovery
+
+When migration stops with an error, inspect the reported paths and the created legacy backup before taking any further action. Restore from the separate project copy where necessary; do not re-run blindly.
