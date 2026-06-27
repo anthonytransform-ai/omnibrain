@@ -12,8 +12,9 @@ This map indexes the project's durable operating knowledge, system standards, an
 ## Core Project Configuration
 - [[Project_Overview]] - The project identity card and permissions boundary.
 - [[Definition_of_Done]] - Quality assurance and sprint checklist.
-- [[Project/System/Product_Vision|Product Vision]] - Deep product goals, target audience, and product direction.
-- [[Project/System/OmniBrain_Architecture|OmniBrain Architecture]] - Architectural and operational guidelines for v2.
+- [[Project/System/Product_Vision|Product Vision]] - Product purpose, audience, experience goals, non-goals, and success signals.
+- [[Project/System/OmniBrain_Architecture|OmniBrain Architecture]] - Architectural boundaries, file ownership, validation, and CI behaviour.
+- [[Project/System/Runtime_Modes_and_JOS_Bridge|Runtime Modes and J_OS Bridge]] - Public local-vault route and optional maintainer J_OS bridge.
 
 ## Core OS Configuration
 - [[Core_OS/Runtime/Entry|Runtime Entry]] - Vault boot sequence and agent routing logic.
