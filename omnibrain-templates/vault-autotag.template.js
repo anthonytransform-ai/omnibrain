@@ -56,7 +56,7 @@ if (fs.existsSync(VAULT_PLANS_DIR)) {
   } else {
     console.log(`[Vault AutoTag] Scan complete. Found ${orphanCount} orphan files.`);
     if (orphanCount > 0) {
-      console.log(`  -> Run 'npm run vault-autotag -- --apply' to automatically add frontmatter.`);
+      console.log(`  -> Run 'node omnibrain/scripts/vault-autotag.js --apply' from the host project root to automatically add frontmatter.`);
     }
   }
 } else {

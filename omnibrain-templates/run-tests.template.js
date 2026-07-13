@@ -11,7 +11,7 @@ const projectDir = path.join(sandboxDir, 'project');
 const frameworkDir = path.join(projectDir, 'omnibrain');
 
 console.log("\x1b[36m===============================================\x1b[0m");
-console.log("\x1b[36m   OmniBrain v2.0.2 Test Suite                 \x1b[0m");
+console.log("\x1b[36m   OmniBrain v2.0.3 Test Suite                 \x1b[0m");
 console.log("\x1b[36m===============================================\n\x1b[0m");
 
 // Helper to initialize clean room sandbox simulating a host project
@@ -42,20 +42,35 @@ function initSandbox() {
 
 let testPassed = true;
 
+function combinedOutput(error) {
+  return [
+    error.stdout ? error.stdout.toString() : '',
+    error.stderr ? error.stderr.toString() : '',
+    error.message || ''
+  ].join('\n');
+}
+
 // Test 1: Existing package protection (and setup idempotency)
 console.log('[TEST 1] Existing package protection...');
 initSandbox();
 try {
   const originalPkg = fs.readFileSync(path.join(projectDir, 'package.json'), 'utf8');
+  const hostConfigPath = path.join(projectDir, 'omnibrain.config.json');
+  fs.writeFileSync(hostConfigPath, JSON.stringify({ project_id: 'host-owned', vault_version: 'custom' }, null, 2) + '\n');
+  const originalConfig = fs.readFileSync(hostConfigPath, 'utf8');
   execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
   const output = execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' }).toString();
   const postPkg = fs.readFileSync(path.join(projectDir, 'package.json'), 'utf8');
+  const postConfig = fs.readFileSync(hostConfigPath, 'utf8');
   
   if (originalPkg !== postPkg) {
     console.error('\x1b[31m  [FAIL] Target package.json was modified.\x1b[0m');
     testPassed = false;
+  } else if (originalConfig !== postConfig) {
+    console.error('\x1b[31m  [FAIL] Existing omnibrain.config.json was modified.\x1b[0m');
+    testPassed = false;
   } else if (output.includes('Skipped (already exists)')) {
-    console.log('\x1b[32m  [PASS] Setup runs idempotently and protects target package.json.\x1b[0m');
+    console.log('\x1b[32m  [PASS] Setup runs idempotently and protects target package.json and omnibrain.config.json.\x1b[0m');
   } else {
     console.error('\x1b[31m  [FAIL] Setup did not report skipping existing files.\x1b[0m');
     testPassed = false;
@@ -122,13 +137,17 @@ if (fs.existsSync(path.join(projectDir, 'AGENTS.md'))) {
 try {
   execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
   const agentsFile = path.join(projectDir, 'AGENTS.md');
+  const freshConfig = JSON.parse(fs.readFileSync(path.join(projectDir, 'omnibrain.config.json'), 'utf8'));
   if (fs.existsSync(agentsFile)) {
     const content = fs.readFileSync(agentsFile, 'utf8');
     if (content.includes('J_OS')) {
       console.error('\x1b[31m  [FAIL] Created AGENTS.md mentions J_OS.\x1b[0m');
       testPassed = false;
+    } else if (freshConfig.vault_version !== '2.0.3') {
+      console.error('\x1b[31m  [FAIL] Fresh omnibrain.config.json does not use vault_version 2.0.3.\x1b[0m');
+      testPassed = false;
     } else if (content.includes('OmniBrain Workspace Bootstrap') && content.includes('Vault/Core_OS/Runtime/Entry.md')) {
-      console.log('\x1b[32m  [PASS] Setup creates public OmniBrain-only bootstrap with no J_OS wording.\x1b[0m');
+      console.log('\x1b[32m  [PASS] Setup creates public OmniBrain-only bootstrap and v2.0.3 config with no J_OS wording.\x1b[0m');
     } else {
       console.error('\x1b[31m  [FAIL] Created AGENTS.md has wrong format.\x1b[0m', content);
       testPassed = false;
@@ -142,6 +161,30 @@ try {
   testPassed = false;
 }
 
+// Test 4B: Fresh Dashboard query install and embed resolution
+console.log('\n[TEST 4B] Fresh Dashboard query install and embed resolution...');
+initSandbox();
+try {
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+  const dashboardFile = path.join(projectDir, 'Vault/Dashboard.md');
+  const queryFile = path.join(projectDir, 'Vault/Obsidian/Queries/Dashboard.md');
+  const dashboardContent = fs.readFileSync(dashboardFile, 'utf8');
+
+  if (!fs.existsSync(queryFile)) {
+    console.error('\x1b[31m  [FAIL] Fresh setup did not install Vault/Obsidian/Queries/Dashboard.md.\x1b[0m');
+    testPassed = false;
+  } else if (!dashboardContent.includes('![[Obsidian/Queries/Dashboard]]')) {
+    console.error('\x1b[31m  [FAIL] Dashboard does not embed the expected Obsidian query.\x1b[0m');
+    testPassed = false;
+  } else {
+    execSync('node omnibrain/scripts/vault-health.js', { cwd: projectDir, stdio: 'pipe' });
+    console.log('\x1b[32m  [PASS] Fresh setup installs the Dashboard query and health resolves the embed.\x1b[0m');
+  }
+} catch (e) {
+  console.error('\x1b[31m  [FAIL] Dashboard query install test failed.\x1b[0m', combinedOutput(e));
+  testPassed = false;
+}
+
 // Test 5: Force boundary
 console.log('\n[TEST 5] Force boundary check...');
 initSandbox();
@@ -150,23 +193,35 @@ try {
 
   const entryFile = path.join(projectDir, 'Vault/Core_OS/Runtime/Entry.md');
   const overviewFile = path.join(projectDir, 'Vault/Project/Project_Overview.md');
+  const queryFile = path.join(projectDir, 'Vault/Obsidian/Queries/Dashboard.md');
+  const dashboardFile = path.join(projectDir, 'Vault/Dashboard.md');
 
   fs.writeFileSync(entryFile, 'DELIBERATELY_ALTERED_ENTRY');
   fs.writeFileSync(overviewFile, 'DELIBERATELY_ALTERED_OVERVIEW');
+  fs.writeFileSync(queryFile, 'DELIBERATELY_ALTERED_QUERY');
+  fs.writeFileSync(dashboardFile, 'DELIBERATELY_ALTERED_DASHBOARD');
 
   execSync('node omnibrain/omnibrain-setup.js --force', { cwd: projectDir, stdio: 'pipe' });
 
   const entryPost = fs.readFileSync(entryFile, 'utf8');
   const overviewPost = fs.readFileSync(overviewFile, 'utf8');
+  const queryPost = fs.readFileSync(queryFile, 'utf8');
+  const dashboardPost = fs.readFileSync(dashboardFile, 'utf8');
 
   if (entryPost === 'DELIBERATELY_ALTERED_ENTRY') {
     console.error('\x1b[31m  [FAIL] Core_OS/Runtime/Entry.md was not refreshed with --force.\x1b[0m');
     testPassed = false;
+  } else if (queryPost === 'DELIBERATELY_ALTERED_QUERY') {
+    console.error('\x1b[31m  [FAIL] Obsidian/Queries/Dashboard.md was not refreshed with --force.\x1b[0m');
+    testPassed = false;
   } else if (overviewPost !== 'DELIBERATELY_ALTERED_OVERVIEW') {
     console.error('\x1b[31m  [FAIL] Project/Project_Overview.md was overwritten despite force boundary.\x1b[0m');
     testPassed = false;
+  } else if (dashboardPost !== 'DELIBERATELY_ALTERED_DASHBOARD') {
+    console.error('\x1b[31m  [FAIL] Vault/Dashboard.md was overwritten despite force boundary.\x1b[0m');
+    testPassed = false;
   } else {
-    console.log('\x1b[32m  [PASS] Force boundary protects Project_Overview.md while refreshing Entry.md.\x1b[0m');
+    console.log('\x1b[32m  [PASS] Force boundary protects Project_Overview.md and Dashboard.md while refreshing framework-owned files.\x1b[0m');
   }
 } catch (e) {
   console.error('\x1b[31m  [FAIL] Force boundary test failed.\x1b[0m', e.message);
@@ -208,6 +263,80 @@ try {
   }
 } catch (e) {
   console.error('\x1b[31m  [FAIL] Broken link test encountered an error.\x1b[0m', e.message);
+  testPassed = false;
+}
+
+// Test 7B: Health Check Required Dashboard Query Detection
+console.log('\n[TEST 7B] Health Check Required Dashboard Query Detection...');
+initSandbox();
+try {
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+  fs.rmSync(path.join(projectDir, 'Vault/Obsidian/Queries/Dashboard.md'));
+
+  try {
+    execSync('node omnibrain/scripts/vault-health.js', { cwd: projectDir, stdio: 'pipe' });
+    console.error('\x1b[31m  [FAIL] Health check passed despite a missing Dashboard query.\x1b[0m');
+    testPassed = false;
+  } catch (e) {
+    const errorOutput = combinedOutput(e);
+    if (e.status === 1 && errorOutput.includes('MISSING FILE') && /Vault[\\/]+Obsidian[\\/]+Queries[\\/]+Dashboard\.md/.test(errorOutput)) {
+      console.log('\x1b[32m  [PASS] Health check fails when the required Dashboard query is removed.\x1b[0m');
+    } else {
+      console.error('\x1b[31m  [FAIL] Health check did not clearly report the missing Dashboard query.\x1b[0m', errorOutput);
+      testPassed = false;
+    }
+  }
+} catch (e) {
+  console.error('\x1b[31m  [FAIL] Dashboard query health test encountered an error.\x1b[0m', combinedOutput(e));
+  testPassed = false;
+}
+
+// Test 7C: Public Generated Command Guidance
+console.log('\n[TEST 7C] Public Generated Command Guidance...');
+initSandbox();
+try {
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+  const publicFiles = [
+    'Vault/Core_OS/Workflows/Implementation.md',
+    'Vault/Core_OS/Workflows/Staged_Change.md',
+    'Vault/Core_OS/Standards/Anti_Patterns.md',
+    'Vault/Core_OS/Validation/Vault_Health_Check.md',
+    'Vault/Obsidian/INSTALL.md'
+  ];
+  const forbiddenCommands = [
+    'npm run check-ai-rules',
+    'npm run vault-health',
+    'npm run obsidian-check',
+    'npm run setup',
+    'npm run omnibrain-migrate',
+    '`npm test`'
+  ];
+  const offenders = [];
+
+  for (const rel of publicFiles) {
+    const content = fs.readFileSync(path.join(projectDir, rel), 'utf8');
+    for (const forbidden of forbiddenCommands) {
+      if (content.includes(forbidden)) {
+        offenders.push(`${rel}: ${forbidden}`);
+      }
+    }
+  }
+
+  const implementation = fs.readFileSync(path.join(projectDir, 'Vault/Core_OS/Workflows/Implementation.md'), 'utf8');
+  if (offenders.length > 0) {
+    console.error('\x1b[31m  [FAIL] Generated public files contain incorrect OmniBrain npm commands.\x1b[0m', offenders.join('\n'));
+    testPassed = false;
+  } else if (!implementation.includes('node omnibrain/scripts/check-ai-rules.js') || !implementation.includes('node omnibrain/scripts/vault-health.js')) {
+    console.error('\x1b[31m  [FAIL] Implementation workflow does not contain the required direct OmniBrain commands.\x1b[0m');
+    testPassed = false;
+  } else if (!implementation.includes('host-application tests separately')) {
+    console.error('\x1b[31m  [FAIL] Implementation workflow does not separate host-application testing.\x1b[0m');
+    testPassed = false;
+  } else {
+    console.log('\x1b[32m  [PASS] Generated public workflows use direct OmniBrain commands and separate host tests.\x1b[0m');
+  }
+} catch (e) {
+  console.error('\x1b[31m  [FAIL] Public command guidance test encountered an error.\x1b[0m', combinedOutput(e));
   testPassed = false;
 }
 
@@ -317,8 +446,8 @@ try {
     console.error('\x1b[31m  [FAIL] Migration script ran on a v2 vault without throwing error.\x1b[0m');
     testPassed = false;
   } catch (e) {
-    const errorOutput = e.stdout.toString() + '\n' + e.stderr.toString();
-    if (errorOutput.includes('Refusing to migrate: An existing v2 vault was detected')) {
+    const errorOutput = combinedOutput(e);
+    if (errorOutput.includes('Migration was not started because an existing v2 vault was detected') && errorOutput.includes('node omnibrain/omnibrain-setup.js') && !errorOutput.includes('npm run setup')) {
       console.log('\x1b[32m  [PASS] Migration correctly refuses to execute on a v2 vault.\x1b[0m');
     } else {
       console.error('\x1b[31m  [FAIL] Migration failed with unexpected error.\x1b[0m', errorOutput);
@@ -327,6 +456,33 @@ try {
   }
 } catch (e) {
   console.error('\x1b[31m  [FAIL] Migration refusal test failed.\x1b[0m', e.message);
+  testPassed = false;
+}
+
+// Test 10B: Migration public recovery commands
+console.log('\n[TEST 10B] Migration public recovery commands...');
+initSandbox();
+try {
+  execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+  try {
+    execSync('node omnibrain/scripts/omnibrain-migrate.js', { cwd: projectDir, stdio: 'pipe' });
+    console.error('\x1b[31m  [FAIL] Migration ran without the required --from-v1 flag.\x1b[0m');
+    testPassed = false;
+  } catch (e) {
+    const errorOutput = combinedOutput(e);
+    if (
+      errorOutput.includes('node omnibrain/scripts/omnibrain-migrate.js --from-v1 --dry-run') &&
+      errorOutput.includes('node omnibrain/scripts/omnibrain-migrate.js --from-v1') &&
+      !errorOutput.includes('npm run omnibrain-migrate')
+    ) {
+      console.log('\x1b[32m  [PASS] Migration missing-flag guidance uses public direct node commands.\x1b[0m');
+    } else {
+      console.error('\x1b[31m  [FAIL] Migration missing-flag guidance used incorrect commands.\x1b[0m', errorOutput);
+      testPassed = false;
+    }
+  }
+} catch (e) {
+  console.error('\x1b[31m  [FAIL] Migration public command test encountered an error.\x1b[0m', combinedOutput(e));
   testPassed = false;
 }
 

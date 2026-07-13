@@ -9,7 +9,7 @@ This is the centralized "Never List" for the project. It documents banned archit
 Agents MUST review this registry during their MOC Pre-Flight checks.
 
 ## Active Linter Rules
-The built-in `npm run check-ai-rules` script actively parses this list. 
+The built-in `node omnibrain/scripts/check-ai-rules.js` script actively parses this list when OmniBrain is installed in a host project.
 To add a new rule, create a bullet point starting with `- [LINT]`. Place the exact code snippet or regex pattern you want to ban inside backticks, followed by the reason.
 
 - [LINT] `\.scrollIntoView\(` : Breaks mobile scrolling physics.

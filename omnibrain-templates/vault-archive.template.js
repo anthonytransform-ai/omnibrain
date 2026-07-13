@@ -90,6 +90,6 @@ if (apply) {
 } else {
   console.log(`[Vault Archive] Scan complete. Found ${eligibleCount} plans eligible for archiving.`);
   if (eligibleCount > 0) {
-    console.log(`  -> Run 'npm run vault-archive -- --apply' to move eligible plans to year-month archives.`);
+    console.log(`  -> Run 'node omnibrain/scripts/vault-archive.js --apply' from the host project root to move eligible plans to year-month archives.`);
   }
 }
