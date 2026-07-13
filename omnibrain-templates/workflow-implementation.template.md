@@ -13,6 +13,11 @@ Before writing any code, execute the pre-flight checks:
 1. Ensure the user has approved the plan or stage.
 2. Load any architectural rules from `Vault/Core_OS/Standards/Anti_Patterns.md` to avoid banned practices.
 3. If the user named a task, use the matching task file in `Vault/Work/Tasks/` as the current working record.
+4. If the current task lacks the standard body headings, add them while preserving existing content:
+   - `## What we are trying to achieve`
+   - `## What happens next`
+   - `## What I need to decide`
+   - `## Useful notes`
 
 ## Minimum Sufficient Process
 
@@ -24,6 +29,16 @@ For ordinary work:
 - do not automatically create a branch;
 - do not automatically request an independent reviewer;
 - keep validation proportionate to the change.
+
+## Task Lifecycle Authority
+
+Task stage movement remains a human decision.
+
+- The agent may recommend a stage.
+- The agent may change `stage` only after direct user instruction.
+- The agent must not silently move a task.
+- Do not treat a recommendation as approval.
+- When `needs_user_decision` is true, explain the required decision in `What I need to decide`, stop at the affected boundary, and wait for the user.
 
 ## Doubt-Driven Development
 Before writing complex or non-trivial logic:

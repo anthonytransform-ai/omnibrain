@@ -31,7 +31,14 @@ It does not make product decisions for you. It helps you see what is happening a
 
 ## 3. What you need before starting
 
-You need your project folder, an AI assistant that can work with local files and Obsidian Desktop.
+You need:
+
+- your project folder;
+- Node.js, because OmniBrain setup runs with `node`;
+- an AI assistant that can work with local files;
+- Obsidian Desktop.
+
+OmniBrain is tested with Node.js 18 in the repository workflow. If your project uses a newer supported Node.js version, that is usually fine. If `node --version` does not work, stop and install Node.js yourself or explicitly approve a trusted helper to guide you. OmniBrain should not install system software automatically.
 
 For the Guided Workspace, Obsidian only needs the Bases core plugin. The main task board works without Dataview, Templates, Daily Notes or community plugins.
 
@@ -42,14 +49,45 @@ The table-based task board requires Obsidian Bases with table view support. Offi
 Copy this instruction into your AI assistant:
 
 ```text
-Please install OmniBrain in this project folder. First confirm the active project folder. Check whether OmniBrain is already installed. If it is not installed, run the safe setup command from the project root: node omnibrain/omnibrain-setup.js. Preserve existing host files, host scripts, host configuration, Vault/Project/**, Vault/Dashboard.md and any existing task files. Inspect the project yourself for language, framework, database, build tools and deployment arrangement. Ask me no more than five product questions: what am I building or improving, who is it for, what should it help them do, how should it feel, and what actions must the AI always ask me about first. Use my answers to populate blank project documents. If existing project documents already contain meaningful content, preserve them and propose additions before changing established product statements or permission boundaries. Verify that Vault/Start_Here.md, both user guides and Vault/Work/Tasks/Task_Board.base exist. Tell me which Vault folder to open in Obsidian and explain how to enable the Bases core plugin in ordinary language. Do not install Node.js, Git, Obsidian or system software automatically.
+Please install OmniBrain in this project folder.
+
+First confirm the active project folder and show me the path. Then check whether Node.js is available by running `node --version`. Report the detected version. If Node.js is missing, stop, explain that OmniBrain setup requires Node.js, and do not install Node.js or other system software unless I explicitly approve that separate action.
+
+Check whether `omnibrain/omnibrain-setup.js` already exists. If it exists, continue safely. If it does not exist, use the official source `https://github.com/anthonytransform-ai/omnibrain`. Obtain or guide me to obtain the official OmniBrain files, place the framework contents under this project folder as `omnibrain/`, and avoid leaving a nested `.git` repository inside my project. If you cannot download files yourself, give me simple instructions to use GitHub Code -> Download ZIP, extract the ZIP, rename the extracted folder to `omnibrain`, move it into this project folder, and remove any nested `.git` folder if one exists.
+
+Before running setup, verify that `omnibrain/omnibrain-setup.js` and `omnibrain/omnibrain-templates/` both exist. Then run `node omnibrain/omnibrain-setup.js` from the project root.
+
+Preserve existing project files, existing project scripts, existing project configuration, `Vault/Project/**`, `Vault/Dashboard.md`, `Vault/Work/Tasks/**`, and `Vault/Work/Archive/**`.
+
+After setup, verify that `Vault/Start_Here.md`, both user guides, and `Vault/Work/Tasks/Task_Board.base` exist. If OmniBrain created the root `AGENTS.md`, verify that it contains the OmniBrain bootstrap. If an existing root `AGENTS.md` was preserved and `omnibrain/AGENTS.omnibrain-snippet.md` was generated, read both files, preserve all existing instructions, propose the exact merged change, and integrate the OmniBrain snippet only after I approve. If safe integration is not possible, explain the exact remaining action.
+
+Inspect the project yourself for language, framework, database, build tools and deployment arrangement. Ask me no more than five product questions: what am I building or improving, who is it for, what should it help them do, how should it feel, and what actions must the AI always ask me about first. Use my answers to populate blank project documents. If existing project documents already contain meaningful content, preserve them and propose additions before changing established product statements or permission boundaries.
+
+Tell me which `Vault/` folder to open in Obsidian and explain how to enable the Bases core plugin in ordinary language.
 ```
 
 ## 5. Manual installation
 
 Manual installation is available for technical users.
 
-From the project root, run:
+1. Confirm you are in the project folder that should receive OmniBrain.
+2. Confirm Node.js is available:
+
+```bash
+node --version
+```
+
+3. Get the official OmniBrain files from `https://github.com/anthonytransform-ai/omnibrain`.
+4. Place the framework contents under your project as `omnibrain/`.
+5. Avoid leaving a nested `.git` repository inside your project.
+6. Verify these paths exist:
+
+```text
+omnibrain/omnibrain-setup.js
+omnibrain/omnibrain-templates/
+```
+
+Then run setup from the project root:
 
 ```bash
 node omnibrain/omnibrain-setup.js
@@ -57,11 +95,12 @@ node omnibrain/omnibrain-setup.js
 
 To refresh framework-owned OmniBrain files later, run:
 
+> [!warning]
+> `--force` can overwrite framework-owned OmniBrain files such as Core_OS, Start Here, guides, the Base task board, Obsidian help files and OmniBrain scripts. It must preserve project memory, task files, archive files, host files, host configuration and the legacy `Vault/Dashboard.md`.
+
 ```bash
 node omnibrain/omnibrain-setup.js --force
 ```
-
-Warning: do not delete your `Vault/Project/`, `Vault/Work/Tasks/`, `Vault/Work/Archive/` or host application files when updating OmniBrain.
 
 ## 6. Open OmniBrain in Obsidian
 
@@ -100,18 +139,22 @@ Use these exact stage values:
 - `Check and decide`: the result needs review or a user decision.
 - `Done`: the task is complete.
 
+The stage is your lifecycle decision. An AI assistant may recommend a stage, but it should change the stage only when you directly instruct it to do so.
+
 ## 11. Mark that a decision is needed
 
 Turn on `needs_user_decision` in the visible properties or checkbox cell.
 
 The task will appear in **Needs my decision**. Use this for product direction, permissions, cost, privacy, deletion, publishing or anything you want to approve yourself.
 
+When this is true, the AI assistant should explain the required decision in `What I need to decide`, stop at that boundary, and wait for you.
+
 ## 12. Ask an AI assistant to work on a task
 
 Copy this instruction:
 
 ```text
-Please read Vault/Start_Here.md, find the task named "[task filename]", and work only on that task. Use the task Markdown file as the current working record. Keep "What happens next" current. Record real user decisions. Use the least complicated safe way to complete the task. Do not create extra plans, branches, reviewers or handoff files unless they reduce a real risk. Run validation that is proportionate to the change. Stop and ask me before destructive, costly, privacy-sensitive, publishing or permission-changing actions.
+Please read `Vault/Start_Here.md`, find the task named "[task filename]", and work only on that task. Use the task Markdown file as the current working record. If the task lacks these body headings, add them while preserving existing content: `## What we are trying to achieve`, `## What happens next`, `## What I need to decide`, and `## Useful notes`. Keep "What happens next" current. Record real user decisions. Use the least complicated safe way to complete the task. Do not create extra plans, branches, reviewers or handoff files unless they reduce a real risk. Run validation that is proportionate to the change. Do not silently move the task stage. You may recommend a stage, but change `stage` only if I directly instruct you. If `needs_user_decision` is true, explain the decision in `What I need to decide`, stop at that boundary, and wait for me. Stop and ask me before destructive, costly, privacy-sensitive, publishing or permission-changing actions.
 ```
 
 ## 13. Check and accept completed work
@@ -122,10 +165,10 @@ Inspect the app or files yourself where it matters. Only move a task to `Done` w
 
 ## 14. Keep important project knowledge
 
-When a task is complete, the AI assistant should ask:
+When you are ready to close a task, copy this instruction:
 
 ```text
-Is there anything from this task that should be kept as lasting project knowledge?
+Please close this task carefully. Summarise what changed, state what was checked, and state anything uncertain or blocked. Ask me whether anything from this task should be kept as lasting project knowledge. Do not move the task to `Done` or `Vault/Work/Archive/` unless I directly instruct you to do that.
 ```
 
 If the answer is no, leave the task as a working record. If the answer is yes, update the owning System or Feature note, preserve existing knowledge, enrich it, and update the index if needed.
@@ -142,13 +185,15 @@ Move files there only when you mean to archive them. Do not archive files automa
 
 Ask your AI assistant to run the safe setup command with `--force`.
 
-`--force` may refresh framework-owned files such as Core_OS, Start Here, both guides, the task board Base, Obsidian help files and OmniBrain scripts.
+> [!warning]
+> `--force` can overwrite framework-owned OmniBrain files. Ask the AI assistant to confirm what will be refreshed and to preserve task Markdown files, archive files, project notes, host files, host configuration and the legacy `Vault/Dashboard.md`.
 
-It must preserve task Markdown files, Archive files, Project notes, host files, host configuration and the legacy `Vault/Dashboard.md`.
+`--force` may refresh framework-owned files such as Core_OS, Start Here, both guides, the task board Base, Obsidian help files and OmniBrain scripts.
 
 ## 17. Back up or remove OmniBrain
 
-Before destructive actions, make a backup of your project folder.
+> [!warning]
+> Removing OmniBrain can delete your local project memory if you delete the wrong folders. Make a backup first and decide what to keep before removing files.
 
 To remove OmniBrain, first confirm what you want to keep. Your project memory is in `Vault/Project/`. Your tasks are in `Vault/Work/Tasks/` and `Vault/Work/Archive/`.
 
@@ -156,26 +201,21 @@ Do not delete those folders unless you are certain you no longer need them.
 
 ## 18. Troubleshooting
 
-Symptom: Start Here opens but the board is blank.
-Action: enable the Bases core plugin in Obsidian and reopen the page.
-
-Symptom: a new task appears under `None`.
-Action: open the task file and choose a stage in visible Obsidian properties.
-
-Symptom: a task is missing from Active work.
-Action: check that it is under `Vault/Work/Tasks/`, has `type: omnibrain_task`, and is not set to `stage: Done`.
-
-Symptom: setup reports missing templates.
-Action: restore the `omnibrain-templates` folder and run setup again.
-
-Symptom: you are worried about overwriting project facts.
-Action: ask the AI assistant to show proposed changes before changing `Vault/Project/**`.
+| Symptom | What to do |
+| ------- | ---------- |
+| `omnibrain/omnibrain-setup.js` is missing. | Get the official files from `https://github.com/anthonytransform-ai/omnibrain`, place them under `omnibrain/`, and verify `omnibrain/omnibrain-templates/` exists before setup. |
+| `node --version` does not work. | Stop. Install Node.js yourself or explicitly approve a trusted helper. Do not let OmniBrain setup pretend Node.js is available. |
+| Start Here opens but the board is blank. | Enable the Bases core plugin in Obsidian and reopen the page. |
+| A new task appears under `None`. | Open the task file and choose a stage in visible Obsidian properties. |
+| A task is missing from Active work. | Check that it is under `Vault/Work/Tasks/`, has `type: omnibrain_task`, and is not set to `stage: Done`. |
+| Setup reports missing templates. | Restore the `omnibrain-templates` folder and run setup again. |
+| You are worried about project knowledge changes. | Ask the AI assistant to show proposed changes before changing `Vault/Project/**`. |
 
 ## 19. Privacy and local-file safety
 
 OmniBrain stores its data in local Markdown files. Bases reads file properties and frontmatter from your vault.
 
-OmniBrain does not add telemetry, hosted services or required API keys. Your AI assistant may have its own privacy model, so check that tool separately.
+OmniBrain does not add telemetry, hosted services or required API keys. Your AI assistant may have its own privacy and data-handling policy, so check that tool separately.
 
 ## 20. Plain-language glossary
 

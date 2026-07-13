@@ -27,6 +27,21 @@ When the user names a task:
 3. If more than one plausible match exists, ask the user which one they mean.
 4. Do not infer a different task.
 5. Use that task Markdown file as the current working record.
+6. If the task lacks the standard body headings, add them while preserving all existing task content:
+   - `## What we are trying to achieve`
+   - `## What happens next`
+   - `## What I need to decide`
+   - `## Useful notes`
+
+## Task Lifecycle Authority
+
+Task stage movement remains a human decision.
+
+- An agent may recommend a stage.
+- An agent may change `stage` only after direct user instruction.
+- An agent must not silently move a task.
+- Do not treat a recommendation as approval.
+- When `needs_user_decision` is true, explain the required decision in `What I need to decide`, stop at the affected boundary, and wait for the user.
 
 ## Minimum Sufficient Process
 
@@ -38,6 +53,7 @@ For ordinary work, use the current task file. Do not automatically create a sepa
 
 While working:
 - keep "What happens next" current in the task note;
+- explain required decisions in "What I need to decide";
 - record real user decisions;
 - keep technical detail proportional;
 - avoid extra plans or handoff files unless they solve a genuine need.

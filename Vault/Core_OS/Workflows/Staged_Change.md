@@ -10,6 +10,8 @@ Use this workflow for large, risky, or complex architectural modifications.
 
 Use the current task Markdown file under `Vault/Work/Tasks/` as the working record when the user has named a task. Keep "What happens next" current and avoid creating extra planning documents unless they reduce a real coordination risk.
 
+Task stage movement remains a human decision. Recommend stage changes when useful, but change `stage` only after direct user instruction. When `needs_user_decision` is true, explain the decision in `What I need to decide`, stop at the affected boundary, and wait for the user.
+
 ## Process
 1. **Scope One Stage:** Break down the overall change into small, reviewable, self-contained stages. Focus on one stage at a time.
 2. **Review The Stage:** Use the review profiles (Code Reviewer, Architect, UI Designer) to audit the stage's design.

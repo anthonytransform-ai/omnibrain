@@ -96,7 +96,7 @@ function taskVisibleInBase(rel) {
   return fm.type === 'omnibrain_task';
 }
 
-const requiredGuideSections = [
+const requiredEnglishGuideSections = [
   '1. What OmniBrain is',
   '2. What OmniBrain does not do',
   '3. What you need before starting',
@@ -117,6 +117,29 @@ const requiredGuideSections = [
   '18. Troubleshooting',
   '19. Privacy and local-file safety',
   '20. Plain-language glossary'
+];
+
+const requiredChineseGuideSections = [
+  '1. OmniBrain 是什麼',
+  '2. OmniBrain 不會做什麼',
+  '3. 開始前需要準備甚麼',
+  '4. 使用 AI 助手安裝',
+  '5. 手動安裝',
+  '6. 在 Obsidian 開啟 OmniBrain',
+  '7. 啟用 Bases',
+  '8. 使用開始使用頁',
+  '9. 建立第一個工作項目',
+  '10. 理解六個階段',
+  '11. 標示需要我決定',
+  '12. 請 AI 助手處理工作項目',
+  '13. 檢查並接受已完成的工作',
+  '14. 保留重要專案知識',
+  '15. 封存已完成的工作',
+  '16. 安全地更新 OmniBrain',
+  '17. 備份或移除 OmniBrain',
+  '18. 疑難排解',
+  '19. 私隱／隱私與本機檔案安全',
+  '20. 簡明詞彙表'
 ];
 
 console.log('[TEST 0] Missing template directory safe failure...');
@@ -200,45 +223,96 @@ try {
 
 console.log('\n[TEST 3] Guide source/install contracts...');
 try {
-  const guidePaths = [
-    ['docs/User_Guide.en.md', rootDir],
-    ['docs/User_Guide.zh-Hant.md', rootDir],
-    ['Vault/Help/User_Guide.en.md', projectDir],
-    ['Vault/Help/User_Guide.zh-Hant.md', projectDir]
-  ];
   const problems = [];
-  for (const [rel, base] of guidePaths) {
-    if (!exists(rel, base)) {
-      problems.push(`${rel} missing`);
-      continue;
-    }
-    const sections = extractNumberedSections(read(rel, base));
-    if (JSON.stringify(sections) !== JSON.stringify(requiredGuideSections)) {
+  const guidePaths = [
+    ['docs/User_Guide.en.md', rootDir, requiredEnglishGuideSections],
+    ['docs/User_Guide.zh-Hant.md', rootDir, requiredChineseGuideSections],
+    ['Vault/Help/User_Guide.en.md', projectDir, requiredEnglishGuideSections],
+    ['Vault/Help/User_Guide.zh-Hant.md', projectDir, requiredChineseGuideSections]
+  ];
+  for (const [rel, base, expected] of guidePaths) {
+    if (!exists(rel, base)) problems.push(`${rel} missing`);
+    else if (JSON.stringify(extractNumberedSections(read(rel, base))) !== JSON.stringify(expected)) {
       problems.push(`${rel} section contract mismatch`);
     }
   }
   const en = read('docs/User_Guide.en.md', rootDir);
   const zh = read('docs/User_Guide.zh-Hant.md', rootDir);
+  const enCopies = [
+    read('omnibrain-templates/user-guide.en.template.md', rootDir),
+    read('Vault/Help/User_Guide.en.md', projectDir)
+  ];
+  const zhCopies = [
+    read('omnibrain-templates/user-guide.zh-Hant.template.md', rootDir),
+    read('Vault/Help/User_Guide.zh-Hant.md', projectDir)
+  ];
+  if (enCopies.some(copy => copy !== en)) problems.push('English guide source/template/install copies are not byte-identical');
+  if (zhCopies.some(copy => copy !== zh)) problems.push('Traditional Chinese guide source/template/install copies are not byte-identical');
+  const enNumbers = extractNumberedSections(en).map(section => section.split('.')[0]);
+  const zhNumbers = extractNumberedSections(zh).map(section => section.split('.')[0]);
+  if (JSON.stringify(enNumbers) !== JSON.stringify(zhNumbers)) problems.push('guide section numbers differ by language');
   const prohibited = ['配置', '默認', '運行', '文件夾', '信息', '創建', '智能體'];
   for (const term of prohibited) {
     if (zh.includes(term)) problems.push(`Traditional Chinese guide contains prohibited term: ${term}`);
   }
+  const privatePhrases = [
+    '合併前請由 K',
+    'K 進行文字審閱',
+    'J_OS',
+    'Agent G',
+    'internal release-review',
+    'private review'
+  ];
+  for (const phrase of privatePhrases) {
+    if (zh.includes(phrase)) problems.push(`Traditional Chinese guide contains private/review phrase: ${phrase}`);
+  }
   if (!en.includes('Three-minute quick start') || !zh.includes('三分鐘快速開始')) {
     problems.push('quick start missing');
   }
-  if (!en.includes('Please install OmniBrain in this project folder') || !zh.includes('Please install OmniBrain in this project folder')) {
-    problems.push('copyable AI installation instruction missing');
+  const requiredEnSnippets = [
+    'Please install OmniBrain in this project folder.',
+    'https://github.com/anthonytransform-ai/omnibrain',
+    'Code -> Download ZIP',
+    'node --version',
+    'Node.js is missing',
+    'omnibrain/omnibrain-setup.js',
+    'omnibrain/omnibrain-templates/',
+    'AGENTS.omnibrain-snippet.md',
+    'propose the exact merged change',
+    'Please read `Vault/Start_Here.md`',
+    'Please close this task carefully',
+    'lasting project knowledge',
+    '> [!warning]',
+    '| Symptom | What to do |',
+    'privacy and data-handling policy'
+  ];
+  const requiredZhSnippets = [
+    '請在這個專案資料夾安裝 OmniBrain',
+    'https://github.com/anthonytransform-ai/omnibrain',
+    'Code -> Download ZIP',
+    'node --version',
+    '找不到 Node.js',
+    'omnibrain/omnibrain-setup.js',
+    'omnibrain/omnibrain-templates/',
+    'AGENTS.omnibrain-snippet.md',
+    '提出準確的合併後變更',
+    '請讀取 `Vault/Start_Here.md`',
+    '請謹慎結束這個工作項目',
+    '長期專案知識',
+    '> [!warning]',
+    '| 情況 | 處理方法 |',
+    '私隱／隱私與資料處理政策'
+  ];
+  for (const snippet of requiredEnSnippets) {
+    if (!en.includes(snippet)) problems.push(`English guide missing: ${snippet}`);
   }
-  if (!en.includes('Please read Vault/Start_Here.md') || !zh.includes('Please read Vault/Start_Here.md')) {
-    problems.push('copyable task instruction missing');
-  }
-  if (!en.includes('Is there anything from this task that should be kept as lasting project knowledge?') || !zh.includes('Is there anything from this task that should be kept as lasting project knowledge?')) {
-    problems.push('copyable close-task instruction missing');
+  for (const snippet of requiredZhSnippets) {
+    if (!zh.includes(snippet)) problems.push(`Traditional Chinese guide missing: ${snippet}`);
   }
   if (problems.length) {
     fail('Guide contracts failed.', problems.join('\n'));
   } else {
-    pass('English and Traditional Chinese guides exist, install, and match the required section contract.');
+    pass('English and Traditional Chinese guides are complete, localised, byte-consistent and free of private review leakage.');
   }
 } catch (e) {
   fail('Guide contract test failed.', combinedOutput(e));
@@ -389,11 +463,15 @@ try {
   }
   const guides = read('Vault/Help/User_Guide.en.md') + read('Vault/Help/User_Guide.zh-Hant.md');
   if (/Dataview[^.\n]*(required|需要)/i.test(guides)) offenders.push('Guides require Dataview');
-  if (!guides.includes('Do not install Node.js, Git, Obsidian or system software automatically.')) offenders.push('AI-assisted install safety line missing');
+  if (!guides.includes('do not install Node.js or other system software') || !guides.includes('不要在未經我明確批准前安裝 Node.js')) offenders.push('AI-assisted Node.js safety line missing');
+  const lifecycle = read('Vault/Core_OS/Runtime/Entry.md') + read('Vault/Core_OS/Workflows/Implementation.md');
+  if (!lifecycle.includes('Task stage movement remains a human decision')) offenders.push('Task lifecycle authority rule missing');
+  if (!lifecycle.includes('change `stage` only after direct user instruction')) offenders.push('Direct stage instruction rule missing');
+  if (!lifecycle.includes('What I need to decide')) offenders.push('Decision-boundary task body rule missing');
   if (offenders.length) {
     fail('Generated public files contain private or obsolete guidance.', offenders.join('\n'));
   } else {
-    pass('Generated public files contain no private J_OS route or obsolete Dataview/npm setup requirement.');
+    pass('Generated public files contain no private J_OS route, obsolete command guidance, or lifecycle-authority gap.');
   }
 } catch (e) {
   fail('Public portability test failed.', combinedOutput(e));

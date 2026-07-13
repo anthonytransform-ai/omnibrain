@@ -21,6 +21,7 @@ OmniBrain remains local, vendor-neutral and transparent. It does not require API
 ## What You Need
 
 - A project folder.
+- Node.js. The repository workflow tests OmniBrain with Node.js 18.
 - An AI assistant that can work with local files.
 - Obsidian Desktop with the Bases core plugin enabled.
 
@@ -30,6 +31,20 @@ Official Obsidian documentation lists Bases table view support from Obsidian 1.9
 
 Ask your AI assistant to install OmniBrain. The full copyable instruction is in both user guides.
 
+The installation journey has two parts:
+
+1. Put the official OmniBrain framework files from `https://github.com/anthonytransform-ai/omnibrain` under your project as `omnibrain/`.
+2. Run setup from the host project root.
+
+Before setup, confirm these paths exist:
+
+```text
+omnibrain/omnibrain-setup.js
+omnibrain/omnibrain-templates/
+```
+
+If you are using GitHub manually, use **Code -> Download ZIP**, extract the ZIP, rename the extracted folder to `omnibrain`, and move it into your project folder. Do not leave a nested `.git` repository inside your project.
+
 For technical users, the safe setup command from the host project root is:
 
 ```bash
@@ -38,11 +53,14 @@ node omnibrain/omnibrain-setup.js
 
 To refresh framework-owned files later:
 
+> [!warning]
+> `--force` can overwrite framework-owned OmniBrain files. It must preserve host files, host configuration, `Vault/Project/**`, `Vault/Work/Tasks/**`, `Vault/Work/Archive/**` and the legacy `Vault/Dashboard.md`.
+
 ```bash
 node omnibrain/omnibrain-setup.js --force
 ```
 
-`--force` refreshes framework-owned files only. It must preserve host files, host configuration, `Vault/Project/**`, `Vault/Work/Tasks/**`, `Vault/Work/Archive/**` and the legacy `Vault/Dashboard.md`.
+When setup preserves an existing root `AGENTS.md`, it may create `omnibrain/AGENTS.omnibrain-snippet.md`. A capable AI assistant should propose a merge that preserves all existing instructions, then integrate the OmniBrain snippet only after approval.
 
 ## Guided Workspace
 
