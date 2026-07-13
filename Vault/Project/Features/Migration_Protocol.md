@@ -35,15 +35,16 @@ node omnibrain/scripts/omnibrain-migrate.js --from-v1
 - **Dry-run support:** `--dry-run` reports the intended backup, setup, and validation steps without changing files.
 - **V2 guard rail:** Migration stops when `Vault/Core_OS/Runtime/Entry.md` already exists.
 - **Collision-safe backups:** Existing backups are retained. A timestamped legacy directory is used when `Vault/_legacy/OmniBrain_v1` already exists.
-- **Post-migration validation:** The tool runs `vault-health` after creating the v2 structure.
+- **Post-migration validation:** The tool runs `node omnibrain/scripts/vault-health.js` after creating the v2 structure.
+- **Public command guidance:** Expected user errors show public `node omnibrain/...` recovery commands, whether files changed, and the next safe action.
 
 ## Important Limits
 
 - The tool places every top-level item in the local `Vault/`, except `_legacy`, into the legacy backup area before regenerating the v2 Vault. This can include local Obsidian settings such as `.obsidian`.
 - An error during the transfer or later setup ends the command; earlier changes are not automatically reversed.
-- After success, reopen the local Vault in Obsidian and review plugin settings. Use `obsidian-check` after Dataview is enabled.
+- After success, reopen the local Vault in Obsidian and review plugin settings. Use `node omnibrain/scripts/obsidian-check.js` after Dataview is enabled.
 - Review legacy notes before distilling durable facts into the new `Project/System/` and `Project/Features/` records.
 
 ## Recovery
 
-When migration stops with an error, inspect the reported paths and the created legacy backup before taking any further action. Restore from the separate project copy where necessary; do not re-run blindly.
+When migration stops with an error, inspect the reported paths and the created legacy backup before taking any further action. Restore from the separate project copy where necessary; do not re-run blindly. For a normal v2 refresh, use `node omnibrain/omnibrain-setup.js`; use `--force` only when intentionally refreshing framework-owned files.

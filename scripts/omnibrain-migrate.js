@@ -32,23 +32,32 @@ console.log("\x1b[36m===============================================\n\x1b[0m");
 
 // Guard 1: Require --from-v1
 if (!fromV1) {
-  console.error("\x1b[31m[!] Error: Migration requires explicit --from-v1 flag.\x1b[0m");
-  console.error("Please run: npm run omnibrain-migrate -- --from-v1");
+  console.error("\x1b[31m[!] Migration was not started.\x1b[0m");
+  console.error("Found: the required --from-v1 flag was not provided.");
+  console.error("Not completed: no v1 files were moved and no v2 files were created.");
+  console.error("Files changed: no.");
+  console.error("Next safe action: from the host project root, run `node omnibrain/scripts/omnibrain-migrate.js --from-v1 --dry-run` first. If the dry run looks right, run `node omnibrain/scripts/omnibrain-migrate.js --from-v1`.");
   process.exit(1);
 }
 
 // Guard 2: Refuse to run on an existing v2 vault
 const v2Entry = path.join(vaultDir, 'Core_OS/Runtime/Entry.md');
 if (fs.existsSync(v2Entry)) {
-  console.error("\x1b[31m[!] Refusing to migrate: An existing v2 vault was detected.\x1b[0m");
-  console.error(`  -> Found: ${path.relative(projectRootDir, v2Entry)}`);
-  console.error("If you want to re-run setup, use: npm run setup");
+  console.error("\x1b[31m[!] Migration was not started because an existing v2 vault was detected.\x1b[0m");
+  console.error(`Found: ${path.relative(projectRootDir, v2Entry)}`);
+  console.error("Not completed: v1 migration did not run because this project already has the v2 runtime file.");
+  console.error("Files changed: no.");
+  console.error("Next safe action: if you only want to refresh missing framework files, run `node omnibrain/omnibrain-setup.js` from the host project root. Use `--force` only when you want to refresh framework-owned files.");
   process.exit(1);
 }
 
 // 1. Ensure Vault directory exists
 if (!fs.existsSync(vaultDir)) {
-  console.error(`\x1b[31m[!] Vault directory not found. Please run 'npm run setup' first.\x1b[0m`);
+  console.error("\x1b[31m[!] Migration was not started because no Vault directory was found.\x1b[0m");
+  console.error(`Found: no ${path.relative(projectRootDir, vaultDir) || 'Vault'} directory at the target project root.`);
+  console.error("Not completed: no backup folder was created and no setup files were written.");
+  console.error("Files changed: no.");
+  console.error("Next safe action: run `node omnibrain/omnibrain-setup.js` for a fresh v2 install, or confirm you are in the correct v1 project before retrying migration.");
   process.exit(1);
 }
 
@@ -113,6 +122,9 @@ try {
   console.log(`[Setup] Successful.\n`);
 } catch (e) {
   console.error(`\x1b[31m[!] Error executing omnibrain-setup.js: ${e.message}\x1b[0m`);
+  console.error("Not completed: the v2 structure could not be generated after the v1 backup step.");
+  console.error("Files changed: yes. Your original v1 files were moved into the `_legacy` backup folder shown above.");
+  console.error("Next safe action: review the setup error above, then run `node omnibrain/omnibrain-setup.js --force` from the host project root after the issue is fixed.");
   process.exit(1);
 }
 
@@ -125,6 +137,9 @@ try {
   process.exit(0);
 } catch (e) {
   console.error(`\x1b[31m[!] Warning: Vault Health Check failed after setup.\x1b[0m`);
-  console.error(`Please review the errors above and ensure all required links are restored.`);
+  console.error("Found: migration moved the v1 files and created the v2 framework, but validation reported problems.");
+  console.error("Not completed: OmniBrain could not confirm the migrated vault is healthy.");
+  console.error("Files changed: yes. Your original v1 files were moved into the `_legacy` backup folder shown above.");
+  console.error("Next safe action: review the health-check errors above, restore any missing required files, then run `node omnibrain/scripts/vault-health.js` from the host project root.");
   process.exit(1);
 }

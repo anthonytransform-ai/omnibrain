@@ -2,7 +2,9 @@ import { spawnSync } from 'node:child_process';
 
 const moduleDefaultFlag = '--experimental-default-type=module';
 const existingNodeOptions = (process.env.NODE_OPTIONS || '').trim();
-const nodeOptions = existingNodeOptions.includes(moduleDefaultFlag)
+const nodeMajor = Number.parseInt(process.versions.node.split('.')[0], 10);
+const canUseModuleDefaultFlag = nodeMajor < 24;
+const nodeOptions = !canUseModuleDefaultFlag || existingNodeOptions.includes(moduleDefaultFlag)
   ? existingNodeOptions
   : [existingNodeOptions, moduleDefaultFlag].filter(Boolean).join(' ');
 

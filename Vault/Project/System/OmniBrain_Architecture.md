@@ -44,6 +44,7 @@ Setup may create the local `Vault/` structure, `omnibrain.config.json` when it i
 - `Vault/Core_OS/**` and `Vault/Obsidian/**` template files refresh with `--force`.
 - Framework scripts inside `omnibrain/scripts/` are regenerated during setup so that installed maintenance utilities match the framework version.
 - The local `Vault/Project/**` memory files and `Vault/Dashboard.md` are not overwritten by `--force`.
+- The Dashboard query at `Vault/Obsidian/Queries/Dashboard.md` is framework-owned and refreshed with `--force`; the Dashboard page itself remains user-protected.
 
 ## 5. Migration and Maintenance Safety
 
@@ -55,11 +56,11 @@ Setup may create the local `Vault/` structure, `omnibrain.config.json` when it i
 ## 6. Human Interface
 
 - `Vault/` is designed to open directly in Obsidian Desktop.
-- The Dashboard transcludes Dataview query views for plans, features, and daily logs.
+- The Dashboard transcludes Dataview query views for plans, features, and daily logs from `Vault/Obsidian/Queries/Dashboard.md`.
 - The `obsidian-check` utility verifies that the Vault has an `.obsidian` directory and that Dataview is enabled. It does not verify that Obsidian is currently running or that all preferred core-plugin settings are configured.
 
 ## 7. Validation and CI
 
-- `vault-health` checks required files, Markdown frontmatter shape, local Markdown and wiki links, and selected operational-language leakage patterns.
+- `vault-health` checks required files, including the Dashboard query, Markdown frontmatter shape, local Markdown and wiki links, embedded query targets, and selected operational-language leakage patterns.
 - It is a structural integrity check. It does not confirm that active documentation is complete, non-template, or current with code.
 - GitHub Actions runs `npm test` on pushes to `main` and pull requests targeting `main`, using Node 18.

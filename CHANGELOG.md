@@ -1,5 +1,19 @@
 # OmniBrain Changelog / 更新日誌
 
+## v2.0.3 - 2026-07-13
+
+### English
+- **Dashboard correctness repair:** Fresh setup now installs `Vault/Obsidian/Queries/Dashboard.md`, the query embedded by `Vault/Dashboard.md`.
+- **Health check coverage:** `vault-health` now treats the Dashboard query as a required file and reports missing required files without changing the project.
+- **Public command repair:** Generated workflows, maintenance prompts and migration guidance now use direct `node omnibrain/...` commands for public installations and separate host-application testing from OmniBrain framework-development tests.
+- **Safer user messages:** Setup, health-check and migration messages now explain what was found, what was not completed, whether files changed and the next safe action.
+
+### 繁體中文
+- **Dashboard 正確性修復：** 全新安裝現在會建立 `Vault/Obsidian/Queries/Dashboard.md`，也就是 `Vault/Dashboard.md` 內嵌所需的查詢檔案。
+- **健康檢查涵蓋範圍：** `vault-health` 現在會將 Dashboard 查詢檔視為必要檔案，並在檔案缺失時只回報問題，不修改專案。
+- **公開指令修復：** 產生的工作流程、維護提示與遷移指引現在使用公開安裝適用的直接 `node omnibrain/...` 指令，並將宿主應用程式測試與 OmniBrain 框架開發測試分開。
+- **更安全的使用者訊息：** setup、health-check 與 migration 訊息現在會說明找到什麼、未完成什麼、檔案是否有變更，以及下一個安全動作。
+
 ## v2.0.2 - 2026-06-25
 
 ### English

@@ -10,6 +10,12 @@ const force = args.includes('--force');
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const frameworkDir = __dirname;
+const frameworkVersion = '2.0.3';
+let filesChanged = false;
+let createdCount = 0;
+let overwrittenCount = 0;
+let skippedCount = 0;
+const missingTemplates = [];
 
 let projectRootDir;
 const prIndex = args.indexOf('--project-root');
@@ -24,10 +30,30 @@ if (prIndex !== -1 && args[prIndex + 1]) {
   }
 }
 
+const templateDir = path.join(frameworkDir, 'omnibrain-templates');
+if (!fs.existsSync(templateDir) || !fs.statSync(templateDir).isDirectory()) {
+  console.error("\x1b[31mOmniBrain setup did not start.\x1b[0m");
+  console.error(`Found: required framework template directory is missing at ${templateDir}.`);
+  console.error("Not completed: no Vault directories, configuration files, snippets or scripts were created.");
+  console.error("Files changed: no.");
+  console.error("Next safe action: restore the `omnibrain-templates` directory, then run `node omnibrain/omnibrain-setup.js` again from the host project root.");
+  process.exit(1);
+}
+
+function recordWritten(existsBefore) {
+  filesChanged = true;
+  if (existsBefore) {
+    overwrittenCount++;
+  } else {
+    createdCount++;
+  }
+}
+
 // Helper function to copy files safely and non-destructively
 function copyIfMissing(src, dest, forceOverwrite = false) {
   if (!fs.existsSync(src)) {
     console.error(`\x1b[31m[!] Template missing:\x1b[0m ${src}`);
+    missingTemplates.push(src);
     return;
   }
 
@@ -37,16 +63,18 @@ function copyIfMissing(src, dest, forceOverwrite = false) {
   }
 
   if (fs.existsSync(dest) && !forceOverwrite) {
+    skippedCount++;
     console.log(`\x1b[33m[-] Skipped (already exists):\x1b[0m ${path.relative(projectRootDir, dest)}`);
   } else {
     const existsBefore = fs.existsSync(dest);
     fs.copyFileSync(src, dest);
+    recordWritten(existsBefore);
     console.log(`\x1b[32m[✓] ${existsBefore ? 'Overwrote' : 'Created'}:\x1b[0m ${path.relative(projectRootDir, dest)}`);
   }
 }
 
 console.log("\x1b[36m\n===============================================\x1b[0m");
-console.log("\x1b[36m   Initializing OmniBrain Agent Framework v2.0.2...\x1b[0m");
+console.log(`\x1b[36m   Initializing OmniBrain Agent Framework v${frameworkVersion}...\x1b[0m`);
 console.log(`   Resolved target project root: ${projectRootDir}`);
 console.log("\x1b[36m===============================================\n\x1b[0m");
 
@@ -91,14 +119,14 @@ if (!fs.existsSync(configPath)) {
   const configContent = {
     project_id: "omnibrain-project",
     source_roots: ["src"],
-    vault_version: "2.0.2"
+    vault_version: frameworkVersion
   };
   fs.writeFileSync(configPath, JSON.stringify(configContent, null, 2) + '\n');
+  recordWritten(false);
   console.log(`\x1b[32m[✓] Generated:\x1b[0m omnibrain.config.json`);
 }
 
 // 3. Move Templates into place
-const templateDir = path.join(frameworkDir, 'omnibrain-templates');
 if (fs.existsSync(templateDir)) {
   // Root level bootstrap
   const agentsPath = path.join(projectRootDir, 'AGENTS.md');
@@ -127,8 +155,12 @@ Read only:
 Then follow Runtime Entry.
 \`\`\`
 `;
+    const snippetExistsBefore = fs.existsSync(snippetPath);
     fs.writeFileSync(snippetPath, snippetContent);
-    console.log(`\x1b[33m[-] Skipped (already exists):\x1b[0m AGENTS.md (written snippet to ${path.relative(projectRootDir, snippetPath)})`);
+    skippedCount++;
+    recordWritten(snippetExistsBefore);
+    console.log(`\x1b[33m[-] Skipped (already exists):\x1b[0m AGENTS.md`);
+    console.log(`\x1b[32m[✓] ${snippetExistsBefore ? 'Overwrote' : 'Created'}:\x1b[0m ${path.relative(projectRootDir, snippetPath)}`);
   }
 
   // Core OS Layer (framework-owned: overwritten with --force)
@@ -160,6 +192,7 @@ Then follow Runtime Entry.
   // Obsidian Configurations & Views (framework-owned: overwritten with --force)
   copyIfMissing(path.join(templateDir, 'obsidian-install.template.md'), path.join(projectRootDir, 'Vault', 'Obsidian', 'INSTALL.md'), force);
   copyIfMissing(path.join(templateDir, 'obsidian-daily-log.template.md'), path.join(projectRootDir, 'Vault', 'Obsidian', 'Templates', 'Daily_Log.md'), force);
+  copyIfMissing(path.join(templateDir, 'obsidian-dashboard-queries.template.md'), path.join(projectRootDir, 'Vault', 'Obsidian', 'Queries', 'Dashboard.md'), force);
 
   // Dashboard (project root dashboard: NEVER overwritten by --force)
   copyIfMissing(path.join(templateDir, 'dashboard.template.md'), path.join(projectRootDir, 'Vault', 'Dashboard.md'), false);
@@ -172,14 +205,21 @@ Then follow Runtime Entry.
   copyIfMissing(path.join(templateDir, 'omnibrain-migrate.template.js'), path.join(frameworkDir, 'scripts', 'omnibrain-migrate.js'), true);
   copyIfMissing(path.join(templateDir, 'obsidian-check.template.js'), path.join(frameworkDir, 'scripts', 'obsidian-check.js'), true);
   copyIfMissing(path.join(templateDir, 'run-tests.template.js'), path.join(frameworkDir, 'scripts', 'run-tests.js'), true);
-} else {
-  console.error("\x1b[31m[!] Error: 'omnibrain-templates' folder is missing!\x1b[0m");
+}
+
+if (missingTemplates.length > 0) {
+  console.error("\x1b[31m\nOmniBrain setup did not complete.\x1b[0m");
+  console.error(`Found: ${missingTemplates.length} required framework template(s) were missing.`);
+  console.error("Not completed: The target Vault may be incomplete.");
+  console.error(`Files changed before the stop: ${filesChanged ? 'yes' : 'no'} (${createdCount} created, ${overwrittenCount} overwritten, ${skippedCount} skipped).`);
+  console.error("Next safe action: restore the missing omnibrain-templates files, then run `node omnibrain/omnibrain-setup.js --force` from the host project root.");
   process.exit(1);
 }
 
 console.log("\x1b[36m\n===============================================\x1b[0m");
 console.log("\x1b[32m✨ OmniBrain Setup Complete! ✨\x1b[0m");
 console.log("\x1b[36m===============================================\x1b[0m");
+console.log(`Files changed: ${filesChanged ? 'yes' : 'no'} (${createdCount} created, ${overwrittenCount} overwritten, ${skippedCount} skipped).`);
 console.log("Next steps for the user / developer:");
 console.log("1. Open the 'Vault' directory in Obsidian Desktop.");
 console.log("2. Follow instructions in Vault/Obsidian/INSTALL.md.");

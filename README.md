@@ -1,10 +1,12 @@
-# OmniBrain v2
+# OmniBrain v2.0.3
 
 OmniBrain is a portable, Markdown-first memory system for AI-assisted work, optimized for a seamless human experience using Obsidian Desktop.
 
 It turns any project folder into a structured workspace where AI agents and coding assistants can retain memory of goals, decisions, plans, review notes, and history across sessions, while providing you with an organized dashboard in Obsidian.
 
 You do not need to be a developer to use OmniBrain. It is designed for non-technical visionaries and product managers who pair-program or build with AI.
+
+Current public release: v2.0.3 correctness repair. Fresh installs include the Dashboard query file required by `Vault/Dashboard.md`, and public users should run direct `node omnibrain/...` commands from the host project root.
 
 ---
 

@@ -21,4 +21,4 @@ Follow these steps to set up Obsidian Desktop to work with the OmniBrain vault.
 
 ## Verify Installation
 Run the automated check tool from the project root:
-`npm run obsidian-check`
+`node omnibrain/scripts/obsidian-check.js`

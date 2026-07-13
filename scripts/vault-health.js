@@ -47,6 +47,13 @@ for (const file of mdFiles) {
 }
 
 let hasErrors = false;
+let errorCount = 0;
+
+function reportError(message) {
+  console.error(message);
+  hasErrors = true;
+  errorCount++;
+}
 
 // 1. Verify Required Files
 const requiredFiles = [
@@ -62,14 +69,14 @@ const requiredFiles = [
   path.join(vaultDir, 'Core_OS/Standards/Anti_Patterns.md'),
   path.join(vaultDir, 'Core_OS/Validation/Vault_Health_Check.md'),
   path.join(vaultDir, 'Dashboard.md'),
-  path.join(vaultDir, 'Obsidian/INSTALL.md')
+  path.join(vaultDir, 'Obsidian/INSTALL.md'),
+  path.join(vaultDir, 'Obsidian/Queries/Dashboard.md')
 ];
 
 console.log('Verifying required vault structure files...');
 requiredFiles.forEach(file => {
   if (!fs.existsSync(file)) {
-    console.error(`\x1b[31m[MISSING FILE]\x1b[0m ${path.relative(projectRootDir, file)} is required but missing.`);
-    hasErrors = true;
+    reportError(`\x1b[31m[MISSING FILE]\x1b[0m ${path.relative(projectRootDir, file)} is required but missing.`);
   }
 });
 
@@ -87,8 +94,7 @@ for (const file of mdFiles) {
   const isObsidianFolder = file.startsWith(path.join(vaultDir, 'Obsidian') + path.sep) || file === path.join(vaultDir, 'Obsidian');
   if (file.startsWith(vaultDir) && !isObsidianFolder) {
     if (!rawContent.startsWith('---')) {
-      console.error(`\x1b[31m[MISSING FRONTMATTER]\x1b[0m in ${path.relative(vaultDir, file)}`);
-      hasErrors = true;
+      reportError(`\x1b[31m[MISSING FRONTMATTER]\x1b[0m in ${path.relative(vaultDir, file)}`);
     } else {
       const lines = rawContent.split('\n');
       let endIdx = -1;
@@ -99,13 +105,11 @@ for (const file of mdFiles) {
         }
       }
       if (endIdx === -1) {
-        console.error(`\x1b[31m[MALFORMED FRONTMATTER]\x1b[0m in ${path.relative(vaultDir, file)}: frontmatter block never closes.`);
-        hasErrors = true;
+        reportError(`\x1b[31m[MALFORMED FRONTMATTER]\x1b[0m in ${path.relative(vaultDir, file)}: frontmatter block never closes.`);
       } else {
         const fmContent = lines.slice(1, endIdx).join('\n');
         if (!fmContent.includes('type:')) {
-          console.error(`\x1b[31m[INVALID FRONTMATTER]\x1b[0m in ${path.relative(vaultDir, file)}: missing 'type:' field.`);
-          hasErrors = true;
+          reportError(`\x1b[31m[INVALID FRONTMATTER]\x1b[0m in ${path.relative(vaultDir, file)}: missing 'type:' field.`);
         }
       }
     }
@@ -125,8 +129,7 @@ for (const file of mdFiles) {
 
     leakageRegexes.forEach(regex => {
       if (regex.test(rawContent)) {
-        console.error(`\x1b[31m[INSTRUCTION LEAKAGE]\x1b[0m in ${path.relative(vaultDir, file)} matches operational instruction pattern: ${regex}`);
-        hasErrors = true;
+        reportError(`\x1b[31m[INSTRUCTION LEAKAGE]\x1b[0m in ${path.relative(vaultDir, file)} matches operational instruction pattern: ${regex}`);
       }
     });
   }
@@ -160,9 +163,7 @@ for (const file of mdFiles) {
     const baseName = path.basename(linkTarget).toLowerCase();
 
     if (!fs.existsSync(resolvedFromVault) && !fs.existsSync(resolvedFromCurrent) && !vaultFileMap.has(baseName)) {
-      console.error(`\x1b[31m[BROKEN WIKI LINK]\x1b[0m in ${path.relative(vaultDir, file)}`);
-      console.error(`  -> Could not resolve: [[${match[1]}]]\n`);
-      hasErrors = true;
+      reportError(`\x1b[31m[BROKEN WIKI LINK]\x1b[0m in ${path.relative(vaultDir, file)}\n  -> Could not resolve: [[${match[1]}]]\n`);
     }
   }
 
@@ -175,15 +176,17 @@ for (const file of mdFiles) {
 
     const absoluteTarget = path.resolve(path.dirname(file), linkTarget);
     if (!fs.existsSync(absoluteTarget)) {
-      console.error(`\x1b[31m[BROKEN MD LINK]\x1b[0m in ${path.relative(vaultDir, file)}`);
-      console.error(`  -> Could not find: ${linkTarget}\n`);
-      hasErrors = true;
+      reportError(`\x1b[31m[BROKEN MD LINK]\x1b[0m in ${path.relative(vaultDir, file)}\n  -> Could not find: ${linkTarget}\n`);
     }
   }
 }
 
 if (hasErrors) {
-  console.error('\x1b[31mVault Health Check Failed. Please fix errors to maintain the vault structure.\x1b[0m');
+  console.error('\x1b[31mVault Health Check Failed.\x1b[0m');
+  console.error(`Found: ${errorCount} vault structure problem(s) in ${path.relative(projectRootDir, vaultDir) || 'Vault'}.`);
+  console.error('Not completed: OmniBrain could not confirm that all required files, links, and embeds are valid.');
+  console.error('Files changed: no. This command only reports problems.');
+  console.error('Next safe action: restore the missing or broken files, then run `node omnibrain/scripts/vault-health.js` again from the host project root.');
   process.exit(1);
 } else {
   console.log(`\x1b[32m\u2714 Vault Health Check Passed. Scanned ${mdFiles.length} files. All links resolve.\x1b[0m`);
