@@ -1,51 +1,54 @@
 # OmniBrain v2.1.0
 
-OmniBrain is a local, Markdown-first workspace for people who work with an AI assistant.
+OmniBrain is a local, Markdown-first workspace for people who work with an AI coding assistant.
 
 It turns one project folder into a guided Obsidian workspace with:
 
-- `Vault/Start_Here.md` as the human home page;
+- `Vault/Start_Here.md` as the home page;
 - a simple Obsidian Bases task board at `Vault/Work/Tasks/Task_Board.base`;
 - local Markdown task files under `Vault/Work/Tasks/`;
 - project knowledge under `Vault/Project/`;
 - framework guidance under `Vault/Core_OS/`;
-- English and Traditional Chinese user guides.
+- English and Traditional Chinese Markdown source guides.
 
 OmniBrain remains local, vendor-neutral and transparent. It does not require API keys, hosted services, telemetry, MCP, Docker, Python, Dataview or a custom Obsidian plugin.
 
-## User Guides
+## Install With An AI Coding Assistant
 
-- [English User Guide](docs/User_Guide.en.md)
-- [Traditional Chinese User Guide](docs/User_Guide.zh-Hant.md)
+Copy this repository URL:
+
+```text
+https://github.com/anthonytransform-ai/omnibrain
+```
+
+Paste it into Codex, Antigravity or another capable AI coding assistant that is already working in your project, then say:
+
+```text
+Install this in my current project. Preserve my existing files and guide me through anything that needs my decision.
+```
+
+The AI assistant should inspect the repository, install OmniBrain under your project as `omnibrain/`, run setup, preserve your existing files, and tell you what needs your decision.
+
+You should not need to clone this repository, download a ZIP, create folders, run terminal commands or merge Markdown instructions before asking the AI assistant to install OmniBrain.
+
+## What The AI Assistant Uses
+
+Agent-facing installation instructions live in [INSTALL_WITH_AI.md](INSTALL_WITH_AI.md).
+
+The Markdown files in `docs/`, `Vault/` and `omnibrain-templates/` are contributor and AI-readable sources. Future approved human PDF guides will be produced separately and integrated later.
 
 ## What You Need
 
 - A project folder.
-- Node.js. The repository workflow tests OmniBrain with Node.js 18.
-- An AI assistant that can work with local files.
-- Obsidian Desktop with the Bases core plugin enabled.
+- An AI coding assistant that can work with local files.
+- Node.js available to the assistant for setup.
+- Obsidian Desktop with the Bases core plugin enabled for the visual workspace.
 
 Official Obsidian documentation lists Bases table view support from Obsidian 1.9. OmniBrain v2.1 uses the table view.
 
-## Recommended Installation
+## Advanced Technical Fallback
 
-Ask your AI assistant to install OmniBrain. The full copyable instruction is in both user guides.
-
-The installation journey has two parts:
-
-1. Put the official OmniBrain framework files from `https://github.com/anthonytransform-ai/omnibrain` under your project as `omnibrain/`.
-2. Run setup from the host project root.
-
-Before setup, confirm these paths exist:
-
-```text
-omnibrain/omnibrain-setup.js
-omnibrain/omnibrain-templates/
-```
-
-If you are using GitHub manually, use **Code -> Download ZIP**, extract the ZIP, rename the extracted folder to `omnibrain`, and move it into your project folder. Do not leave a nested `.git` repository inside your project.
-
-For technical users, the safe setup command from the host project root is:
+Technical users may install manually by placing the official OmniBrain framework contents under a host project as `omnibrain/`, then running setup from the host project root:
 
 ```bash
 node omnibrain/omnibrain-setup.js
@@ -59,8 +62,6 @@ To refresh framework-owned files later:
 ```bash
 node omnibrain/omnibrain-setup.js --force
 ```
-
-When setup preserves an existing root `AGENTS.md`, it may create `omnibrain/AGENTS.omnibrain-snippet.md`. A capable AI assistant should propose a merge that preserves all existing instructions, then integrate the OmniBrain snippet only after approval.
 
 ## Guided Workspace
 

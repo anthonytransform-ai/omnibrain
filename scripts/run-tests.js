@@ -142,7 +142,61 @@ const requiredChineseGuideSections = [
   '20. 簡明詞彙表'
 ];
 
-console.log('[TEST 0] Missing template directory safe failure...');
+console.log('[TEST 0] URL-only front door and agent installation contract...');
+try {
+  const problems = [];
+  const readme = read('README.md', rootDir);
+  const contractPath = path.join(rootDir, 'INSTALL_WITH_AI.md');
+  if (!fs.existsSync(contractPath)) problems.push('INSTALL_WITH_AI.md missing');
+  const contract = fs.existsSync(contractPath) ? fs.readFileSync(contractPath, 'utf8') : '';
+  const primaryRoute = readme.split('## Advanced Technical Fallback')[0];
+  const repoUrl = 'https://github.com/anthonytransform-ai/omnibrain';
+  const shortInstruction = 'Install this in my current project. Preserve my existing files and guide me through anything that needs my decision.';
+  if (!primaryRoute.includes(repoUrl)) problems.push('README primary route missing repository URL');
+  if (!primaryRoute.includes(shortInstruction)) problems.push('README primary route missing short human instruction');
+  if (!primaryRoute.includes('already working in your project')) problems.push('README does not tell user to paste into the active project AI assistant');
+  if (/```bash|node omnibrain\/omnibrain-setup\.js|Code -> Download ZIP|Download ZIP|git clone/i.test(primaryRoute)) {
+    problems.push('README primary route includes manual acquisition or terminal-command requirement');
+  }
+  const requiredContractSnippets = [
+    'Confirm the active host project folder',
+    'Use `https://github.com/anthonytransform-ai/omnibrain` as the official repository URL',
+    'Run `node --version`',
+    'Do not install Node.js, Git, Obsidian or other system software without explicit user approval',
+    'Do not leave a nested `.git` repository',
+    'Preserve existing `package.json`',
+    'Preserve existing host `scripts/`',
+    'Preserve existing root `AGENTS.md`',
+    'Run `node omnibrain/omnibrain-setup.js`',
+    'AGENTS.omnibrain-snippet.md',
+    'Ask no more than five product questions',
+    'Run `node omnibrain/scripts/vault-health.js`',
+    'If installation cannot complete, do not pretend success',
+    "Tell the user to open the host project's `Vault/` folder in Obsidian Desktop"
+  ];
+  for (const snippet of requiredContractSnippets) {
+    if (!contract.includes(snippet)) problems.push(`INSTALL_WITH_AI.md missing: ${snippet}`);
+  }
+  const boundarySnippets = [
+    'Future approved human PDF guides will be produced separately',
+    'Markdown files in `docs/`, `Vault/` and `omnibrain-templates/` are contributor and AI-readable sources'
+  ];
+  for (const snippet of boundarySnippets) {
+    if (!readme.includes(snippet)) problems.push(`README missing human-guide boundary: ${snippet}`);
+  }
+  if (/successfully followed the URL-only journey|proves the real user journey/i.test(readme + contract)) {
+    problems.push('Static docs claim to prove the independent fresh-agent journey');
+  }
+  if (problems.length) {
+    fail('URL-only front door contract failed.', problems.join('\n'));
+  } else {
+    pass('README front door and INSTALL_WITH_AI.md define the URL-only agent installation contract.');
+  }
+} catch (e) {
+  fail('URL-only front door contract test failed.', combinedOutput(e));
+}
+
+console.log('\n[TEST 1] Missing template directory safe failure...');
 initSandbox();
 try {
   fs.rmSync(path.join(frameworkDir, 'omnibrain-templates'), { recursive: true, force: true });
@@ -169,7 +223,7 @@ try {
   fail('Missing template directory test encountered an error.', combinedOutput(e));
 }
 
-console.log('\n[TEST 1] Fresh Guided Workspace setup...');
+console.log('\n[TEST 2] Fresh Guided Workspace setup...');
 initSandbox();
 try {
   runSetup();
@@ -197,7 +251,7 @@ try {
   fail('Fresh Guided Workspace setup failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 2] Start Here links and Base embed...');
+console.log('\n[TEST 3] Start Here links and Base embed...');
 try {
   const start = read('Vault/Start_Here.md');
   const requiredSnippets = [
@@ -221,7 +275,7 @@ try {
   fail('Start Here validation failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 3] Guide source/install contracts...');
+console.log('\n[TEST 4] Guide source/install contracts...');
 try {
   const problems = [];
   const guidePaths = [
@@ -318,7 +372,7 @@ try {
   fail('Guide contract test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 4] Task Board static behaviour...');
+console.log('\n[TEST 5] Task Board static behaviour...');
 try {
   const base = read('Vault/Work/Tasks/Task_Board.base');
   const requiredSnippets = [
@@ -351,7 +405,7 @@ try {
   fail('Task Board static behaviour test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 5] Setup idempotency and preservation boundaries...');
+console.log('\n[TEST 6] Setup idempotency and preservation boundaries...');
 initSandbox();
 try {
   fs.writeFileSync(path.join(projectDir, 'AGENTS.md'), 'CUSTOM_AGENTS_CONTENT');
@@ -395,7 +449,7 @@ try {
   fail('Preservation boundary test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 6] Health validation required structure...');
+console.log('\n[TEST 7] Health validation required structure...');
 initSandbox();
 try {
   runSetup();
@@ -416,7 +470,7 @@ try {
   fail('Health validation test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 7] Obsidian check v2.1 behaviour...');
+console.log('\n[TEST 8] Obsidian check v2.1 behaviour...');
 initSandbox();
 try {
   runSetup();
@@ -440,23 +494,25 @@ try {
   fail('Obsidian check test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 8] Public generated files stay portable...');
+console.log('\n[TEST 9] Public generated files stay portable...');
 initSandbox();
 try {
   runSetup();
   const publicFiles = [
-    'AGENTS.md',
-    'Vault/Start_Here.md',
-    'Vault/Help/User_Guide.en.md',
-    'Vault/Help/User_Guide.zh-Hant.md',
-    'Vault/Core_OS/Runtime/Entry.md',
-    'Vault/Core_OS/Workflows/Implementation.md',
-    'Vault/Obsidian/INSTALL.md'
+    ['README.md', rootDir],
+    ['INSTALL_WITH_AI.md', rootDir],
+    ['AGENTS.md', projectDir],
+    ['Vault/Start_Here.md', projectDir],
+    ['Vault/Help/User_Guide.en.md', projectDir],
+    ['Vault/Help/User_Guide.zh-Hant.md', projectDir],
+    ['Vault/Core_OS/Runtime/Entry.md', projectDir],
+    ['Vault/Core_OS/Workflows/Implementation.md', projectDir],
+    ['Vault/Obsidian/INSTALL.md', projectDir]
   ];
-  const forbidden = ['J_OS', 'j_os_root', 'npm run setup', 'npm run obsidian-check', 'required to render the read-only dashboard queries'];
+  const forbidden = ['J_OS', 'j_os_root', 'npm run setup', 'npm run obsidian-check', 'required to render the read-only dashboard queries', '合併前請由 K', 'K 進行文字審閱'];
   const offenders = [];
-  for (const rel of publicFiles) {
-    const content = read(rel);
+  for (const [rel, base] of publicFiles) {
+    const content = read(rel, base);
     for (const phrase of forbidden) {
       if (content.includes(phrase)) offenders.push(`${rel}: ${phrase}`);
     }
@@ -477,7 +533,7 @@ try {
   fail('Public portability test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 9] Source templates and installed files remain consistent...');
+console.log('\n[TEST 10] Source templates and installed files remain consistent...');
 try {
   const pairs = [
     ['omnibrain-templates/start-here.template.md', 'Vault/Start_Here.md'],
@@ -502,7 +558,7 @@ try {
   fail('Template consistency test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 10] Migration public recovery commands...');
+console.log('\n[TEST 11] Migration public recovery commands...');
 initSandbox();
 try {
   runSetup();
@@ -525,7 +581,7 @@ try {
   fail('Migration public command test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 11] Non-destructive maintenance checks...');
+console.log('\n[TEST 12] Non-destructive maintenance checks...');
 initSandbox();
 try {
   runSetup();
