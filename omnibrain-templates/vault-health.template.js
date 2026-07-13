@@ -40,9 +40,9 @@ function getAllFiles(dir, fileList = []) {
 const allFiles = getAllFiles(vaultDir);
 const mdFiles = allFiles.filter(f => f.endsWith('.md'));
 
-// Build a map of lowercase base filenames to their full paths to support [[Link]] resolution
+// Build a map of lowercase filenames to their full paths to support [[Link]] resolution.
 const vaultFileMap = new Map();
-for (const file of mdFiles) {
+for (const file of allFiles) {
   vaultFileMap.set(path.basename(file).toLowerCase(), file);
 }
 
@@ -68,6 +68,10 @@ const requiredFiles = [
   path.join(vaultDir, 'Core_OS/Standards/Knowledge_Format.md'),
   path.join(vaultDir, 'Core_OS/Standards/Anti_Patterns.md'),
   path.join(vaultDir, 'Core_OS/Validation/Vault_Health_Check.md'),
+  path.join(vaultDir, 'Start_Here.md'),
+  path.join(vaultDir, 'Help/User_Guide.en.md'),
+  path.join(vaultDir, 'Help/User_Guide.zh-Hant.md'),
+  path.join(vaultDir, 'Work/Tasks/Task_Board.base'),
   path.join(vaultDir, 'Dashboard.md'),
   path.join(vaultDir, 'Obsidian/INSTALL.md'),
   path.join(vaultDir, 'Obsidian/Queries/Dashboard.md')
@@ -143,6 +147,7 @@ for (const file of mdFiles) {
   let match;
   while ((match = wikiLinkRegex.exec(content)) !== null) {
     let linkTarget = match[1].trim();
+    linkTarget = linkTarget.split('#')[0].trim();
     if (!linkTarget) continue;
 
     // Check if targeting a folder or directory (e.g. Project/Daily_Logs)
@@ -151,18 +156,19 @@ for (const file of mdFiles) {
       continue;
     }
 
-    if (!path.extname(linkTarget)) {
-      linkTarget += '.md';
+    const linkCandidates = [linkTarget];
+    if (!linkTarget.toLowerCase().endsWith('.md') && !linkTarget.toLowerCase().endsWith('.base')) {
+      linkCandidates.push(`${linkTarget}.md`);
     }
 
-    // Try resolving linkTarget relative to vault root
-    const resolvedFromVault = path.join(vaultDir, linkTarget);
-    // Try resolving relative to current file
-    const resolvedFromCurrent = path.resolve(path.dirname(file), linkTarget);
-    // Try resolving using base name map
-    const baseName = path.basename(linkTarget).toLowerCase();
+    const resolved = linkCandidates.some(candidate => {
+      const resolvedFromVault = path.join(vaultDir, candidate);
+      const resolvedFromCurrent = path.resolve(path.dirname(file), candidate);
+      const baseName = path.basename(candidate).toLowerCase();
+      return fs.existsSync(resolvedFromVault) || fs.existsSync(resolvedFromCurrent) || vaultFileMap.has(baseName);
+    });
 
-    if (!fs.existsSync(resolvedFromVault) && !fs.existsSync(resolvedFromCurrent) && !vaultFileMap.has(baseName)) {
+    if (!resolved) {
       reportError(`\x1b[31m[BROKEN WIKI LINK]\x1b[0m in ${path.relative(vaultDir, file)}\n  -> Could not resolve: [[${match[1]}]]\n`);
     }
   }

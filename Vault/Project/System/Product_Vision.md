@@ -37,6 +37,7 @@ AI-supported projects often lose essential context between sessions. Plans, impl
 - OmniBrain is not a hosted knowledge-management service, cloud-sync platform, or replacement for version control.
 - It is not an autonomous multi-agent orchestration service.
 - It must not require J_OS, a particular AI vendor, or a proprietary service for public use.
+- It must support a non-technical Guided Workspace journey through Start Here, bilingual guides, Obsidian Bases, and local Markdown task files without requiring Dataview or community plugins for the primary experience.
 - It must not rewrite host-project configuration, package scripts, or user-owned Project memory to make installation convenient.
 - It must not treat temporary plans or chat output as durable project truth without review and distillation.
 

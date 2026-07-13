@@ -42,7 +42,7 @@ node omnibrain/scripts/omnibrain-migrate.js --from-v1
 
 - The tool places every top-level item in the local `Vault/`, except `_legacy`, into the legacy backup area before regenerating the v2 Vault. This can include local Obsidian settings such as `.obsidian`.
 - An error during the transfer or later setup ends the command; earlier changes are not automatically reversed.
-- After success, reopen the local Vault in Obsidian and review plugin settings. Use `node omnibrain/scripts/obsidian-check.js` after Dataview is enabled.
+- After success, reopen the local Vault in Obsidian and enable the Bases core plugin if the Task Board does not display. Use `node omnibrain/scripts/obsidian-check.js` after Obsidian has opened the Vault.
 - Review legacy notes before distilling durable facts into the new `Project/System/` and `Project/Features/` records.
 
 ## Recovery

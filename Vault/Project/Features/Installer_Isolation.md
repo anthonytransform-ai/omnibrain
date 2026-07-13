@@ -42,8 +42,9 @@ The framework repository's own root `AGENTS.md` can route to J_OS in developer m
 
 - A normal setup run creates missing templates and does not overwrite existing vault templates or user memory.
 - `--force` refreshes framework-owned `Vault/Core_OS/**` and `Vault/Obsidian/**` files.
-- `--force` does not overwrite `Vault/Project/**` or `Vault/Dashboard.md`.
+- `--force` does not overwrite `Vault/Project/**`, task Markdown files under `Vault/Work/Tasks/`, files under `Vault/Work/Archive/`, or `Vault/Dashboard.md`.
 - `Vault/Obsidian/Queries/Dashboard.md` is framework-owned and is installed or refreshed so the root Dashboard embed resolves in clean projects.
+- `Vault/Start_Here.md`, both installed user guides, and `Vault/Work/Tasks/Task_Board.base` are framework-owned Guided Workspace files and may refresh with `--force`.
 - Setup regenerates OmniBrain's own files in `omnibrain/scripts/`; this is separate from the protected host `scripts/` directory.
 
 ## Command-Line Usage

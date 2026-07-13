@@ -11,12 +11,7 @@ This hub connects all feature-specific documentation.
 
 ## Current Feature Notes
 
-Add feature notes here as they become durable project knowledge.
-
-Examples:
-
-- `[[Authentication]]`
-- `[[Dashboard]]`
+- [[Project/Features/Guided_Workspace|Guided Workspace]] - Start Here, Bases task board, bilingual guides, and task/archive ownership boundaries.
 
 ## How To Use This Map
 

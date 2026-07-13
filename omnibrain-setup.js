@@ -10,7 +10,7 @@ const force = args.includes('--force');
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const frameworkDir = __dirname;
-const frameworkVersion = '2.0.3';
+const frameworkVersion = '2.1.0';
 let filesChanged = false;
 let createdCount = 0;
 let overwrittenCount = 0;
@@ -87,6 +87,10 @@ const targetDirs = [
   'Vault/Core_OS/Workflows',
   'Vault/Core_OS/Standards',
   'Vault/Core_OS/Templates',
+  'Vault/Help',
+  'Vault/Work',
+  'Vault/Work/Tasks',
+  'Vault/Work/Archive',
   'Vault/Core_OS/Validation',
   'Vault/Project',
   'Vault/Project/System',
@@ -164,6 +168,10 @@ Then follow Runtime Entry.
   }
 
   // Core OS Layer (framework-owned: overwritten with --force)
+  copyIfMissing(path.join(templateDir, 'start-here.template.md'), path.join(projectRootDir, 'Vault', 'Start_Here.md'), force);
+  copyIfMissing(path.join(templateDir, 'user-guide.en.template.md'), path.join(projectRootDir, 'Vault', 'Help', 'User_Guide.en.md'), force);
+  copyIfMissing(path.join(templateDir, 'user-guide.zh-Hant.template.md'), path.join(projectRootDir, 'Vault', 'Help', 'User_Guide.zh-Hant.md'), force);
+  copyIfMissing(path.join(templateDir, 'task-board.template.base'), path.join(projectRootDir, 'Vault', 'Work', 'Tasks', 'Task_Board.base'), force);
   copyIfMissing(path.join(templateDir, 'entry.template.md'), path.join(projectRootDir, 'Vault', 'Core_OS', 'Runtime', 'Entry.md'), force);
   copyIfMissing(path.join(templateDir, 'workflow-registry.template.md'), path.join(projectRootDir, 'Vault', 'Core_OS', 'Registries', 'Workflow_Registry.md'), force);
   
@@ -187,6 +195,7 @@ Then follow Runtime Entry.
   copyIfMissing(path.join(templateDir, 'definition-of-done.template.md'), path.join(projectRootDir, 'Vault', 'Project', 'Definition_of_Done.md'), false);
   copyIfMissing(path.join(templateDir, 'system-moc.template.md'), path.join(projectRootDir, 'Vault', 'Project', 'System', '_System_MOC.md'), false);
   copyIfMissing(path.join(templateDir, 'features-moc.template.md'), path.join(projectRootDir, 'Vault', 'Project', 'Features', '_Features_MOC.md'), false);
+  copyIfMissing(path.join(templateDir, 'guided-workspace-feature.template.md'), path.join(projectRootDir, 'Vault', 'Project', 'Features', 'Guided_Workspace.md'), false);
   copyIfMissing(path.join(templateDir, 'product-vision.template.md'), path.join(projectRootDir, 'Vault', 'Project', 'System', 'Product_Vision.md'), false);
 
   // Obsidian Configurations & Views (framework-owned: overwritten with --force)
@@ -221,7 +230,7 @@ console.log("\x1b[32m✨ OmniBrain Setup Complete! ✨\x1b[0m");
 console.log("\x1b[36m===============================================\x1b[0m");
 console.log(`Files changed: ${filesChanged ? 'yes' : 'no'} (${createdCount} created, ${overwrittenCount} overwritten, ${skippedCount} skipped).`);
 console.log("Next steps for the user / developer:");
-console.log("1. Open the 'Vault' directory in Obsidian Desktop.");
-console.log("2. Follow instructions in Vault/Obsidian/INSTALL.md.");
-console.log(`3. Run 'node ${path.relative(projectRootDir, path.join(frameworkDir, 'scripts/obsidian-check.js'))}' to verify Obsidian plugin installation.`);
-console.log(`4. Run 'node ${path.relative(projectRootDir, path.join(frameworkDir, 'scripts/run-tests.js'))}' to verify overall framework health.\n`);
+console.log("1. Open 'Vault/Start_Here.md' in Obsidian Desktop.");
+console.log("2. Enable the Bases core plugin if the task board does not display.");
+console.log("3. Read Vault/Help/User_Guide.en.md or Vault/Help/User_Guide.zh-Hant.md.");
+console.log("4. Run 'node omnibrain/scripts/obsidian-check.js' after opening the Vault in Obsidian.\n");

@@ -1,0 +1,51 @@
+filters:
+  and:
+    - file.inFolder("Work/Tasks")
+    - file.ext == "md"
+    - type == "omnibrain_task"
+properties:
+  file.name:
+    displayName: File
+  summary:
+    displayName: Summary
+  needs_user_decision:
+    displayName: Decision
+  file.mtime:
+    displayName: Last modified
+  stage:
+    displayName: Stage
+views:
+  - type: table
+    name: Active work
+    filters:
+      and:
+        - stage != "Done"
+    groupBy:
+      property: stage
+      direction: ASC
+    order:
+      - file.name
+      - summary
+      - needs_user_decision
+      - file.mtime
+  - type: table
+    name: Needs my decision
+    filters:
+      and:
+        - needs_user_decision == true
+    order:
+      - file.name
+      - summary
+  - type: table
+    name: Done
+    filters:
+      and:
+        - stage == "Done"
+    order:
+      - file.name
+      - summary
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC
+

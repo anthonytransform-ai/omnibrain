@@ -7,7 +7,7 @@ tags: [omnibrain, system, architecture]
 
 # OmniBrain System Architecture
 
-This document records the durable architectural and operational facts of OmniBrain v2. For the developer/public routing boundary, see [[Project/System/Runtime_Modes_and_JOS_Bridge|Runtime Modes and J_OS Bridge]].
+This document records the durable architectural and operational facts of OmniBrain v2.1. For the developer/public routing boundary, see [[Project/System/Runtime_Modes_and_JOS_Bridge|Runtime Modes and J_OS Bridge]].
 
 ## 1. Control Plane and Memory Plane
 
@@ -42,8 +42,9 @@ Setup may create the local `Vault/` structure, `omnibrain.config.json` when it i
 ### Framework-owned files
 
 - `Vault/Core_OS/**` and `Vault/Obsidian/**` template files refresh with `--force`.
+- `Vault/Start_Here.md`, `Vault/Help/User_Guide.en.md`, `Vault/Help/User_Guide.zh-Hant.md`, and `Vault/Work/Tasks/Task_Board.base` are framework-owned and refresh with `--force`.
 - Framework scripts inside `omnibrain/scripts/` are regenerated during setup so that installed maintenance utilities match the framework version.
-- The local `Vault/Project/**` memory files and `Vault/Dashboard.md` are not overwritten by `--force`.
+- Task Markdown files under `Vault/Work/Tasks/`, all files under `Vault/Work/Archive/`, the local `Vault/Project/**` memory files and `Vault/Dashboard.md` are not overwritten by `--force`.
 - The Dashboard query at `Vault/Obsidian/Queries/Dashboard.md` is framework-owned and refreshed with `--force`; the Dashboard page itself remains user-protected.
 
 ## 5. Migration and Maintenance Safety
@@ -56,11 +57,13 @@ Setup may create the local `Vault/` structure, `omnibrain.config.json` when it i
 ## 6. Human Interface
 
 - `Vault/` is designed to open directly in Obsidian Desktop.
-- The Dashboard transcludes Dataview query views for plans, features, and daily logs from `Vault/Obsidian/Queries/Dashboard.md`.
-- The `obsidian-check` utility verifies that the Vault has an `.obsidian` directory and that Dataview is enabled. It does not verify that Obsidian is currently running or that all preferred core-plugin settings are configured.
+- `Vault/Start_Here.md` is the primary human home page and embeds `Vault/Work/Tasks/Task_Board.base#Active work`.
+- The Task Board uses Obsidian Bases table views. Official Obsidian documentation lists table view support from Obsidian 1.9.
+- The Dashboard transcludes Dataview query views for legacy compatibility, but the Guided Workspace does not require Dataview.
+- The `obsidian-check` utility verifies that the Vault has an `.obsidian` directory and that required Guided Workspace files exist. It tells the user how to enable Bases when the board does not display and does not claim Bases is active through undocumented internal state.
 
 ## 7. Validation and CI
 
-- `vault-health` checks required files, including the Dashboard query, Markdown frontmatter shape, local Markdown and wiki links, embedded query targets, and selected operational-language leakage patterns.
+- `vault-health` checks required files, including Start Here, both guides, the Task Board Base, the Dashboard query, Markdown frontmatter shape, local Markdown and wiki links, embedded Base/query targets, and selected operational-language leakage patterns.
 - It is a structural integrity check. It does not confirm that active documentation is complete, non-template, or current with code.
 - GitHub Actions runs `npm test` on pushes to `main` and pull requests targeting `main`, using Node 18.

@@ -1,5 +1,21 @@
 # OmniBrain Changelog / 更新日誌
 
+## v2.1.0 - 2026-07-13
+
+### English
+- **Guided Workspace:** Added `Vault/Start_Here.md`, bilingual user guides, `Vault/Work/Tasks/Task_Board.base`, and `Vault/Work/Archive/`.
+- **Bases task board:** The primary human workflow now uses Obsidian Bases table views for Active work, Needs my decision, and Done.
+- **AI-assisted onboarding:** Added copyable, vendor-neutral installation and task instructions for non-technical users.
+- **Safer updates:** Setup creates missing Guided Workspace files additively and `--force` refreshes only framework-owned files while preserving tasks, archive files, Project memory, host files and the legacy Dashboard.
+- **Obsidian requirements:** The main Guided Workspace requires only Obsidian Desktop and the Bases core plugin. Dataview remains only for legacy Dashboard compatibility.
+
+### 繁體中文
+- **Guided Workspace：** 新增 `Vault/Start_Here.md`、雙語使用指南、`Vault/Work/Tasks/Task_Board.base` 和 `Vault/Work/Archive/`。
+- **Bases 工作面板：** 主要人類工作流程現在使用 Obsidian Bases 表格視圖，包含 Active work、Needs my decision 和 Done。
+- **AI 輔助入門：** 新增可複製、供應商中立的安裝與工作項目指示，方便非技術使用者使用。
+- **更安全的更新：** setup 以增補方式建立缺少的 Guided Workspace 檔案，`--force` 只重新整理框架擁有的檔案，同時保留工作項目、封存檔案、Project 記憶、宿主檔案和舊有 Dashboard。
+- **Obsidian 需求：** 主要 Guided Workspace 只需要 Obsidian Desktop 和 Bases 核心外掛。Dataview 僅保留為舊有 Dashboard 相容用途。
+
 ## v2.0.3 - 2026-07-13
 
 ### English

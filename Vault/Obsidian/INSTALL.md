@@ -1,24 +1,27 @@
-# Obsidian Onboarding & Installation
+# Obsidian Guided Workspace Setup
 
-Follow these steps to set up Obsidian Desktop to work with the OmniBrain vault.
+Open the local `Vault/` folder in Obsidian Desktop.
 
-## Required Steps
-1. **Download & Install:** Download Obsidian Desktop from [obsidian.md](https://obsidian.md) and install it.
-2. **Open Vault:** Open Obsidian, click "Open folder as vault", and select the `<project-root>/Vault` directory.
-3. **Core Plugins:**
-   - Go to Settings (cog icon) -> Core Plugins.
-   - Enable **Templates**.
-   - Enable **Daily Notes**.
-4. **Community Plugins:**
-   - Go to Settings -> Community Plugins.
-   - Click "Turn on community plugins" (disables restricted mode).
-   - Click "Browse" under Community Plugins, search for **Dataview**, install it, and enable it.
-5. **Configure Folders & Paths:**
-   - **Templates:** Go to Settings -> Templates. Set "Template folder path" to `Obsidian/Templates`.
-   - **Daily Notes:** Go to Settings -> Daily Notes.
-     - Set "New file location" to `Project/Daily_Logs`.
-     - Set "Template file location" to `Obsidian/Templates/Daily_Log.md`.
+## Required
 
-## Verify Installation
-Run the automated check tool from the project root:
-`node omnibrain/scripts/obsidian-check.js`
+1. Open Obsidian Desktop.
+2. Choose **Open folder as vault**.
+3. Select the `Vault/` folder inside your project folder.
+4. Open `Start_Here.md`.
+5. If the task board does not display, open Settings -> Core plugins and enable **Bases**.
+
+## Not required for the Guided Workspace
+
+The main Start Here page and Task Board do not require Dataview, Templates, Daily Notes, community plugins, hosted services or API keys.
+
+The legacy `Dashboard.md` page may still use older Dataview query files if you choose to keep that view.
+
+## Verify
+
+From the project root, an AI assistant or technical user can run:
+
+```bash
+node omnibrain/scripts/obsidian-check.js
+```
+
+This check confirms the Vault has been opened and required Guided Workspace files exist. It does not claim Bases is active through undocumented Obsidian internal state.
