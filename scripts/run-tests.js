@@ -50,6 +50,46 @@ function combinedOutput(error) {
   ].join('\n');
 }
 
+// Test 0: Missing template directory safe failure
+console.log('[TEST 0] Missing template directory safe failure...');
+initSandbox();
+try {
+  fs.rmSync(path.join(frameworkDir, 'omnibrain-templates'), { recursive: true, force: true });
+
+  try {
+    execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' });
+    console.error('\x1b[31m  [FAIL] Setup succeeded even though omnibrain-templates was missing.\x1b[0m');
+    testPassed = false;
+  } catch (e) {
+    const errorOutput = combinedOutput(e);
+    const hostPkgStillExists = fs.existsSync(path.join(projectDir, 'package.json'));
+    const hostScriptsStillExists = fs.existsSync(path.join(projectDir, 'scripts/vault-health.js'));
+    const noVault = !fs.existsSync(path.join(projectDir, 'Vault'));
+    const noRootConfig = !fs.existsSync(path.join(projectDir, 'omnibrain.config.json'));
+    const noSnippet = !fs.existsSync(path.join(frameworkDir, 'AGENTS.omnibrain-snippet.md'));
+
+    if (
+      e.status === 1 &&
+      errorOutput.includes('OmniBrain setup did not start') &&
+      errorOutput.includes('Files changed: no') &&
+      errorOutput.includes('Next safe action') &&
+      hostPkgStillExists &&
+      hostScriptsStillExists &&
+      noVault &&
+      noRootConfig &&
+      noSnippet
+    ) {
+      console.log('\x1b[32m  [PASS] Missing template directory stops setup before target-project modification.\x1b[0m');
+    } else {
+      console.error('\x1b[31m  [FAIL] Missing template directory did not fail safely or clearly.\x1b[0m', errorOutput);
+      testPassed = false;
+    }
+  }
+} catch (e) {
+  console.error('\x1b[31m  [FAIL] Missing template directory test encountered an error.\x1b[0m', combinedOutput(e));
+  testPassed = false;
+}
+
 // Test 1: Existing package protection (and setup idempotency)
 console.log('[TEST 1] Existing package protection...');
 initSandbox();
@@ -124,6 +164,36 @@ try {
   }
 } catch (e) {
   console.error('\x1b[31m  [FAIL] Existing AGENTS protection test encountered an error.\x1b[0m', e.message);
+  testPassed = false;
+}
+
+// Test 3B: Existing AGENTS snippet reporting
+console.log('\n[TEST 3B] Existing AGENTS snippet reporting...');
+initSandbox();
+fs.writeFileSync(path.join(projectDir, 'AGENTS.md'), 'CUSTOM_AGENTS_CONTENT');
+try {
+  const snippetPath = path.join(frameworkDir, 'AGENTS.omnibrain-snippet.md');
+  fs.writeFileSync(snippetPath, 'OLD_SNIPPET_CONTENT');
+  const output = execSync('node omnibrain/omnibrain-setup.js', { cwd: projectDir, stdio: 'pipe' }).toString();
+  const snippetAfter = fs.readFileSync(snippetPath, 'utf8');
+  const snippetLines = output
+    .split(/\r?\n/)
+    .filter(line => line.includes('AGENTS.omnibrain-snippet.md'));
+
+  if (snippetAfter === 'OLD_SNIPPET_CONTENT') {
+    console.error('\x1b[31m  [FAIL] Existing OmniBrain snippet was not refreshed.\x1b[0m');
+    testPassed = false;
+  } else if (!snippetLines.some(line => line.includes('Overwrote'))) {
+    console.error('\x1b[31m  [FAIL] Existing OmniBrain snippet was not reported as overwritten.\x1b[0m', output);
+    testPassed = false;
+  } else if (snippetLines.some(line => line.includes('Created'))) {
+    console.error('\x1b[31m  [FAIL] Existing OmniBrain snippet was incorrectly reported as created.\x1b[0m', output);
+    testPassed = false;
+  } else {
+    console.log('\x1b[32m  [PASS] Existing OmniBrain snippet is reported as overwritten, not newly created.\x1b[0m');
+  }
+} catch (e) {
+  console.error('\x1b[31m  [FAIL] Existing AGENTS snippet reporting test encountered an error.\x1b[0m', combinedOutput(e));
   testPassed = false;
 }
 

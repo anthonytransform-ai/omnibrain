@@ -30,6 +30,25 @@ if (prIndex !== -1 && args[prIndex + 1]) {
   }
 }
 
+const templateDir = path.join(frameworkDir, 'omnibrain-templates');
+if (!fs.existsSync(templateDir) || !fs.statSync(templateDir).isDirectory()) {
+  console.error("\x1b[31mOmniBrain setup did not start.\x1b[0m");
+  console.error(`Found: required framework template directory is missing at ${templateDir}.`);
+  console.error("Not completed: no Vault directories, configuration files, snippets or scripts were created.");
+  console.error("Files changed: no.");
+  console.error("Next safe action: restore the `omnibrain-templates` directory, then run `node omnibrain/omnibrain-setup.js` again from the host project root.");
+  process.exit(1);
+}
+
+function recordWritten(existsBefore) {
+  filesChanged = true;
+  if (existsBefore) {
+    overwrittenCount++;
+  } else {
+    createdCount++;
+  }
+}
+
 // Helper function to copy files safely and non-destructively
 function copyIfMissing(src, dest, forceOverwrite = false) {
   if (!fs.existsSync(src)) {
@@ -49,12 +68,7 @@ function copyIfMissing(src, dest, forceOverwrite = false) {
   } else {
     const existsBefore = fs.existsSync(dest);
     fs.copyFileSync(src, dest);
-    filesChanged = true;
-    if (existsBefore) {
-      overwrittenCount++;
-    } else {
-      createdCount++;
-    }
+    recordWritten(existsBefore);
     console.log(`\x1b[32m[✓] ${existsBefore ? 'Overwrote' : 'Created'}:\x1b[0m ${path.relative(projectRootDir, dest)}`);
   }
 }
@@ -108,13 +122,11 @@ if (!fs.existsSync(configPath)) {
     vault_version: frameworkVersion
   };
   fs.writeFileSync(configPath, JSON.stringify(configContent, null, 2) + '\n');
-  filesChanged = true;
-  createdCount++;
+  recordWritten(false);
   console.log(`\x1b[32m[✓] Generated:\x1b[0m omnibrain.config.json`);
 }
 
 // 3. Move Templates into place
-const templateDir = path.join(frameworkDir, 'omnibrain-templates');
 if (fs.existsSync(templateDir)) {
   // Root level bootstrap
   const agentsPath = path.join(projectRootDir, 'AGENTS.md');
@@ -143,10 +155,12 @@ Read only:
 Then follow Runtime Entry.
 \`\`\`
 `;
+    const snippetExistsBefore = fs.existsSync(snippetPath);
     fs.writeFileSync(snippetPath, snippetContent);
-    filesChanged = true;
-    createdCount++;
-    console.log(`\x1b[33m[-] Skipped (already exists):\x1b[0m AGENTS.md (written snippet to ${path.relative(projectRootDir, snippetPath)})`);
+    skippedCount++;
+    recordWritten(snippetExistsBefore);
+    console.log(`\x1b[33m[-] Skipped (already exists):\x1b[0m AGENTS.md`);
+    console.log(`\x1b[32m[✓] ${snippetExistsBefore ? 'Overwrote' : 'Created'}:\x1b[0m ${path.relative(projectRootDir, snippetPath)}`);
   }
 
   // Core OS Layer (framework-owned: overwritten with --force)
@@ -191,9 +205,6 @@ Then follow Runtime Entry.
   copyIfMissing(path.join(templateDir, 'omnibrain-migrate.template.js'), path.join(frameworkDir, 'scripts', 'omnibrain-migrate.js'), true);
   copyIfMissing(path.join(templateDir, 'obsidian-check.template.js'), path.join(frameworkDir, 'scripts', 'obsidian-check.js'), true);
   copyIfMissing(path.join(templateDir, 'run-tests.template.js'), path.join(frameworkDir, 'scripts', 'run-tests.js'), true);
-} else {
-  console.error("\x1b[31m[!] Error: 'omnibrain-templates' folder is missing!\x1b[0m");
-  process.exit(1);
 }
 
 if (missingTemplates.length > 0) {
