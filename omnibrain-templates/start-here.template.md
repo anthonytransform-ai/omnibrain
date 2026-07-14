@@ -22,15 +22,25 @@ Use this page as your home screen. Durable project facts belong in the project n
 
 ![[Work/Tasks/Task_Board.base#Active work]]
 
-## Ask your AI assistant
+## Quick Calls
 
-Copy this into your AI assistant when you want help:
+Use these short calls with your AI assistant. Natural variations with the same meaning are fine.
 
-> Please read my OmniBrain Start Here page, find the task named "[task title]", and work only on that task. Keep the task note updated and tell me before any risky change.
+| Say | OmniBrain will |
+| --- | -------------- |
+| `Start OmniBrain.` | Orient to this project. |
+| `New task: [task name].` | Create a safe task in Ideas. |
+| `Work on [task name].` | Continue from that task record. |
+| `My decisions?` | Show what needs your decision. |
+| `Wrap up.` | Record where things stand. |
+| `Keep as knowledge.` | Save approved lasting learning. |
+| `Mark done.` | Mark the current task Done when decisions are resolved. |
+| `Archive task.` | Move the current task to Archive after your instruction. |
+| `Check OmniBrain.` | Run non-destructive OmniBrain checks. |
+| `Update OmniBrain.` | Safely refresh the framework while preserving your content. |
 
 ## Needs my decision
 
 The **Needs my decision** view shows work where the AI assistant should stop and wait for you. Use it when a choice affects product direction, permissions, cost, privacy, deletion, publishing or anything you want to approve yourself.
 
 The older [[Dashboard]] page is still preserved as a legacy view. The main Guided Workspace starts here.
-

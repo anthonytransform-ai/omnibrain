@@ -19,6 +19,48 @@ When starting a session:
 6. Read `Vault/Core_OS/Registries/Workflow_Registry.md`.
 7. Stop. Do not load every task, plan or detailed workflow during boot.
 
+## OmniBrain Quick Calls
+
+Quick Calls are conversational intent cues, not passwords, slash commands, CLI commands or exact-string parser inputs. Do not build or require exact-string matching. Accept equivalent natural-language requests in the user's language and route by meaning.
+
+Quick Calls are requests to OmniBrain, not permission for unrelated work. Destructive, costly, publishing, privacy-sensitive and permission-changing actions still require direct approval. A recommendation is not approval.
+
+| Canonical Quick Call | Runtime behaviour |
+| :--- | :--- |
+| `Start OmniBrain.` | Run the Session Start Protocol, then give a short orientation: identified project, current status or blocker, whether a task is already active if clearly recorded, and that OmniBrain is ready. Do not scan every task. Do not change any task stage. |
+| `New task: [task name].` | Create `Vault/Work/Tasks/[task name].md` with safe readable filename handling, `stage: Ideas`, `needs_user_decision: false`, standard task headings, and never overwrite an existing task. If a matching or very similar task exists, show it and ask whether to use it. Use request details for purpose or summary when safe; do not invent product facts or create branches, plans or other documents automatically. Report the created filename. |
+| `Work on [task name].` | Use Named Task Handling. Search `Vault/Work/Tasks/`, select the exact or nearest clear task, ask if more than one plausible match exists, do not create a missing task unless the user requested `New task`, use the task file as the current working record, load only relevant project knowledge, choose an existing workflow from intent and task content, keep `What happens next` current, and do not change stage automatically. |
+| `My decisions?` | Inspect task metadata under `Vault/Work/Tasks/` for `needs_user_decision: true`. For each result show task name, summary, the content or concise meaning of `What I need to decide`, and current stage. If none exist, say so clearly. Do not clear the checkbox, resolve decisions, change stages or load unrelated task details unnecessarily. |
+| `Wrap up.` | If there is a current task, record current position, update `What happens next`, record actual decisions made, record uncertainty or blockers, ensure `What I need to decide` is current, briefly state what was checked, and ask whether anything should be kept as lasting project knowledge. If there is no current task, summarise meaningful project work from the session, identify possible lasting knowledge, ask before changing durable project documents, and do not create a task merely to wrap up. Never mark Done, archive, change stage or preserve speculative information as durable knowledge. |
+| `Keep as knowledge.` | Treat as user approval to run the Knowledge Update workflow for the current task or clearly identified information. Identify the owning System or Feature document, preserve existing content, merge or append approved knowledge, update the relevant index when a new knowledge file is created, avoid temporary conversation detail, ask one concise clarification when "this" is materially ambiguous, and report which durable files changed. |
+| `Mark done.` | Treat as direct human authority to set the current task `stage: Done`. If no current task is clear, ask which task. If `needs_user_decision` is true or an unresolved decision remains, explain it and do not mark Done until resolved. Clear `needs_user_decision` only when the related decision is genuinely resolved. Do not archive automatically. Report the stage change. |
+| `Archive task.` | Treat as direct human authority to move the current task into `Vault/Work/Archive/`. If no current task is clear, ask which task. Preserve the complete task file, do not delete it, and do not archive automatically as part of `Wrap up` or `Mark done`. If the task is not `Done`, state that clearly and ask for confirmation before moving it. Report the archive path. |
+| `Check OmniBrain.` | Run non-destructive OmniBrain checks appropriate to the installed workspace: `node omnibrain/scripts/vault-health.js` and `node omnibrain/scripts/obsidian-check.js`. If the Vault has not been opened in Obsidian, report that as the next action. Do not claim Bases is enabled through undocumented internal state. Do not modify user files. Do not treat host-application tests as OmniBrain checks. Report pass, failure and next safe action clearly. |
+| `Update OmniBrain.` | Treat as authority for a safe OmniBrain framework update, not host-application changes. Confirm host project and installed version, inspect whether local `omnibrain/` contains uncommitted or user-modified framework files, stop before destroying unreviewed customisation, obtain the current official framework from `https://github.com/anthonytransform-ai/omnibrain` through a safe temporary location, replace or refresh only framework source under `omnibrain/`, avoid nested `.git`, run `node omnibrain/omnibrain-setup.js --force`, preserve host files, host scripts, host configuration, root `AGENTS.md`, `Vault/Project/**`, task files, Archive files and `Vault/Dashboard.md`, run health validation, and report previous version, new version, changed framework files, preserved user content and remaining actions. Do not install system software automatically or claim success if source acquisition or validation failed. |
+
+New task frontmatter:
+
+```yaml
+---
+type: omnibrain_task
+stage: Ideas
+needs_user_decision: false
+summary:
+---
+```
+
+New task body:
+
+```markdown
+## What we are trying to achieve
+
+## What happens next
+
+## What I need to decide
+
+## Useful notes
+```
+
 ## Named Task Handling
 
 When the user names a task:

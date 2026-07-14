@@ -46,29 +46,13 @@ The table-based task board requires Obsidian Bases with table view support. Offi
 
 ## 4. Install with an AI assistant
 
-Copy this instruction into your AI assistant:
+The normal human route is in `README.md`: paste the repository URL into the AI coding assistant already working on your project, then ask it to install OmniBrain while preserving existing files.
 
-```text
-Please install OmniBrain in this project folder.
-
-First confirm the active project folder and show me the path. Then check whether Node.js is available by running `node --version`. Report the detected version. If Node.js is missing, stop, explain that OmniBrain setup requires Node.js, and do not install Node.js or other system software unless I explicitly approve that separate action.
-
-Check whether `omnibrain/omnibrain-setup.js` already exists. If it exists, continue safely. If it does not exist, use the official source `https://github.com/anthonytransform-ai/omnibrain`. Obtain or guide me to obtain the official OmniBrain files, place the framework contents under this project folder as `omnibrain/`, and avoid leaving a nested `.git` repository inside my project. If you cannot download files yourself, give me simple instructions to use GitHub Code -> Download ZIP, extract the ZIP, rename the extracted folder to `omnibrain`, move it into this project folder, and remove any nested `.git` folder if one exists.
-
-Before running setup, verify that `omnibrain/omnibrain-setup.js` and `omnibrain/omnibrain-templates/` both exist. Then run `node omnibrain/omnibrain-setup.js` from the project root.
-
-Preserve existing project files, existing project scripts, existing project configuration, `Vault/Project/**`, `Vault/Dashboard.md`, `Vault/Work/Tasks/**`, and `Vault/Work/Archive/**`.
-
-After setup, verify that `Vault/Start_Here.md`, both user guides, and `Vault/Work/Tasks/Task_Board.base` exist. If OmniBrain created the root `AGENTS.md`, verify that it contains the OmniBrain bootstrap. If an existing root `AGENTS.md` was preserved and `omnibrain/AGENTS.omnibrain-snippet.md` was generated, read both files, preserve all existing instructions, propose the exact merged change, and integrate the OmniBrain snippet only after I approve. If safe integration is not possible, explain the exact remaining action.
-
-Inspect the project yourself for language, framework, database, build tools and deployment arrangement. Ask me no more than five product questions: what am I building or improving, who is it for, what should it help them do, how should it feel, and what actions must the AI always ask me about first. Use my answers to populate blank project documents. If existing project documents already contain meaningful content, preserve them and propose additions before changing established product statements or permission boundaries.
-
-Tell me which `Vault/` folder to open in Obsidian and explain how to enable the Bases core plugin in ordinary language.
-```
+The technical installation contract for agents is `INSTALL_WITH_AI.md`. It defines source acquisition, Node.js preflight, preservation boundaries, AGENTS handling, validation and truthful failure reporting.
 
 ## 5. Manual installation
 
-Manual installation is available for technical users.
+Manual installation is an advanced fallback for technical users. The primary route is still AI-assisted installation from the README front door.
 
 1. Confirm you are in the project folder that should receive OmniBrain.
 2. Confirm Node.js is available:
@@ -151,11 +135,22 @@ When this is true, the AI assistant should explain the required decision in `Wha
 
 ## 12. Ask an AI assistant to work on a task
 
-Copy this instruction:
+Use short Quick Calls instead of long copy-and-paste prompts:
 
-```text
-Please read `Vault/Start_Here.md`, find the task named "[task filename]", and work only on that task. Use the task Markdown file as the current working record. If the task lacks these body headings, add them while preserving existing content: `## What we are trying to achieve`, `## What happens next`, `## What I need to decide`, and `## Useful notes`. Keep "What happens next" current. Record real user decisions. Use the least complicated safe way to complete the task. Do not create extra plans, branches, reviewers or handoff files unless they reduce a real risk. Run validation that is proportionate to the change. Do not silently move the task stage. You may recommend a stage, but change `stage` only if I directly instruct you. If `needs_user_decision` is true, explain the decision in `What I need to decide`, stop at that boundary, and wait for me. Stop and ask me before destructive, costly, privacy-sensitive, publishing or permission-changing actions.
-```
+| Say | OmniBrain will |
+| --- | -------------- |
+| `Start OmniBrain.` | Orient to this project. |
+| `New task: [task name].` | Create a safe task in Ideas. |
+| `Work on [task name].` | Continue from that task record. |
+| `My decisions?` | Show what needs your decision. |
+| `Wrap up.` | Record where things stand. |
+| `Keep as knowledge.` | Save approved lasting learning. |
+| `Mark done.` | Mark the current task Done when decisions are resolved. |
+| `Archive task.` | Move the current task to Archive after your instruction. |
+| `Check OmniBrain.` | Run non-destructive OmniBrain checks. |
+| `Update OmniBrain.` | Safely refresh the framework while preserving your content. |
+
+Detailed behaviour is enforced by `Vault/Core_OS/Runtime/Entry.md`. The calls are examples, not exact-string commands; equivalent natural-language requests should be interpreted by intent.
 
 ## 13. Check and accept completed work
 
@@ -165,13 +160,9 @@ Inspect the app or files yourself where it matters. Only move a task to `Done` w
 
 ## 14. Keep important project knowledge
 
-When you are ready to close a task, copy this instruction:
+When you are ready to close a task, say `Wrap up.` OmniBrain should record the current position, state what was checked, note anything uncertain or blocked, and ask whether anything should be kept as lasting project knowledge.
 
-```text
-Please close this task carefully. Summarise what changed, state what was checked, and state anything uncertain or blocked. Ask me whether anything from this task should be kept as lasting project knowledge. Do not move the task to `Done` or `Vault/Work/Archive/` unless I directly instruct you to do that.
-```
-
-If the answer is no, leave the task as a working record. If the answer is yes, update the owning System or Feature note, preserve existing knowledge, enrich it, and update the index if needed.
+If the answer is no, leave the task as a working record. If the answer is yes, say `Keep as knowledge.` OmniBrain should update the owning System or Feature note, preserve existing knowledge, enrich it, and update the index if needed.
 
 A completed task is not automatically permanent project knowledge.
 
@@ -183,7 +174,7 @@ Move files there only when you mean to archive them. Do not archive files automa
 
 ## 16. Update OmniBrain safely
 
-Ask your AI assistant to run the safe setup command with `--force`.
+Say `Update OmniBrain.` to ask for a safe framework update.
 
 > [!warning]
 > `--force` can overwrite framework-owned OmniBrain files. Ask the AI assistant to confirm what will be refreshed and to preserve task Markdown files, archive files, project notes, host files, host configuration and the legacy `Vault/Dashboard.md`.

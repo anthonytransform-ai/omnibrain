@@ -94,3 +94,18 @@ If installation cannot complete, do not pretend success. Report:
 - whether any files were changed;
 - the safest next action for the user.
 
+## Safe Framework Update
+
+When the user says `Update OmniBrain.`, treat it as authority to update the OmniBrain framework, not the host application.
+
+Follow the same source, Node.js, no-system-install, no-nested-`.git` and preservation rules above. Additionally:
+
+1. Confirm the host project and installed OmniBrain version.
+2. Inspect whether `omnibrain/` contains uncommitted or user-modified framework files.
+3. Stop before replacing files if that would destroy unreviewed framework customisation.
+4. Obtain the current official framework from `https://github.com/anthonytransform-ai/omnibrain` through a safe temporary location.
+5. Replace or refresh only framework source under `omnibrain/`.
+6. Run `node omnibrain/omnibrain-setup.js --force`.
+7. Preserve host files, host scripts, host configuration, root `AGENTS.md`, `Vault/Project/**`, task files, Archive files and `Vault/Dashboard.md`.
+8. Run OmniBrain health validation.
+9. Report the previous version, new version, changed framework files, preserved user content and remaining action.

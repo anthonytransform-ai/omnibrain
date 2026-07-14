@@ -142,6 +142,19 @@ const requiredChineseGuideSections = [
   '20. 簡明詞彙表'
 ];
 
+const canonicalQuickCalls = [
+  'Start OmniBrain.',
+  'New task: [task name].',
+  'Work on [task name].',
+  'My decisions?',
+  'Wrap up.',
+  'Keep as knowledge.',
+  'Mark done.',
+  'Archive task.',
+  'Check OmniBrain.',
+  'Update OmniBrain.'
+];
+
 console.log('[TEST 0] URL-only front door and agent installation contract...');
 try {
   const problems = [];
@@ -172,7 +185,10 @@ try {
     'Ask no more than five product questions',
     'Run `node omnibrain/scripts/vault-health.js`',
     'If installation cannot complete, do not pretend success',
-    "Tell the user to open the host project's `Vault/` folder in Obsidian Desktop"
+    "Tell the user to open the host project's `Vault/` folder in Obsidian Desktop",
+    'When the user says `Update OmniBrain.`',
+    'Run `node omnibrain/omnibrain-setup.js --force`',
+    'Report the previous version, new version, changed framework files, preserved user content and remaining action'
   ];
   for (const snippet of requiredContractSnippets) {
     if (!contract.includes(snippet)) problems.push(`INSTALL_WITH_AI.md missing: ${snippet}`);
@@ -261,21 +277,74 @@ try {
     '[[Help/User_Guide.en|English User Guide]]',
     '[[Help/User_Guide.zh-Hant|Traditional Chinese User Guide]]',
     '![[Work/Tasks/Task_Board.base#Active work]]',
-    'Needs my decision'
+    'Needs my decision',
+    '| Say | OmniBrain will |'
   ];
+  for (const call of canonicalQuickCalls) requiredSnippets.push(call);
   const missing = requiredSnippets.filter(snippet => !start.includes(snippet));
   if (missing.length) {
     fail('Start Here is missing required links or embed.', missing.join('\n'));
   } else if (/node omnibrain|npm run|```bash/.test(start)) {
     fail('Start Here contains terminal commands in the main user-facing body.');
+  } else if (start.includes('Please read my OmniBrain Start Here page')) {
+    fail('Start Here still contains the former long task prompt.');
   } else {
-    pass('Start Here links to required notes and embeds the Active work Base view.');
+    pass('Start Here links to required notes, embeds the Active work Base view, and shows all Quick Calls.');
   }
 } catch (e) {
   fail('Start Here validation failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 4] Guide source/install contracts...');
+console.log('\n[TEST 4] Runtime Quick Call contracts...');
+try {
+  const problems = [];
+  const runtime = read('Vault/Core_OS/Runtime/Entry.md');
+  for (const call of canonicalQuickCalls) {
+    if (!runtime.includes(call)) problems.push(`Runtime missing Quick Call: ${call}`);
+  }
+  const requiredRuntimeSnippets = [
+    'Accept equivalent natural-language requests',
+    'Do not build or require exact-string matching',
+    'Quick Calls are requests to OmniBrain, not permission for unrelated work',
+    'Create `Vault/Work/Tasks/[task name].md`',
+    'stage: Ideas',
+    'needs_user_decision: false',
+    'never overwrite',
+    'If a matching or very similar task exists',
+    'Search `Vault/Work/Tasks/`',
+    'ask if more than one plausible match exists',
+    'do not create a missing task unless the user requested `New task`',
+    'Do not clear the checkbox',
+    'Never mark Done, archive, change stage',
+    'Knowledge Update workflow',
+    'direct human authority to set the current task `stage: Done`',
+    'unresolved decision remains',
+    'move the current task into `Vault/Work/Archive/`',
+    'Preserve the complete task file',
+    'Run non-destructive OmniBrain checks',
+    'Do not modify user files',
+    'safe OmniBrain framework update, not host-application changes',
+    'preserve host files, host scripts, host configuration, root `AGENTS.md`, `Vault/Project/**`, task files, Archive files and `Vault/Dashboard.md`',
+    'Do not install system software automatically'
+  ];
+  for (const snippet of requiredRuntimeSnippets) {
+    if (!runtime.includes(snippet)) problems.push(`Runtime missing behavior: ${snippet}`);
+  }
+  if (runtime.includes('slash commands') && runtime.includes('exact-string parser')) {
+    // Positive evidence only; no-op keeps failure list focused.
+  } else {
+    problems.push('Runtime does not clearly reject slash-command/exact parser semantics');
+  }
+  if (problems.length) {
+    fail('Runtime Quick Call contract failed.', problems.join('\n'));
+  } else {
+    pass('Runtime Entry defines all Quick Calls and their authority/preservation boundaries.');
+  }
+} catch (e) {
+  fail('Runtime Quick Call contract test failed.', combinedOutput(e));
+}
+
+console.log('\n[TEST 5] Guide source/install contracts...');
 try {
   const problems = [];
   const guidePaths = [
@@ -324,35 +393,27 @@ try {
     problems.push('quick start missing');
   }
   const requiredEnSnippets = [
-    'Please install OmniBrain in this project folder.',
-    'https://github.com/anthonytransform-ai/omnibrain',
-    'Code -> Download ZIP',
-    'node --version',
-    'Node.js is missing',
-    'omnibrain/omnibrain-setup.js',
-    'omnibrain/omnibrain-templates/',
-    'AGENTS.omnibrain-snippet.md',
-    'propose the exact merged change',
-    'Please read `Vault/Start_Here.md`',
-    'Please close this task carefully',
-    'lasting project knowledge',
+    'The normal human route is in `README.md`',
+    'The technical installation contract for agents is `INSTALL_WITH_AI.md`',
+    'Use short Quick Calls instead of long copy-and-paste prompts',
+    'Detailed behaviour is enforced by `Vault/Core_OS/Runtime/Entry.md`',
+    'equivalent natural-language requests should be interpreted by intent',
+    '`Wrap up.`',
+    '`Keep as knowledge.`',
+    '`Update OmniBrain.`',
     '> [!warning]',
     '| Symptom | What to do |',
     'privacy and data-handling policy'
   ];
   const requiredZhSnippets = [
-    '請在這個專案資料夾安裝 OmniBrain',
-    'https://github.com/anthonytransform-ai/omnibrain',
-    'Code -> Download ZIP',
-    'node --version',
-    '找不到 Node.js',
-    'omnibrain/omnibrain-setup.js',
-    'omnibrain/omnibrain-templates/',
-    'AGENTS.omnibrain-snippet.md',
-    '提出準確的合併後變更',
-    '請讀取 `Vault/Start_Here.md`',
-    '請謹慎結束這個工作項目',
-    '長期專案知識',
+    '一般人使用的主要路徑在 `README.md`',
+    '給 AI 助手使用的技術安裝合約是 `INSTALL_WITH_AI.md`',
+    '請使用短 Quick Calls',
+    '詳細行為由 `Vault/Core_OS/Runtime/Entry.md` 強制定義',
+    'AI 助手應按意圖理解',
+    '`Wrap up.`',
+    '`Keep as knowledge.`',
+    '`Update OmniBrain.`',
     '> [!warning]',
     '| 情況 | 處理方法 |',
     '私隱／隱私與資料處理政策'
@@ -363,6 +424,15 @@ try {
   for (const snippet of requiredZhSnippets) {
     if (!zh.includes(snippet)) problems.push(`Traditional Chinese guide missing: ${snippet}`);
   }
+  const oldLongPromptMarkers = [
+    'Please read `Vault/Start_Here.md`, find the task named',
+    'Please close this task carefully',
+    '請讀取 `Vault/Start_Here.md`，找出名為',
+    '請謹慎結束這個工作項目'
+  ];
+  for (const marker of oldLongPromptMarkers) {
+    if ((en + zh).includes(marker)) problems.push(`Guide still contains old long prompt marker: ${marker}`);
+  }
   if (problems.length) {
     fail('Guide contracts failed.', problems.join('\n'));
   } else {
@@ -372,7 +442,7 @@ try {
   fail('Guide contract test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 5] Task Board static behaviour...');
+console.log('\n[TEST 6] Task Board static behaviour...');
 try {
   const base = read('Vault/Work/Tasks/Task_Board.base');
   const requiredSnippets = [
@@ -405,7 +475,7 @@ try {
   fail('Task Board static behaviour test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 6] Setup idempotency and preservation boundaries...');
+console.log('\n[TEST 7] Setup idempotency and preservation boundaries...');
 initSandbox();
 try {
   fs.writeFileSync(path.join(projectDir, 'AGENTS.md'), 'CUSTOM_AGENTS_CONTENT');
@@ -449,7 +519,7 @@ try {
   fail('Preservation boundary test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 7] Health validation required structure...');
+console.log('\n[TEST 8] Health validation required structure...');
 initSandbox();
 try {
   runSetup();
@@ -470,7 +540,7 @@ try {
   fail('Health validation test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 8] Obsidian check v2.1 behaviour...');
+console.log('\n[TEST 9] Obsidian check v2.1 behaviour...');
 initSandbox();
 try {
   runSetup();
@@ -494,7 +564,7 @@ try {
   fail('Obsidian check test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 9] Public generated files stay portable...');
+console.log('\n[TEST 10] Public generated files stay portable...');
 initSandbox();
 try {
   runSetup();
@@ -519,7 +589,8 @@ try {
   }
   const guides = read('Vault/Help/User_Guide.en.md') + read('Vault/Help/User_Guide.zh-Hant.md');
   if (/Dataview[^.\n]*(required|需要)/i.test(guides)) offenders.push('Guides require Dataview');
-  if (!guides.includes('do not install Node.js or other system software') || !guides.includes('不要在未經我明確批准前安裝 Node.js')) offenders.push('AI-assisted Node.js safety line missing');
+  const installContract = read('INSTALL_WITH_AI.md', rootDir);
+  if (!installContract.includes('Do not install Node.js, Git, Obsidian or other system software without explicit user approval')) offenders.push('AI-assisted Node.js safety line missing from install contract');
   const lifecycle = read('Vault/Core_OS/Runtime/Entry.md') + read('Vault/Core_OS/Workflows/Implementation.md');
   if (!lifecycle.includes('Task stage movement remains a human decision')) offenders.push('Task lifecycle authority rule missing');
   if (!lifecycle.includes('change `stage` only after direct user instruction')) offenders.push('Direct stage instruction rule missing');
@@ -533,7 +604,7 @@ try {
   fail('Public portability test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 10] Source templates and installed files remain consistent...');
+console.log('\n[TEST 11] Source templates and installed files remain consistent...');
 try {
   const pairs = [
     ['omnibrain-templates/start-here.template.md', 'Vault/Start_Here.md'],
@@ -542,7 +613,9 @@ try {
     ['omnibrain-templates/task-board.template.base', 'Vault/Work/Tasks/Task_Board.base'],
     ['omnibrain-templates/obsidian-install.template.md', 'Vault/Obsidian/INSTALL.md'],
     ['omnibrain-templates/entry.template.md', 'Vault/Core_OS/Runtime/Entry.md'],
+    ['omnibrain-templates/workflow-registry.template.md', 'Vault/Core_OS/Registries/Workflow_Registry.md'],
     ['omnibrain-templates/workflow-implementation.template.md', 'Vault/Core_OS/Workflows/Implementation.md'],
+    ['omnibrain-templates/workflow-knowledge-update.template.md', 'Vault/Core_OS/Workflows/Knowledge_Update.md'],
     ['omnibrain-templates/workflow-staged-change.template.md', 'Vault/Core_OS/Workflows/Staged_Change.md'],
     ['omnibrain-templates/vault-health.template.js', 'scripts/vault-health.js'],
     ['omnibrain-templates/obsidian-check.template.js', 'scripts/obsidian-check.js'],
@@ -558,7 +631,7 @@ try {
   fail('Template consistency test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 11] Migration public recovery commands...');
+console.log('\n[TEST 12] Migration public recovery commands...');
 initSandbox();
 try {
   runSetup();
@@ -581,7 +654,7 @@ try {
   fail('Migration public command test failed.', combinedOutput(e));
 }
 
-console.log('\n[TEST 12] Non-destructive maintenance checks...');
+console.log('\n[TEST 13] Non-destructive maintenance checks...');
 initSandbox();
 try {
   runSetup();

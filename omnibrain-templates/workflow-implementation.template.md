@@ -39,6 +39,9 @@ Task stage movement remains a human decision.
 - The agent must not silently move a task.
 - Do not treat a recommendation as approval.
 - When `needs_user_decision` is true, explain the required decision in `What I need to decide`, stop at the affected boundary, and wait for the user.
+- `Wrap up.` never means Done or Archive.
+- `Mark done.` is the direct user authority to set `stage: Done` after unresolved decisions are cleared.
+- `Archive task.` is the direct user authority to move the task into `Vault/Work/Archive/`.
 
 ## Doubt-Driven Development
 Before writing complex or non-trivial logic:
