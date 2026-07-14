@@ -451,11 +451,13 @@ try {
     '一般人使用的主要路徑在 `README.md`',
     '給 AI 助手使用的技術安裝合約是 `INSTALL_WITH_AI.md`',
     '請使用短 Quick Calls',
+    '這些繁體中文 Quick Calls 是標準例子',
+    '英文 Quick Calls 和其他同等意思的自然語言請求也可以使用',
+    '中文讀者可以直接使用上表，不需要先改成英文',
     '詳細行為由 `Vault/Core_OS/Runtime/Entry.md` 強制定義',
-    'AI 助手應按意圖理解',
-    '`Wrap up.`',
-    '`Keep as knowledge.`',
-    '`Update OmniBrain.`',
+    '`整理本次進度。`',
+    '`保留為專案知識。`',
+    '`更新 OmniBrain。`',
     '> [!warning]',
     '| 情況 | 處理方法 |',
     '私隱／隱私與資料處理政策'
@@ -465,6 +467,22 @@ try {
   }
   for (const snippet of requiredZhSnippets) {
     if (!zh.includes(snippet)) problems.push(`Traditional Chinese guide missing: ${snippet}`);
+  }
+  for (const call of canonicalTraditionalChineseQuickCalls) {
+    if (!zh.includes(call)) problems.push(`Traditional Chinese guide missing canonical Quick Call: ${call}`);
+  }
+  const englishPrimaryZhMarkers = [
+    '| Say | OmniBrain will |',
+    '| `Start OmniBrain.` | Orient to this project. |',
+    '| `Wrap up.` | Record where things stand. |',
+    '| `Keep as knowledge.` | Save approved lasting learning. |',
+    '| `Update OmniBrain.` | Safely refresh the framework while preserving your content. |',
+    '說 `Wrap up.`',
+    '說 `Keep as knowledge.`',
+    '說 `Update OmniBrain.`'
+  ];
+  for (const marker of englishPrimaryZhMarkers) {
+    if (zh.includes(marker)) problems.push(`Traditional Chinese guide uses English Quick Call as primary instruction: ${marker}`);
   }
   const oldLongPromptMarkers = [
     'Please read `Vault/Start_Here.md`, find the task named',
