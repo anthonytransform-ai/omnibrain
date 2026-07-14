@@ -24,7 +24,9 @@ Use this page as your home screen. Durable project facts belong in the project n
 
 ## Quick Calls
 
-Use these short calls with your AI assistant. Natural variations with the same meaning are fine.
+Use these short calls with your AI assistant. Natural variations with the same meaning are fine in English or Traditional Chinese.
+
+### English
 
 | Say | OmniBrain will |
 | --- | -------------- |
@@ -38,6 +40,21 @@ Use these short calls with your AI assistant. Natural variations with the same m
 | `Archive task.` | Move the current task to Archive after your instruction. |
 | `Check OmniBrain.` | Run non-destructive OmniBrain checks. |
 | `Update OmniBrain.` | Safely refresh the framework while preserving your content. |
+
+### 繁體中文
+
+| 你可以說 | OmniBrain 會 |
+| --- | --- |
+| `啟動 OmniBrain。` | 說明目前專案狀態。 |
+| `新增工作：[工作名稱]。` | 在 Ideas 建立安全的工作項目。 |
+| `處理「[工作名稱]」。` | 從該工作記錄繼續。 |
+| `有甚麼需要我決定？` | 顯示需要你決定的事項。 |
+| `整理本次進度。` | 記錄目前進度。 |
+| `保留為專案知識。` | 保存已批准的長期知識。 |
+| `標記為已完成。` | 在決定已解決後標記目前工作為完成。 |
+| `封存工作。` | 按你的指示把目前工作移到封存區。 |
+| `檢查 OmniBrain。` | 執行不會修改檔案的 OmniBrain 檢查。 |
+| `更新 OmniBrain。` | 在保留你內容的前提下安全更新框架。 |
 
 ## Needs my decision
 

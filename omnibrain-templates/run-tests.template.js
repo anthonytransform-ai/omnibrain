@@ -155,6 +155,19 @@ const canonicalQuickCalls = [
   'Update OmniBrain.'
 ];
 
+const canonicalTraditionalChineseQuickCalls = [
+  '啟動 OmniBrain。',
+  '新增工作：[工作名稱]。',
+  '處理「[工作名稱]」。',
+  '有甚麼需要我決定？',
+  '整理本次進度。',
+  '保留為專案知識。',
+  '標記為已完成。',
+  '封存工作。',
+  '檢查 OmniBrain。',
+  '更新 OmniBrain。'
+];
+
 console.log('[TEST 0] URL-only front door and agent installation contract...');
 try {
   const problems = [];
@@ -278,9 +291,13 @@ try {
     '[[Help/User_Guide.zh-Hant|Traditional Chinese User Guide]]',
     '![[Work/Tasks/Task_Board.base#Active work]]',
     'Needs my decision',
-    '| Say | OmniBrain will |'
+    '| Say | OmniBrain will |',
+    '### 繁體中文',
+    '| 你可以說 | OmniBrain 會 |',
+    'Natural variations with the same meaning are fine in English or Traditional Chinese'
   ];
   for (const call of canonicalQuickCalls) requiredSnippets.push(call);
+  for (const call of canonicalTraditionalChineseQuickCalls) requiredSnippets.push(call);
   const missing = requiredSnippets.filter(snippet => !start.includes(snippet));
   if (missing.length) {
     fail('Start Here is missing required links or embed.', missing.join('\n'));
@@ -300,11 +317,36 @@ try {
   const problems = [];
   const runtime = read('Vault/Core_OS/Runtime/Entry.md');
   for (const call of canonicalQuickCalls) {
-    if (!runtime.includes(call)) problems.push(`Runtime missing Quick Call: ${call}`);
+    if (!runtime.includes(call)) problems.push(`Runtime missing English Quick Call: ${call}`);
+  }
+  for (const call of canonicalTraditionalChineseQuickCalls) {
+    if (!runtime.includes(call)) problems.push(`Runtime missing Traditional Chinese Quick Call: ${call}`);
   }
   const requiredRuntimeSnippets = [
     'Accept equivalent natural-language requests',
     'Do not build or require exact-string matching',
+    'OmniBrain formally supports English and Traditional Chinese Quick Calls',
+    'Exact wording, punctuation and capitalisation are not required',
+    'Do not require English',
+    'Do not translate Chinese requests into visible English before acting',
+    'Do not create a separate Chinese runtime, parser or language-detection system',
+    'Equivalent requests by meaning in either language map to the same runtime behaviour',
+    '請啟動 OmniBrain。',
+    '建立一個名為「改善新手流程」的工作。',
+    '繼續處理「改善新手流程」。',
+    '現在有甚麼等我決定？',
+    '今天先整理進度。',
+    '把這項決定保留為專案知識。',
+    'Start OmniBrain / 啟動 OmniBrain',
+    'New task / 新增工作',
+    'Work on / 處理',
+    'My decisions / 需要我決定',
+    'Wrap up / 整理本次進度',
+    'Keep as knowledge / 保留為專案知識',
+    'Mark done / 標記為已完成',
+    'Archive task / 封存工作',
+    'Check OmniBrain / 檢查 OmniBrain',
+    'Update OmniBrain / 更新 OmniBrain',
     'Quick Calls are requests to OmniBrain, not permission for unrelated work',
     'Create `Vault/Work/Tasks/[task name].md`',
     'stage: Ideas',
@@ -338,7 +380,7 @@ try {
   if (problems.length) {
     fail('Runtime Quick Call contract failed.', problems.join('\n'));
   } else {
-    pass('Runtime Entry defines all Quick Calls and their authority/preservation boundaries.');
+    pass('Runtime Entry defines bilingual Quick Calls and their shared authority/preservation boundaries.');
   }
 } catch (e) {
   fail('Runtime Quick Call contract test failed.', combinedOutput(e));
